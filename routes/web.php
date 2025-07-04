@@ -2,6 +2,7 @@
 use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\DocumentoLegalController;
 use App\Http\Controllers\EmpresaController;
+use App\Http\Controllers\InventarioEquipoController;
 use App\Http\Controllers\LicitacionController;
 use App\Http\Controllers\ModalidadController;
 use App\Http\Controllers\TipoDeDocumentoController;
@@ -103,6 +104,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/licitaciones/{licitacion}/descargar-expediente', [LicitacionController::class, 'descargarExpediente'])->name('licitaciones.descargar');
     // routes/web.php
     Route::post('/verificar-modalidades', [LicitacionController::class, 'verificarModalidades'])->name('licitacion.verificarModalidades');
+
+
+
+    //Rutas para modulo de inventario 
+    //Route::resource('/inventario', controller: InventarioEquipoController::class);
+    Route::resource('/inventario', InventarioEquipoController::class)->names('inventario');
+
+    Route::post('/inventario/importar', [InventarioEquipoController::class, 'importarExcel'])->name('inventario.importar');
+
 
 
 });

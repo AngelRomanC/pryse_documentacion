@@ -29,6 +29,7 @@ class PermisosSeeder extends Seeder
         Permission::create(['name' => 'documentoLegal.update', 'guard_name' => 'web', 'description' => 'Actualizar Registros', 'module_key' => 'cat']);
         Permission::create(['name' => 'documentoLegal.delete', 'guard_name' => 'web', 'description' => 'Eliminar Registros', 'module_key' => 'cat']);
       
+        
 
     }
 }
