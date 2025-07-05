@@ -109,7 +109,8 @@ Route::middleware('auth')->group(function () {
 
     //Rutas para modulo de inventario 
     //Route::resource('/inventario', controller: InventarioEquipoController::class);
-    Route::resource('/inventario', InventarioEquipoController::class)->names('inventario');
+    //Route::resource('inventario', InventarioEquipoController::class)->names('inventario');
+    Route::resource('inventario', InventarioEquipoController::class);
 
     Route::post('/inventario/importar', [InventarioEquipoController::class, 'importarExcel'])->name('inventario.importar');
 

@@ -17,13 +17,25 @@ class DatosSeeder extends Seeder
     public function run()
     {
         DB::table('departamentos')->insert([
-            ['nombre_departamento' => 'Normatividad'],
-            ['nombre_departamento' => 'Proyecto'],
-            ['nombre_departamento' => 'Administración'],
-            ['nombre_departamento' => 'Contabilidad'],
-            ['nombre_departamento' => 'Legal'],
-        ]);
+            ['nombre' => 'DIRECCIÓN'],
+            ['nombre' => 'ADMINISTRACIÓN'],
+            ['nombre' => 'RRHH'],
+            ['nombre' => 'ALMACEN'],
+            ['nombre' => 'LICITACIONES'],
+            ['nombre' => 'CONTABILIDAD'],
+            ['nombre' => 'NORMATIVIDAD'],
+            ['nombre' => 'OPERACIONES'],
+            ['nombre' => 'FISCAL'],
+            ['nombre' => 'CUENTAS VARIAS'],
+            ['nombre' => 'IMSS'],
+            ['nombre' => 'PAGOS'],
+            ['nombre' => 'CAPUFE'],
+            ['nombre' => 'PROYECTOS'],
+            ['nombre' => 'MONITOREO'],
+            ['nombre' => 'FLOTILLAS'],
 
+        ]);
+/*
         DB::table('tipo_de_documentos')->insert([
             ['nombre_documento' => 'Autorización Aguascalientes'],
             ['nombre_documento' => 'Autorización Baja California Sur'],
@@ -86,7 +98,7 @@ class DatosSeeder extends Seeder
             ['nombre_modalidad' => 'III. Seguridad privada en el traslado de bienes o valores '],
             ['nombre_modalidad' => 'IV. Servicios de alarmas y de monitoreo electrónico '],
 
-        ]);
+        ]); */
 
     }
 }

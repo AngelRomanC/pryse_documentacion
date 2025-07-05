@@ -20,7 +20,7 @@ class DepartamentoController extends Controller
         $query = Departamento::query();
 
         if ($request->filled('search')) {
-            $query->where('nombre_departamento', 'like', '%' . $request->search . '%');
+            $query->where('nombre', 'like', '%' . $request->search . '%');
         }
 
         $departamentos = $query->orderBy('id', 'desc')

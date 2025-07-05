@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreInventarioEquipoRequest;
+use App\Models\Departamento;
 use App\Models\InventarioEquipo;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -41,16 +43,10 @@ class InventarioEquipoController extends Controller
 
                 ->orWhere('procesador', 'like', '%' . $request->search . '%')
                 ->orWhere('capacidad_ram', 'like', '%' . $request->search . '%')
+                ->orWhere('tipo_ram', 'like', '%' . $request->search . '%')
                 ->orWhere('tipo_disco', 'like', '%' . $request->search . '%')
                 ->orWhere('capacidad_disco', 'like', '%' . $request->search . '%')
                 ->orWhere('nombre_arqueo', 'like', '%' . $request->search . '%');
-
-
-
-
-
-
-
         }
 
         $inventarios = $query->orderBy('id', 'desc')
@@ -60,7 +56,7 @@ class InventarioEquipoController extends Controller
         return Inertia::render('Inventario/Index', [
             'titulo' => 'Inventario de Equipos',
             'inventarios' => $inventarios,
-            'routeName' =>  $this->routeName, 
+            'routeName' => $this->routeName,
             'filters' => $request->only('search'),
         ]);
     }
@@ -72,14 +68,27 @@ class InventarioEquipoController extends Controller
     public function create()
     {
         //
+        $departamentos = Departamento::select('id', 'nombre as name')->get();
+        
+        return Inertia::render('Inventario/Create', [
+            'titulo' => 'Inventario de Equipos',
+            'routeName' => $this->routeName,
+            'departamentos' => $departamentos,
+
+
+        ]);
+
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreInventarioEquipoRequest $request)
     {
         //
+        InventarioEquipo::create($request->validated());
+
+        return redirect()->route($this->routeName . 'index')->with('success', 'Regidtro de equipo creado con éxito.');
     }
 
     /**

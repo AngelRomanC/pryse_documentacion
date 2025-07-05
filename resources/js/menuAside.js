@@ -158,6 +158,8 @@ export default [
 //   Modulo de Inventario Definir el usuario aún 
   {
     route: "inventario.index",
+    //href:"/inventario",
+
     label: "Inventario Equipos",
     icon: mdiGavel ,
     role: "Admin",

@@ -29,4 +29,9 @@ class InventarioEquipo extends Model
         'nombre_arqueo',
         'observaciones',
     ];
+
+    public function departamento()
+    {
+        return $this->belongsTo(Departamento::class); //Cargar relación
+    }
 }

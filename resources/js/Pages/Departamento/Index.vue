@@ -78,7 +78,7 @@ const destroy = (id) => {
                     <tr v-for="departamento in departamentos.data" :key="departamento.id">
                         <td class="align-items-center">
                         </td>
-                        <td data-label="Departamento"class="border p-2">{{ departamento.nombre_departamento }}</td>
+                        <td data-label="Departamento"class="border p-2">{{ departamento.nombre }}</td>
                        
                         <td class="before:hidden lg:w-1 whitespace-nowrap">
                             <BaseButtons type="justify-start lg:justify-end" no-wrap>
