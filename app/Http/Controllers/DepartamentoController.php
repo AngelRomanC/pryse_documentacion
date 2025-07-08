@@ -54,7 +54,7 @@ class DepartamentoController extends Controller
     {
         // Validar los datos recibidos
         $validated = $request->validate([
-            'nombre_departamento' => 'required|string|max:100',
+            'nombre' => 'required|string|max:100',
             'email' => 'required|email|max:50|unique:departamentos,email',
 
         ], [
@@ -65,10 +65,10 @@ class DepartamentoController extends Controller
 
         if ($request->filled('redirect')) {
             return redirect($request->input('redirect'))
-                ->with('success', 'Empresa creada correctamente');
+                ->with('success', 'Departamento creada correctamente');
         }
 
-        return redirect()->route($this->routeName . 'index')->with('success', 'Área creada con éxito.');
+        return redirect()->route($this->routeName . 'index')->with('success', 'Departamento creada con éxito.');
     }
 
     /**
@@ -97,12 +97,12 @@ class DepartamentoController extends Controller
     public function update(Request $request, Departamento $departamento)
     {
         $validated = $request->validate([
-            'nombre_departamento' => 'required|string|max:50',
+            'nombre' => 'required|string|max:50',
             'email' => 'required|email|max:50',
         ]);
         $departamento->update($validated);
 
-        return redirect()->route($this->routeName . 'index')->with('success', 'Área actualizada con éxito.');
+        return redirect()->route($this->routeName . 'index')->with('success', 'Departamento actualizada con éxito.');
 
     }
 

@@ -69,7 +69,7 @@ class InventarioEquipoController extends Controller
     {
         //
         $departamentos = Departamento::select('id', 'nombre as name')->get();
-        
+
         return Inertia::render('Inventario/Create', [
             'titulo' => 'Inventario de Equipos',
             'routeName' => $this->routeName,
@@ -88,7 +88,7 @@ class InventarioEquipoController extends Controller
         //
         InventarioEquipo::create($request->validated());
 
-        return redirect()->route($this->routeName . 'index')->with('success', 'Regidtro de equipo creado con éxito.');
+        return redirect()->route($this->routeName . 'index')->with('success', 'Registro de equipo creado con éxito.');
     }
 
     /**
@@ -105,14 +105,26 @@ class InventarioEquipoController extends Controller
     public function edit(InventarioEquipo $inventarioEquipo)
     {
         //
+        dd($inventarioEquipo);
+        $departamentos = Departamento::select('id', 'nombre as name')->get();
+
+        return Inertia::render('Inventario/Edit', [
+            'titulo' => 'Editar Equipo',
+            'routeName' => $this->routeName,
+            'departamentos' => $departamentos,
+            'inventario' => $inventarioEquipo,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, InventarioEquipo $inventarioEquipo)
+    public function update(StoreInventarioEquipoRequest  $request, InventarioEquipo $inventarioEquipo)
     {
         //
+        $inventarioEquipo->update($request->validated());
+
+        return redirect()->route($this->routeName . 'index')->with('success', 'Equipo actualizado correctamente.');
     }
 
     /**

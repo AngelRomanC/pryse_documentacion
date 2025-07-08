@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->dateTime('fecha_registro');
             $table->string('nombre_persona');
-            $table->string('area');
+            $table->string('departamento_id');
             $table->string('tipo_pc');
             $table->string('marca_equipo');
             $table->string('sistema_operativo');

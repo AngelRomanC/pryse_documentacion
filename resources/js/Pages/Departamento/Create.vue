@@ -16,7 +16,7 @@ const props = defineProps({
 const urlParams = new URLSearchParams(window.location.search);
 const redirectParam = urlParams.get('redirect');
 const form = useForm({
-    nombre_departamento: '',
+    nombre: '',
     email: '',
     redirect: redirectParam,
     
@@ -36,9 +36,9 @@ const handleSubmit = () => {
         <CardBox form @submit.prevent="handleSubmit">
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <!-- Campo: Nombre -->
-                <FormField label="Nombre" :error="form.errors.nombre_departamento">
+                <FormField label="Nombre" :error="form.errors.nombre">
                     <FormControl
-                        v-model="form.nombre_departamento"
+                        v-model="form.nombre"
                         type="text"
                         placeholder="Nombre de Departamento"
                         :icon="mdiHomeCity"

@@ -66,47 +66,44 @@ const handleSubmit = () => {
 
     <CardBox form @submit.prevent="handleSubmit">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <FormField label="Fecha de Registro" :error="form.errors.fecha_registro">
-          <FormControl v-model="form.fecha_registro" type="datetime-local" :icon="mdiCalendar" required />
-        </FormField>
+      
 
         <FormField label="Nombre de Persona" :error="form.errors.nombre_persona">
           <FormControl v-model="form.nombre_persona" type="text" :icon="mdiAccount" required />
         </FormField>
 
-        <FormField label="Área" :error="form.errors.departamentos">
-          <FormControl v-model="form.departamento_id" :options="departamentos" type="select" :icon="mdiHomeCity" required />
+        <FormField label="Deoartamento" :error="form.errors.departamento_id">
+          <FormControl v-model="form.departamento_id" :options="departamentos" type="select" :icon="mdiHomeCity"
+            required />
         </FormField>
-
-
-
 
         <FormField label="Tipo de PC" :error="form.errors.tipo_pc">
-          <FormControl v-model="form.tipo_pc" type="text" :icon="mdiDesktopClassic" required />
+          <FormControlSelect v-model="form.tipo_pc" type="select" :icon="mdiDesktopClassic" :options="[
+            { value: 'Laptop', text: 'Laptop' },
+            { value: 'PC Escritorio', text: 'PC Escritorio' },
+            { value: 'PC Escritorio (Servidor)', text: 'PC Escritorio (Servidor)' },
+            { value: 'Impresora', text: 'Impresora' }
+          ]" required />
         </FormField>
 
-<FormField label="Tipo de PC" :error="form.errors.tipo_pc">
-  <FormControlSelect
-    v-model="form.tipo_pc"
-    type="select"
-    :icon="mdiDesktopClassic"
-    :options="[
-      { value: '', text: 'Elige' },
-      { value: 'Laptop', text: 'Laptop' },
-      { value: 'PC Escritorio', text: 'PC Escritorio' },
-      { value: 'PC Escritorio (Servidor)', text: 'PC Escritorio (Servidor)' },
-      { value: 'Impresora', text: 'Impresora' }
-    ]"
-    required
-  />
-</FormField>
-
-
-
-
-
         <FormField label="Marca del Equipo" :error="form.errors.marca_equipo">
-          <FormControl v-model="form.marca_equipo" type="text" :icon="mdiDesktopClassic" required />
+          <FormControlSelect v-model="form.marca_equipo" type="select" :icon="mdiDesktopClassic" :options="[
+            { value: 'GENERICA (Armada)', text: 'GENERICA (Armada)' },
+            { value: 'DELL', text: 'DELL' },
+            { value: 'HP', text: 'HP' },
+            { value: 'LENOVO', text: 'LENOVO' },
+            { value: 'LENOVO Thinkpad', text: 'LENOVO Thinkpad' },
+            { value: 'ASUS', text: 'ASUS' },
+            { value: 'VORAGO', text: 'VORAGO' },
+            { value: 'ACER', text: 'ACER' },
+            { value: 'GHIA', text: 'GHIA' },
+            { value: 'HIUNDAI', text: 'HIUNDAI' },
+            { value: 'SAMSUNG', text: 'SAMSUNG' },
+            { value: 'MSI', text: 'MSI' },
+            { value: 'Otra', text: 'Otra' },
+            { value: 'Sharp', text: 'Sharp' },
+            { value: 'Brother', text: 'Brother' },
+          ]" required />
         </FormField>
 
         <FormField label="Sistema Operativo" :error="form.errors.sistema_operativo">
@@ -118,11 +115,22 @@ const handleSubmit = () => {
         </FormField>
 
         <FormField label="Tarjeta Madre" :error="form.errors.tarjeta_madre">
-          <FormControl v-model="form.tarjeta_madre" type="text" :icon="mdiChip" required />
+          <FormControlSelect v-model="form.tarjeta_madre" type="text" :icon="mdiChip" :options="[
+            { value: 'DELL', text: 'DELL' },
+            { value: 'HP', text: 'HP' },
+            { value: 'LENOVO', text: 'LENOVO' },
+            { value: 'ASUS', text: 'ASUS' },
+            { value: 'GENÉRICA', text: 'GENÉRICA' },
+            { value: 'PROPIA DE LA MARCA', text: 'PROPIA DE LA MARCA' },
+          ]" required />
         </FormField>
 
         <FormField label="Tarjeta Gráfica" :error="form.errors.tarjeta_grafica">
-          <FormControl v-model="form.tarjeta_grafica" type="text" :icon="mdiChip" />
+          <FormControlSelect v-model="form.tarjeta_grafica" type="text" :icon="mdiChip" :options="[
+            { value: 'INTEGRADA AL PROCESADOR', text: 'INTEGRADA AL PROCESADOR' },
+            { value: 'EXTERNA', text: 'EXTERNA' },
+
+          ]" required />
         </FormField>
 
         <FormField label="Datos Tarjeta Gráfica" :error="form.errors.datos_tarjeta_grafica">
@@ -130,31 +138,84 @@ const handleSubmit = () => {
         </FormField>
 
         <FormField label="Tipo de RAM" :error="form.errors.tipo_ram">
-          <FormControl v-model="form.tipo_ram" type="text" :icon="mdiMemory" required />
+          <FormControlSelect v-model="form.tipo_ram" type="text" :icon="mdiMemory" :options="[
+            { value: 'DDR2', text: 'DDR2' },
+            { value: 'DDR3', text: 'DDR3' },
+            { value: 'DDR4 ', text: 'DDR4 ' },
+            { value: 'DDR5', text: 'DDR5' },
+          ]" required />
         </FormField>
 
         <FormField label="Capacidad RAM" :error="form.errors.capacidad_ram">
-          <FormControl v-model="form.capacidad_ram" type="text" :icon="mdiMemory" required />
+          <FormControlSelect v-model="form.capacidad_ram" type="select" :icon="mdiMemory" :options="[
+            { value: '2 GB', text: '2 GB' },
+            { value: '4 GB ', text: '4 GB' },
+            { value: '6 GB ', text: '6 GB' },
+            { value: '8 GB', text: '8 GB' },
+            { value: '12 GB', text: '12 GB' },
+            { value: '16 GB', text: '16 GB' },
+            { value: '20 GB', text: '20 GB' },
+            { value: '32 GB', text: '32 GB' },
+          ]" required />
         </FormField>
 
         <FormField label="Marca de RAM" :error="form.errors.marca_ram">
-          <FormControl v-model="form.marca_ram" type="text" :icon="mdiMemory" required />
+          <FormControlSelect v-model="form.marca_ram" type="text" :icon="mdiMemory" :options="[
+            { value: 'Kingston', text: 'Kingston)' },
+            { value: 'Adata ', text: 'Adata ' },
+            { value: 'G. Skill ', text: 'G.Skill' },
+            { value: 'Corsait', text: 'Corsait ' },
+            { value: 'Lexa', text: 'Lexa' },
+            { value: 'Crucial', text: 'Crucial' },
+            { value: 'Otra', text: 'Otra' },
+
+          ]" required />
         </FormField>
 
         <FormField label="Tipo de Disco" :error="form.errors.tipo_disco">
-          <FormControl v-model="form.tipo_disco" type="text" :icon="mdiHarddisk" required />
+          <FormControlSelect v-model="form.tipo_disco" type="text" :icon="mdiHarddisk" :options="[
+            { value: 'SSD', text: 'SSD' },
+            { value: 'M2 ', text: 'M2' },
+            { value: 'HDD', text: 'HDD' },
+          ]" required />
         </FormField>
 
         <FormField label="Capacidad Disco" :error="form.errors.capacidad_disco">
-          <FormControl v-model="form.capacidad_disco" type="text" :icon="mdiHarddisk" required />
+          <FormControlSelect v-model="form.capacidad_disco" type="text" :icon="mdiHarddisk" :options="[
+            { value: 'Menos de 100 GB', text: 'Menos de 100 GB' },
+            { value: '120 GB', text: '120 GB' },
+            { value: '256 GB ', text: '256 GB ' },
+            { value: '460 GB ', text: '460 GB ' },
+            { value: '512 GB', text: '512 GB ' },
+            { value: '1 TB', text: '1 TB' },
+            { value: '2 TB', text: '2 TB' },
+          ]" required />
         </FormField>
 
         <FormField label="Teclado y Mouse" :error="form.errors.teclado_mouse">
-          <FormControl v-model="form.teclado_mouse" type="text" :icon="mdiUsb" required />
+          <FormControlSelect v-model="form.teclado_mouse" type="text" :icon="mdiUsb" :options="[
+            { value: 'Genéricos', text: 'Genéricos' },
+            { value: 'DELL', text: 'DELL' },
+            { value: 'HP', text: 'HP' },
+            { value: 'Logitec ', text: 'Logitec ' },
+            { value: 'Microsoft ', text: 'Microsoft ' },
+            { value: 'Genius', text: 'Genius ' },
+            { value: 'Razer', text: 'Razer' },
+            { value: 'HyperX', text: 'HyperX' },
+          ]" required />
         </FormField>
 
         <FormField label="Cámara Web" :error="form.errors.camara_web">
-          <FormControl v-model="form.camara_web" type="text" :icon="mdiCamera" />
+          <FormControlSelect v-model="form.camara_web" type="text" :icon="mdiCamera" :options="[
+            { value: 'Genéricos', text: 'Genéricos' },
+            { value: 'DELL', text: 'DELL' },
+            { value: 'HP', text: 'HP' },
+            { value: 'Logitec ', text: 'Logitec ' },
+            { value: 'Microsoft ', text: 'Microsoft ' },
+            { value: 'Genius', text: 'Genius ' },
+            { value: 'Razer', text: 'Razer' },
+            { value: 'HyperX', text: 'HyperX' },
+          ]" required />
         </FormField>
 
         <FormField label="Otro Periférico" :error="form.errors.otro_periferico">
@@ -162,11 +223,16 @@ const handleSubmit = () => {
         </FormField>
 
         <FormField label="Nombre Arqueo" :error="form.errors.nombre_arqueo">
-          <FormControl v-model="form.nombre_arqueo" type="text" :icon="mdiAccount" required />
+          <FormControlSelect v-model="form.nombre_arqueo" type="text" :icon="mdiAccount" :options="[
+            { value: 'Miguel', text: 'Miguel' },
+            { value: 'Moises', text: 'Moises' },
+            { value: 'Ricardo', text: 'Ricardo' },
+            { value: 'Mario ', text: 'Mario ' },
+          ]" required />
         </FormField>
 
         <FormField label="Observaciones" :error="form.errors.observaciones">
-          <FormControl v-model="form.observaciones" type="text" :icon="mdiCommentTextOutline" />
+          <FormControl v-model="form.observaciones" type="text" :icon="mdiCommentTextOutline" required />
         </FormField>
       </div>
 

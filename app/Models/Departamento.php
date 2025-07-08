@@ -10,7 +10,7 @@ class Departamento extends Model
 {
     use HasFactory;
     use Notifiable;
-    protected $fillable = ['nombre_departamento', 'email'];
+    protected $fillable = ['nombre', 'email'];
 
     public function routeNotificationForMail()
     {

@@ -37,9 +37,9 @@ const guardar = () => {
 
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <!-- Campo: Nombre -->
-                <FormField label="Nombre" :error="form.errors.nombre">
+                <FormField label="Nombre" :error="form.errors.nombre_departamento">
                     <FormControl
-                        v-model="form.nombre"
+                        v-model="form.nombre_departamento"
                         type="text"
                         placeholder="Nombre de área"
                         :icon="mdiHomeCity"

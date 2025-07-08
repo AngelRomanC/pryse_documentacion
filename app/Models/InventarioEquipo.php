@@ -10,7 +10,7 @@ class InventarioEquipo extends Model
     protected $fillable = [
         'fecha_registro',
         'nombre_persona',
-        'area',
+        'departamento_id',
         'tipo_pc',
         'marca_equipo',
         'sistema_operativo',
@@ -33,5 +33,13 @@ class InventarioEquipo extends Model
     public function departamento()
     {
         return $this->belongsTo(Departamento::class); //Cargar relación
+    }
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->fecha_registro = now();
+        });
     }
 }
