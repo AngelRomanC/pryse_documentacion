@@ -13,6 +13,9 @@ import NotificationBar from "@/components/NotificationBar.vue";
 import SearchBar from '@/components/SearchBar.vue'
 import { ref } from 'vue'
 
+import { Link } from '@inertiajs/vue3'
+
+
 const props = defineProps({
   inventarios: Object,
   titulo: String,
@@ -39,19 +42,23 @@ const destroy = (id) => {
     }
   });
 };
+
 </script>
 
 <template>
   <LayoutMain>
     <SectionTitleLineWithButton :title="props.titulo" main>
+      <BaseButton :href="route('inventario.form')" color="danger" label="Cargar Datos" />
+        <Link :href="route('inventario.form')" class="bg-red-600 text-white px-4 py-2 rounded">
+    Cargar Datos Link
+  </Link>
+
+
       <BaseButton :href="route(`${props.routeName}create`)" color="warning" label="Registrar Equipo" />
     </SectionTitleLineWithButton>
 
-    <SearchBar
-      v-model="filters.search"
-      :routeName="routeName"
-      placeholder="Buscar por persona, área, típo de pc, marca equipo, S.O. , procesador, tipo disco, capacidad disco, capacidad RAM..."
-    />
+    <SearchBar v-model="filters.search" :routeName="routeName"
+      placeholder="Buscar por persona, área, tipo de pc, marca equipo, S.O. , procesador, tipo disco, capacidad disco, capacidad RAM..." />
 
     <NotificationBar v-if="$page.props.flash.success" color="success" :icon="mdiInformation" :outline="false">
       {{ $page.props.flash.success }}
@@ -82,7 +89,7 @@ const destroy = (id) => {
         <tbody>
           <tr v-for="item in inventarios.data" :key="item.id">
             <td class="border p-2">{{ item.nombre_persona }}</td>
-            <td class="border p-2">{{ item.area }}</td>
+            <td class="border p-2">{{ item.departamento_id }}</td>
             <td class="border p-2">{{ item.tipo_pc }} {{ item.marca_equipo }} {{ item.sistema_operativo }}</td>
             <td class="border p-2">{{ item.procesador }}</td>
             <td class="border p-2">{{ item.capacidad_ram }} {{ item.tipo_ram }}</td>
@@ -98,11 +105,8 @@ const destroy = (id) => {
         </tbody>
       </table>
 
-      <Pagination
-        :currentPage="inventarios.current_page"
-        :links="inventarios.links"
-        :total="inventarios.links.length - 2"
-      />
+      <Pagination :currentPage="inventarios.current_page" :links="inventarios.links"
+        :total="inventarios.links.length - 2" />
     </CardBox>
   </LayoutMain>
 </template>

@@ -21,7 +21,7 @@ class InventarioEquipoImport implements ToModel, WithHeadingRow
             //'fecha_registro'         => $row['marca_temporal'] ?? now(),
             'fecha_registro' => $this->parseFecha($row['marca_temporal'] ?? null),
             'nombre_persona'         => $row['nombre'],
-            'area'                   => $row['area'],
+            'departamento_id'                   => $row['area'],
             'tipo_pc'                => $row['tipo_de_pc'],
             'marca_equipo'           => $row['marca_del_equipo'],
             'sistema_operativo'      => $row['sistema_operativo_modelo'],

@@ -53,6 +53,11 @@ const form = useForm({
   teclado_mouse: '',
   camara_web: '',
   otro_periferico: '',
+
+  software_remoto: '',
+  id_remoto: '',
+  password_remoto: '',
+
   nombre_arqueo: '',
   observaciones: '',
 });
@@ -96,12 +101,14 @@ const handleSubmit = () => {
         </FormField>
 
         <FormField label="Sistema Operativo" :error="form.errors.sistema_operativo">
-          <FormControl v-model="form.sistema_operativo" type="text" :icon="mdiMicrosoftWindows" required             @input="form.sistema_operativo = form.sistema_operativo.toUpperCase()" />
- 
+          <FormControl v-model="form.sistema_operativo" type="text" :icon="mdiMicrosoftWindows" required
+            @input="form.sistema_operativo = form.sistema_operativo.toUpperCase()" />
+
         </FormField>
 
         <FormField label="Procesador" :error="form.errors.procesador">
-          <FormControl v-model="form.procesador" type="text" :icon="mdiChip" required  @input="form.procesador = form.procesador.toUpperCase()" />
+          <FormControl v-model="form.procesador" type="text" :icon="mdiChip" required
+            @input="form.procesador = form.procesador.toUpperCase()" />
         </FormField>
 
         <FormField label="Tarjeta Madre" :error="form.errors.tarjeta_madre">
@@ -118,7 +125,8 @@ const handleSubmit = () => {
         </FormField>
 
         <FormField label="Datos Tarjeta Gráfica" :error="form.errors.datos_tarjeta_grafica">
-          <FormControl v-model="form.datos_tarjeta_grafica" type="text" :icon="mdiChip" @input="form.datos_tarjeta_grafica = form.datos_tarjeta_grafica.toUpperCase()" />
+          <FormControl v-model="form.datos_tarjeta_grafica" type="text" :icon="mdiChip"
+            @input="form.datos_tarjeta_grafica = form.datos_tarjeta_grafica.toUpperCase()" />
         </FormField>
 
         <FormField label="Tipo de RAM" :error="form.errors.tipo_ram">
@@ -180,17 +188,29 @@ const handleSubmit = () => {
         </FormField>
 
         <FormField label="Otro Periférico" :error="form.errors.otro_periferico">
-          <FormControl v-model="form.otro_periferico" type="text" :icon="mdiUsb"  @input="form.otro_periferico = form.otro_periferico.toUpperCase()" />
+          <FormControl v-model="form.otro_periferico" type="text" :icon="mdiUsb"
+            @input="form.otro_periferico = form.otro_periferico.toUpperCase()" />
         </FormField>
-
-        <FormField label="Nombre Arqueo" :error="form.errors.nombre_arqueo">
-          <FormControlSelect v-model="form.nombre_arqueo" type="text" :icon="mdiAccount" :options="[
-            { value: 'Miguel', text: 'Miguel' },
-            { value: 'Moises', text: 'Moises' },
-            { value: 'Ricardo', text: 'Ricardo' },
-            { value: 'Mario ', text: 'Mario ' },
+        <FormField label="Software de Acceso Remoto" :error="form.errors.software_remoto">
+          <FormControlSelect v-model="form.software_remoto" :options="[
+            { value: 'TeamViewer', text: 'TeamViewer' },
+            { value: 'AnyDesk', text: 'AnyDesk' },
+            { value: 'Chrome Remote Desktop', text: 'Chrome Remote Desktop' },
+            { value: 'RustDesk', text: 'RustDesk' },
+            { value: 'Otro', text: 'Otro' },
           ]" required />
         </FormField>
+
+        <FormField v-if="form.software_remoto !== ''" label="ID Remoto" :error="form.errors.id_remoto">
+          <FormControl v-model="form.id_remoto" type="text" placeholder="Ej. 123 456 789" required />
+        </FormField>
+
+        <FormField v-if="form.software_remoto !== ''" label="Contraseña Remota" :error="form.errors.password_remoto">
+          <FormControl v-model="form.password_remoto" type="password" placeholder="Contraseña" required />
+        </FormField>
+
+
+     
 
         <FormField label="Nombre Arqueo" :error="form.errors.nombre_arqueo">
           <FormControlSelect v-model="form.nombre_arqueo" type="select" :icon="mdiAccount"
@@ -199,7 +219,8 @@ const handleSubmit = () => {
 
 
         <FormField label="Observaciones" :error="form.errors.observaciones">
-          <FormControl v-model="form.observaciones" type="text" :icon="mdiCommentTextOutline" required @input="form.observaciones = form.observaciones.toUpperCase()" />
+          <FormControl v-model="form.observaciones" type="text" :icon="mdiCommentTextOutline" required
+            @input="form.observaciones = form.observaciones.toUpperCase()" />
         </FormField>
       </div>
 

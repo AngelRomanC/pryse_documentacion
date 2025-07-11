@@ -30,8 +30,12 @@ return new class extends Migration {
             $table->string('teclado_mouse');
             $table->string('camara_web')->nullable();
             $table->string('otro_periferico')->nullable();
+            $table->string('software_remoto')->nullable();
+            $table->string('id_remoto')->nullable();
+            $table->string('password_remoto')->nullable();
             $table->string('nombre_arqueo');
-            $table->string('observaciones')->nullable()->default('N/A');;
+            $table->string('observaciones')->nullable()->default('N/A');
+            ;
 
             $table->timestamps();
 

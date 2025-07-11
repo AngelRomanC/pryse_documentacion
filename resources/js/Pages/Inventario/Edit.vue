@@ -81,7 +81,7 @@ const handleSubmit = () => {
           <FormControl v-model="form.nombre_persona" type="text" :icon="mdiAccount" required />
         </FormField>
 
-        <FormField label="Deoartamento" :error="form.errors.departamento_id">
+        <FormField label="Departamento" :error="form.errors.departamento_id">
           <FormControl v-model="form.departamento_id" :options="departamentos" type="select" :icon="mdiHomeCity"
             required />
         </FormField>

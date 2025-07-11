@@ -39,7 +39,7 @@ class InventarioEquipoController extends Controller
 
         if ($request->filled('search')) {
             $query->where('nombre_persona', 'like', '%' . $request->search . '%')
-                ->orWhere('area', 'like', '%' . $request->search . '%')
+                ->orWhere('departamento_id', 'like', '%' . $request->search . '%')
                 ->orWhere('tipo_pc', 'like', '%' . $request->search . '%')
                 ->orWhere('marca_equipo', 'like', '%' . $request->search . '%')
                 ->orWhere('sistema_operativo', 'like', '%' . $request->search . '%')
@@ -164,8 +164,8 @@ class InventarioEquipoController extends Controller
 
         return redirect()->back()->with('success', 'Archivo importado correctamente.');
     }
-    public function mostrarFormularioImportacion()
+    public function mostrar()
     {
-        return Inertia::render('Inventario/Importar');
+        return Inertia::render( 'Inventario/Importar');
     }
 }

@@ -9,8 +9,11 @@
 </template>
 
 <script setup>
+import LayoutMain from '@/layouts/LayoutMain.vue' // <-- Asegúrate que esté correcto
 import { ref } from 'vue'
 import { useForm } from '@inertiajs/vue3'
+
+defineOptions({ layout: LayoutMain })
 
 const archivo = ref(null)
 const form = useForm({ archivo: null })
@@ -31,3 +34,4 @@ function submit() {
   })
 }
 </script>
+
