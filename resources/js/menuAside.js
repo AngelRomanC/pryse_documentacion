@@ -71,6 +71,12 @@ export default [
         icon: mdiFormatListChecks,
         role: "Admin",
       }, 
+       {
+    route: "marcas.index",
+    label: "Registrar Marcas",
+    icon: mdiGavel ,
+    role: "Admin",
+  }, 
     ]
   },
   
@@ -164,4 +170,5 @@ export default [
     icon: mdiGavel ,
     role: "Admin",
   }, 
+  
 ];

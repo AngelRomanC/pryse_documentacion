@@ -4,6 +4,7 @@ use App\Http\Controllers\DocumentoLegalController;
 use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\InventarioEquipoController;
 use App\Http\Controllers\LicitacionController;
+use App\Http\Controllers\MarcaController;
 use App\Http\Controllers\ModalidadController;
 use App\Http\Controllers\TipoDeDocumentoController;
 use App\Http\Controllers\DocumentoController;
@@ -113,6 +114,11 @@ Route::middleware('auth')->group(function () {
     Route::resource('inventario', InventarioEquipoController::class);
 
     Route::post('/inventario/importar', [InventarioEquipoController::class, 'importarExcel'])->name('inventario.importar');
+
+    //Catalogo
+    Route::resource('marcas', MarcaController::class);
+
+
 
 
 
