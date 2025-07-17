@@ -28,6 +28,10 @@ const props = defineProps({
   titulo: String,
   routeName: String,
   departamentos: Array,
+  marcasPorTipo: Object, // <--- nuevo
+  usuariosArqueo: Array, // <--- nuevo
+
+
 });
 
 const form = useForm({
@@ -49,6 +53,11 @@ const form = useForm({
   teclado_mouse: '',
   camara_web: '',
   otro_periferico: '',
+
+  software_remoto: '',
+  id_remoto: '',
+  password_remoto: '',
+
   nombre_arqueo: '',
   observaciones: '',
 });
@@ -65,14 +74,14 @@ const handleSubmit = () => {
     <SectionTitleLineWithButton :icon="mdiBallotOutline" :title="titulo" main />
 
     <CardBox form @submit.prevent="handleSubmit">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
         <FormField label="Nombre de Persona" :error="form.errors.nombre_persona">
-          <FormControl v-model="form.nombre_persona" type="text" :icon="mdiAccount" required />
+          <FormControl v-model="form.nombre_persona" type="text" :icon="mdiAccount" required
+            @input="form.nombre_persona = form.nombre_persona.toUpperCase()" />
         </FormField>
 
-        <FormField label="Deoartamento" :error="form.errors.departamento_id">
+        <FormField label="Departamento" :error="form.errors.departamento_id">
           <FormControl v-model="form.departamento_id" :options="departamentos" type="select" :icon="mdiHomeCity"
             required />
         </FormField>
@@ -87,42 +96,24 @@ const handleSubmit = () => {
         </FormField>
 
         <FormField label="Marca del Equipo" :error="form.errors.marca_equipo">
-          <FormControlSelect v-model="form.marca_equipo" type="select" :icon="mdiDesktopClassic" :options="[
-            { value: 'GENERICA (Armada)', text: 'GENERICA (Armada)' },
-            { value: 'DELL', text: 'DELL' },
-            { value: 'HP', text: 'HP' },
-            { value: 'LENOVO', text: 'LENOVO' },
-            { value: 'LENOVO Thinkpad', text: 'LENOVO Thinkpad' },
-            { value: 'ASUS', text: 'ASUS' },
-            { value: 'VORAGO', text: 'VORAGO' },
-            { value: 'ACER', text: 'ACER' },
-            { value: 'GHIA', text: 'GHIA' },
-            { value: 'HIUNDAI', text: 'HIUNDAI' },
-            { value: 'SAMSUNG', text: 'SAMSUNG' },
-            { value: 'MSI', text: 'MSI' },
-            { value: 'Otra', text: 'Otra' },
-            { value: 'Sharp', text: 'Sharp' },
-            { value: 'Brother', text: 'Brother' },
-          ]" required />
+          <FormControlSelect v-model="form.marca_equipo" type="select" :icon="mdiDesktopClassic"
+            :options="props.marcasPorTipo.marca_equipo.map(m => ({ value: m.nombre, text: m.nombre }))" required />
         </FormField>
 
         <FormField label="Sistema Operativo" :error="form.errors.sistema_operativo">
-          <FormControl v-model="form.sistema_operativo" type="text" :icon="mdiMicrosoftWindows" required />
+          <FormControl v-model="form.sistema_operativo" type="text" :icon="mdiMicrosoftWindows" required
+            @input="form.sistema_operativo = form.sistema_operativo.toUpperCase()" />
+
         </FormField>
 
         <FormField label="Procesador" :error="form.errors.procesador">
-          <FormControl v-model="form.procesador" type="text" :icon="mdiChip" required />
+          <FormControl v-model="form.procesador" type="text" :icon="mdiChip" required
+            @input="form.procesador = form.procesador.toUpperCase()" />
         </FormField>
 
         <FormField label="Tarjeta Madre" :error="form.errors.tarjeta_madre">
-          <FormControlSelect v-model="form.tarjeta_madre" type="text" :icon="mdiChip" :options="[
-            { value: 'DELL', text: 'DELL' },
-            { value: 'HP', text: 'HP' },
-            { value: 'LENOVO', text: 'LENOVO' },
-            { value: 'ASUS', text: 'ASUS' },
-            { value: 'GENÉRICA', text: 'GENÉRICA' },
-            { value: 'PROPIA DE LA MARCA', text: 'PROPIA DE LA MARCA' },
-          ]" required />
+          <FormControlSelect v-model="form.tarjeta_madre" type="select" :icon="mdiChip"
+            :options="props.marcasPorTipo.tarjeta_madre.map(m => ({ value: m.nombre, text: m.nombre }))" required />
         </FormField>
 
         <FormField label="Tarjeta Gráfica" :error="form.errors.tarjeta_grafica">
@@ -134,7 +125,8 @@ const handleSubmit = () => {
         </FormField>
 
         <FormField label="Datos Tarjeta Gráfica" :error="form.errors.datos_tarjeta_grafica">
-          <FormControl v-model="form.datos_tarjeta_grafica" type="text" :icon="mdiChip" />
+          <FormControl v-model="form.datos_tarjeta_grafica" type="text" :icon="mdiChip"
+            @input="form.datos_tarjeta_grafica = form.datos_tarjeta_grafica.toUpperCase()" />
         </FormField>
 
         <FormField label="Tipo de RAM" :error="form.errors.tipo_ram">
@@ -159,17 +151,9 @@ const handleSubmit = () => {
           ]" required />
         </FormField>
 
-        <FormField label="Marca de RAM" :error="form.errors.marca_ram">
-          <FormControlSelect v-model="form.marca_ram" type="text" :icon="mdiMemory" :options="[
-            { value: 'Kingston', text: 'Kingston)' },
-            { value: 'Adata ', text: 'Adata ' },
-            { value: 'G. Skill ', text: 'G.Skill' },
-            { value: 'Corsait', text: 'Corsait ' },
-            { value: 'Lexa', text: 'Lexa' },
-            { value: 'Crucial', text: 'Crucial' },
-            { value: 'Otra', text: 'Otra' },
-
-          ]" required />
+        <FormField label="Marca RAM" :error="form.errors.marca_ram">
+          <FormControlSelect v-model="form.marca_ram" type="select" :icon="mdiMemory"
+            :options="props.marcasPorTipo.marca_ram.map(m => ({ value: m.nombre, text: m.nombre }))" required />
         </FormField>
 
         <FormField label="Tipo de Disco" :error="form.errors.tipo_disco">
@@ -192,47 +176,51 @@ const handleSubmit = () => {
           ]" required />
         </FormField>
 
+
         <FormField label="Teclado y Mouse" :error="form.errors.teclado_mouse">
-          <FormControlSelect v-model="form.teclado_mouse" type="text" :icon="mdiUsb" :options="[
-            { value: 'Genéricos', text: 'Genéricos' },
-            { value: 'DELL', text: 'DELL' },
-            { value: 'HP', text: 'HP' },
-            { value: 'Logitec ', text: 'Logitec ' },
-            { value: 'Microsoft ', text: 'Microsoft ' },
-            { value: 'Genius', text: 'Genius ' },
-            { value: 'Razer', text: 'Razer' },
-            { value: 'HyperX', text: 'HyperX' },
-          ]" required />
+          <FormControlSelect v-model="form.teclado_mouse" type="select" :icon="mdiUsb"
+            :options="props.marcasPorTipo.teclado_mouse.map(m => ({ value: m.nombre, text: m.nombre }))" required />
         </FormField>
 
         <FormField label="Cámara Web" :error="form.errors.camara_web">
-          <FormControlSelect v-model="form.camara_web" type="text" :icon="mdiCamera" :options="[
-            { value: 'Genéricos', text: 'Genéricos' },
-            { value: 'DELL', text: 'DELL' },
-            { value: 'HP', text: 'HP' },
-            { value: 'Logitec ', text: 'Logitec ' },
-            { value: 'Microsoft ', text: 'Microsoft ' },
-            { value: 'Genius', text: 'Genius ' },
-            { value: 'Razer', text: 'Razer' },
-            { value: 'HyperX', text: 'HyperX' },
-          ]" required />
+          <FormControlSelect v-model="form.camara_web" type="select" :icon="mdiCamera"
+            :options="props.marcasPorTipo.camara_web.map(m => ({ value: m.nombre, text: m.nombre }))" required />
         </FormField>
 
         <FormField label="Otro Periférico" :error="form.errors.otro_periferico">
-          <FormControl v-model="form.otro_periferico" type="text" :icon="mdiUsb" />
+          <FormControl v-model="form.otro_periferico" type="text" :icon="mdiUsb"
+            @input="form.otro_periferico = form.otro_periferico.toUpperCase()" />
         </FormField>
-
-        <FormField label="Nombre Arqueo" :error="form.errors.nombre_arqueo">
-          <FormControlSelect v-model="form.nombre_arqueo" type="text" :icon="mdiAccount" :options="[
-            { value: 'Miguel', text: 'Miguel' },
-            { value: 'Moises', text: 'Moises' },
-            { value: 'Ricardo', text: 'Ricardo' },
-            { value: 'Mario ', text: 'Mario ' },
+        <FormField label="Software de Acceso Remoto" :error="form.errors.software_remoto">
+          <FormControlSelect v-model="form.software_remoto" :options="[
+            { value: 'TeamViewer', text: 'TeamViewer' },
+            { value: 'AnyDesk', text: 'AnyDesk' },
+            { value: 'Chrome Remote Desktop', text: 'Chrome Remote Desktop' },
+            { value: 'RustDesk', text: 'RustDesk' },
+            { value: 'Otro', text: 'Otro' },
           ]" required />
         </FormField>
 
+        <FormField v-if="form.software_remoto !== ''" label="ID Remoto" :error="form.errors.id_remoto">
+          <FormControl v-model="form.id_remoto" type="text" placeholder="Ej. 123 456 789" required />
+        </FormField>
+
+        <FormField v-if="form.software_remoto !== ''" label="Contraseña Remota" :error="form.errors.password_remoto">
+          <FormControl v-model="form.password_remoto" type="password" placeholder="Contraseña" required />
+        </FormField>
+
+
+     
+
+        <FormField label="Nombre Arqueo" :error="form.errors.nombre_arqueo">
+          <FormControlSelect v-model="form.nombre_arqueo" type="select" :icon="mdiAccount"
+            :options="props.usuariosArqueo.map(u => ({ value: u.id, text: u.name }))" required />
+        </FormField>
+
+
         <FormField label="Observaciones" :error="form.errors.observaciones">
-          <FormControl v-model="form.observaciones" type="text" :icon="mdiCommentTextOutline" required />
+          <FormControl v-model="form.observaciones" type="text" :icon="mdiCommentTextOutline" required
+            @input="form.observaciones = form.observaciones.toUpperCase()" />
         </FormField>
       </div>
 

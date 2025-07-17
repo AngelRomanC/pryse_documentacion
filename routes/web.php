@@ -4,6 +4,7 @@ use App\Http\Controllers\DocumentoLegalController;
 use App\Http\Controllers\EmpresaController;
 use App\Http\Controllers\InventarioEquipoController;
 use App\Http\Controllers\LicitacionController;
+use App\Http\Controllers\MarcaController;
 use App\Http\Controllers\ModalidadController;
 use App\Http\Controllers\TipoDeDocumentoController;
 use App\Http\Controllers\DocumentoController;
@@ -109,9 +110,19 @@ Route::middleware('auth')->group(function () {
     //Rutas para modulo de inventario 
     //Route::resource('/inventario', controller: InventarioEquipoController::class);
     //Route::resource('inventario', InventarioEquipoController::class)->names('inventario');
+    
+    Route::get('/inventario/form', [InventarioEquipoController::class, 'mostrar'])->name('inventario.form'); //declarar antes de la ruta principal
+
     Route::resource('inventario', InventarioEquipoController::class);
 
     Route::post('/inventario/importar', [InventarioEquipoController::class, 'importarExcel'])->name('inventario.importar');
+    //Route::get('/form', [InventarioEquipoController::class, 'mostrar'])->name('inventario.form');
+
+
+    //Catalogo
+    Route::resource('marcas', MarcaController::class);
+
+
 
     //Rutas para modulo de sistema
     Route::resource('sistema', controller: SistemaController::class);

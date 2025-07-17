@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,           
             EstadosSeeder::class,
             DatosSeeder::class,
+            MarcaSeeder::class,
             
            
         ]);

@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreInventarioEquipoRequest;
 use App\Models\Departamento;
 use App\Models\InventarioEquipo;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\InventarioEquipoImport;
+use App\Models\Marca;
+
 
 
 
@@ -36,7 +39,7 @@ class InventarioEquipoController extends Controller
 
         if ($request->filled('search')) {
             $query->where('nombre_persona', 'like', '%' . $request->search . '%')
-                ->orWhere('area', 'like', '%' . $request->search . '%')
+                ->orWhere('departamento_id', 'like', '%' . $request->search . '%')
                 ->orWhere('tipo_pc', 'like', '%' . $request->search . '%')
                 ->orWhere('marca_equipo', 'like', '%' . $request->search . '%')
                 ->orWhere('sistema_operativo', 'like', '%' . $request->search . '%')
@@ -69,12 +72,27 @@ class InventarioEquipoController extends Controller
     {
         //
         $departamentos = Departamento::select('id', 'nombre as name')->get();
+        $tipos = ['marca_equipo', 'tarjeta_madre', 'camara_web', 'teclado_mouse', 'marca_ram'];
+
+        $marcasPorTipo = [];
+        foreach ($tipos as $tipo) {
+            $marcasPorTipo[$tipo] = Marca::whereHas('tipos', function ($query) use ($tipo) {
+                $query->where('tipo', $tipo);
+            })->orderBy('nombre')->get(['id', 'nombre']);
+        }
+        $usuariosArqueo = User::where('role', 'admin') // si tienes campo `role`
+            ->select('id', 'name')
+            ->orderBy('name')
+            ->get();
+
+
 
         return Inertia::render('Inventario/Create', [
             'titulo' => 'Inventario de Equipos',
             'routeName' => $this->routeName,
             'departamentos' => $departamentos,
-
+            'marcasPorTipo' => $marcasPorTipo, // <--- lo nuevo
+            'usuariosArqueo' => $usuariosArqueo, // <--- nuevo
 
         ]);
 
@@ -102,24 +120,24 @@ class InventarioEquipoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(InventarioEquipo $inventarioEquipo)
+    public function edit(InventarioEquipo $inventario)
     {
         //
-        dd($inventarioEquipo);
+        // dd($inventarioEquipo);
         $departamentos = Departamento::select('id', 'nombre as name')->get();
 
         return Inertia::render('Inventario/Edit', [
             'titulo' => 'Editar Equipo',
             'routeName' => $this->routeName,
             'departamentos' => $departamentos,
-            'inventario' => $inventarioEquipo,
+            'inventario' => $inventario,
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreInventarioEquipoRequest  $request, InventarioEquipo $inventarioEquipo)
+    public function update(StoreInventarioEquipoRequest $request, InventarioEquipo $inventarioEquipo)
     {
         //
         $inventarioEquipo->update($request->validated());
@@ -146,8 +164,8 @@ class InventarioEquipoController extends Controller
 
         return redirect()->back()->with('success', 'Archivo importado correctamente.');
     }
-    public function mostrarFormularioImportacion()
+    public function mostrar()
     {
-        return Inertia::render('Inventario/Importar');
+        return Inertia::render( 'Inventario/Importar');
     }
 }

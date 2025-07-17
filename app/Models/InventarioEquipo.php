@@ -26,6 +26,11 @@ class InventarioEquipo extends Model
         'teclado_mouse',
         'camara_web',
         'otro_periferico',
+
+        'software_remoto',
+        'id_remoto',
+        'password_remoto',
+        
         'nombre_arqueo',
         'observaciones',
     ];
