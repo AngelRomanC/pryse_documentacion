@@ -84,40 +84,6 @@ const marcarParaEliminar = (id, tipo) => {
     }
 };
 
-// Función para guardar
-const guardar2 = () => {
-    // Crear FormData para enviar archivos
-    const formData = new FormData();
-    
-    // Agregar campos normales
-    Object.keys(form.data()).forEach(key => {
-        if (key !== 'nuevos_documentos_principales' && key !== 'nuevos_documentos_anexos') {
-            formData.append(key, form[key]);
-        }
-    });
-    
-    // Agregar nuevos archivos principales
-    form.nuevos_documentos_principales.forEach((file, index) => {
-        formData.append(`nuevos_documentos_principales[${index}]`, file);
-    });
-    
-    // Agregar nuevos archivos anexos
-    form.nuevos_documentos_anexos.forEach((file, index) => {
-        formData.append(`nuevos_documentos_anexos[${index}]`, file);
-    });
-    
-    // // Enviar el formulario
-    // router.post(route(`${props.routeName}update`, props.documento.id), formData, {
-    //     forceFormData: true,
-    //     onSuccess: () => {
-        router.post(route(`${props.routeName}update`, props.documento.id), {
-        _method: 'PATCH',
-        ...form.data(),
-    }, {
-        forceFormData: true,
-      
-    });
-};
 const guardar = () => {
 
     isUploading.value = true;

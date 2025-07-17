@@ -164,4 +164,12 @@ export default [
     icon: mdiGavel ,
     role: "Admin",
   }, 
+    {
+    route: "sistema.index",
+    //href:"/inventario",
+
+    label: "Inventario Sistema",
+    icon: mdiGavel ,
+    role: "Admin",
+  }, 
 ];

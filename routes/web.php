@@ -26,8 +26,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 use App\Http\Controllers\NotificationController;
-
-
+use App\Http\Controllers\SistemaController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -114,8 +113,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/inventario/importar', [InventarioEquipoController::class, 'importarExcel'])->name('inventario.importar');
 
-
-
+    //Rutas para modulo de sistema
+    Route::resource('sistema', controller: SistemaController::class);
 });
 
 require __DIR__ . '/auth.php';
