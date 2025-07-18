@@ -33,7 +33,7 @@ return new class extends Migration {
             $table->string('software_remoto')->nullable();
             $table->string('id_remoto')->nullable();
             $table->string('password_remoto')->nullable();
-            $table->string('nombre_arqueo');
+            $table->string('name_id');
             $table->string('observaciones')->nullable()->default('N/A');
             ;
 

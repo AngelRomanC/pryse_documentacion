@@ -23,10 +23,8 @@ class StoreInventarioEquipoRequest extends FormRequest
     public function rules(): array
     {
       return [
-            //'fecha_registro'         => 'required|date',
             'nombre_persona'         => 'required|string|max:255',
-            //'departamento_id'        => 'required|string|max:255',
-            'departamento_id' => 'required|integer|exists:departamentos,id',
+            'departamento_id'        => 'required|integer|exists:departamentos,id',
             'tipo_pc'                => 'required|string|max:100',
             'marca_equipo'           => 'required|string|max:100',
             'sistema_operativo'      => 'required|string|max:100',
@@ -42,7 +40,10 @@ class StoreInventarioEquipoRequest extends FormRequest
             'teclado_mouse'          => 'required|string|max:255',
             'camara_web'             => 'required|string|max:255',
             'otro_periferico'        => 'required|string|max:255',
-            'nombre_arqueo'          => 'required|string|max:255',
+            'software_remoto'        => 'nullable|string|max:255',
+            'id_remoto'              => 'nullable|string|max:255',
+            'password_remoto'        => 'nullable|string|max:255',
+            'name_id'                => 'required|integer|exists:users,id',
             'observaciones'          => 'nullable|string|max:500',
         ];
     }
@@ -52,6 +53,9 @@ class StoreInventarioEquipoRequest extends FormRequest
         'departamento_id.required' => 'El campo departamento es obligatorio.',
         'departamento_id.integer' => 'El departamento debe ser un valor numérico.',
         'departamento_id.exists' => 'El departamento seleccionado no es válido.',
+
+        'name_id.required' => 'El campo nombre es obligatorio.',
+
     ];
 }
 

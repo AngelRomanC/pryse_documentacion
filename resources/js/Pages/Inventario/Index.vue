@@ -77,7 +77,7 @@ const destroy = (id) => {
         <thead>
           <tr>
             <th class="border p-2">Nombre</th>
-            <th class="border p-2">Área</th>
+            <th class="border p-2">Departamento</th>
             <th class="border p-2">Tipo PC S.O.</th>
             <th class="border p-2">Procesador</th>
             <th class="border p-2">RAM</th>
@@ -89,7 +89,7 @@ const destroy = (id) => {
         <tbody>
           <tr v-for="item in inventarios.data" :key="item.id">
             <td class="border p-2">{{ item.nombre_persona }}</td>
-            <td class="border p-2">{{ item.departamento_id }}</td>
+            <td class="border p-2">{{ item.departamento.nombre }}</td>
             <td class="border p-2">{{ item.tipo_pc }} {{ item.marca_equipo }} {{ item.sistema_operativo }}</td>
             <td class="border p-2">{{ item.procesador }}</td>
             <td class="border p-2">{{ item.capacidad_ram }} {{ item.tipo_ram }}</td>
