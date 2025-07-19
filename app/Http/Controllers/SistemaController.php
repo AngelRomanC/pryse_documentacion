@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Sistema;
 use App\Http\Requests\StoreSistemaRequest;
 use App\Http\Requests\UpdateSistemaRequest;
+use Illuminate\Support\Facades\Log;
 use App\Models\Departamento;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -131,62 +132,85 @@ class SistemaController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateSistemaRequest $request, Sistema $sistema) {
-        dd($request->all()); // Debugging: Verifica los datos recibidos
-        DB::beginTransaction();
-        try {
-            // Actualizar datos básicos primero
-            $sistema->update($request->only([
-                'nombre', 'descripcion', 'departamento_id', 'url',
-                'fecha_creacion', 'fecha_produccion', 'estatus',
-                'numero_usuarios', 'nombre_servidor', 'ip_servidor',
-                'sistema_operativo', 'nombre_servidor_bd', 'ip_servidor_bd',
-                'lenguaje_desarrollo', 'version_lenguaje'
-            ]));
 
-            // Manejar archivos a eliminar (si existen)
-            if ($request->has('archivos_a_eliminar') && is_array($request->archivos_a_eliminar)) {
-                $archivosAEliminar = array_unique($request->archivos_a_eliminar);
-                
-                foreach ($archivosAEliminar as $archivoId) {
-                    $archivo = $sistema->archivos()->find($archivoId);
-                    
-                    if ($archivo) {
-                        // Eliminar físicamente el archivo
-                        if (Storage::disk('public')->exists($archivo->ruta_archivo)) {
-                            Storage::disk('public')->delete($archivo->ruta_archivo);
-                        }
-                        // Eliminar registro de la BD
-                        $archivo->delete();
-                    }
-                }
-            }
+    public function update(UpdateSistemaRequest $request, Sistema $sistema)
+{
+    DB::beginTransaction();
+    
+    try {
+        // 1. Actualizar los datos principales del sistema
+        $sistema->update($request->only([
+            'nombre',
+            'descripcion',
+            'departamento_id',
+            'url',
+            'fecha_creacion',
+            'fecha_produccion',
+            'estatus',
+            'numero_usuarios',
+            'nombre_servidor',
+            'ip_servidor',
+            'sistema_operativo',
+            'nombre_servidor_bd',
+            'ip_servidor_bd',
+            'lenguaje_desarrollo',
+            'version_lenguaje'
+        ]));
 
-            // Manejar nuevos archivos (si existen)
-            if ($request->hasFile('nuevos_documentos_principales')) {
-                foreach ($request->file('nuevos_documentos_principales') as $file) {
-                    $nombreOriginal = $file->getClientOriginalName();
-                    $ruta = $file->store('documentos_sistema', 'public');
-                    
-                    $sistema->archivos()->create([
-                        'ruta_archivo' => $ruta,
-                        'nombre_original' => $nombreOriginal
-                    ]);
-                }
-            }
-
-            DB::commit(); // Confirma la transacción
-            return redirect()->route($this->routeName . 'index')
-                ->with('success', 'Sistema actualizado correctamente.');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return redirect()->back()
-                ->with('error', 'Error al actualizar: ' . $e->getMessage());
+        // 2. Eliminar archivos marcados para borrar
+        if (!empty($request->archivos_a_eliminar)) {
+            $this->eliminarArchivos($sistema, $request->archivos_a_eliminar);
         }
+
+        // 3. Guardar nuevos archivos
+        if ($request->hasFile('nuevos_documentos_principales')) {
+            $this->guardarNuevosArchivos($sistema, $request->file('nuevos_documentos_principales'));
+        }
+
+        DB::commit();
+
+        // Redirigir con mensaje de éxito
+        return redirect()->route($this->routeName . 'index')->with('success', 'Información del sistema actualizado con éxito.');
+    } catch (\Exception $e) {
+        DB::rollBack();
+        Log::error('Error al actualizar sistema: ' . $e->getMessage());
+        
+        return back()
+            ->withInput()
+            ->with('error', 'Error al actualizar el sistema: ' . $e->getMessage());
     }
+}
+
+/**
+ * Elimina archivos del storage y de la base de datos
+ */
+protected function eliminarArchivos(Sistema $sistema, array $archivosIds)
+{
+    $archivos = $sistema->archivos()->whereIn('id', $archivosIds)->get();
+    
+    foreach ($archivos as $archivo) {
+        // Eliminar del storage
+        Storage::disk('public')->delete($archivo->ruta_archivo);
+        // Eliminar registro de la base de datos
+        $archivo->delete();
+    }
+}
+
+/**
+ * Guarda nuevos archivos en el storage y registros en la base de datos
+ */
+protected function guardarNuevosArchivos(Sistema $sistema, array $archivos)
+{
+    foreach ($archivos as $archivo) {
+        $ruta = $archivo->store('documentos_sistema', 'public');
+        
+        $sistema->archivos()->create([
+            'ruta_archivo' => $ruta,
+            'nombre_original' => $archivo->getClientOriginalName(),
+            // Agrega aquí otros campos necesarios según tu modelo DocumentoSistema
+        ]);
+    }
+}
 
     /**
      * Remove the specified resource from storage.
