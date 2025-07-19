@@ -35,7 +35,7 @@ class DatosSeeder extends Seeder
             ['nombre' => 'FLOTILLAS'],
 
         ]);
-/*
+
         DB::table('tipo_de_documentos')->insert([
             ['nombre_documento' => 'Autorización Aguascalientes'],
             ['nombre_documento' => 'Autorización Baja California Sur'],
@@ -98,7 +98,7 @@ class DatosSeeder extends Seeder
             ['nombre_modalidad' => 'III. Seguridad privada en el traslado de bienes o valores '],
             ['nombre_modalidad' => 'IV. Servicios de alarmas y de monitoreo electrónico '],
 
-        ]); */
+        ]); 
 
     }
 }

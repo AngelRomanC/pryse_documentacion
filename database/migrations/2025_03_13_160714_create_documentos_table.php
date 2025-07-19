@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('documentos', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre_documento');
+            $table->string('nombre');
             $table->foreignId('empresa_id')->constrained('empresas')->onDelete('cascade'); // Clave foránea
             $table->foreignId('tipo_de_documento_id')->constrained('tipo_de_documentos')->onDelete('cascade'); // Clave foránea
             $table->foreignId('estado_id')->nullable()->constrained('estados')->onDelete('set null'); // Clave foránea // Estado opcional
