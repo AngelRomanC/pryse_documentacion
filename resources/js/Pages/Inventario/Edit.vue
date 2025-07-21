@@ -9,6 +9,8 @@ import FormField from "@/components/FormField.vue";
 import FormControl from "@/components/FormControl.vue";
 import FormControlSelect from "@/components/FormControlSelect.vue";
 import { onMounted } from 'vue';
+import FormControlPassword from "@/components/FormControlPassword.vue";
+
 
 import {
   mdiBallotOutline,
@@ -72,7 +74,7 @@ const handleSubmit = () => {
 };
 
 
-
+console.log("Inventario recibido:", props.inventario);
 </script>
 
 <template>
@@ -122,8 +124,8 @@ const handleSubmit = () => {
 
         <FormField label="Tarjeta Gráfica" :error="form.errors.tarjeta_grafica">
           <FormControlSelect v-model="form.tarjeta_grafica" type="text" :icon="mdiChip" :options="[
-            { value: 'INTEGRADA AL PROCESADOR', text: 'INTEGRADA AL PROCESADOR' },
-            { value: 'EXTERNA', text: 'EXTERNA' },
+            { value: 'Integrada al procesador' , text: 'INTEGRADA AL PROCESADOR' },
+            { value: 'Externa', text: 'EXTERNA' },
 
           ]" required />
         </FormField>
@@ -136,7 +138,7 @@ const handleSubmit = () => {
           <FormControlSelect v-model="form.tipo_ram" type="text" :icon="mdiMemory" :options="[
             { value: 'DDR2', text: 'DDR2' },
             { value: 'DDR3', text: 'DDR3' },
-            { value: 'DDR4 ', text: 'DDR4 ' },
+            { value: 'DDR4', text: 'DDR4' },
             { value: 'DDR5', text: 'DDR5' },
           ]" required />
         </FormField>
@@ -144,8 +146,8 @@ const handleSubmit = () => {
         <FormField label="Capacidad RAM" :error="form.errors.capacidad_ram">
           <FormControlSelect v-model="form.capacidad_ram" type="select" :icon="mdiMemory" :options="[
             { value: '2 GB', text: '2 GB' },
-            { value: '4 GB ', text: '4 GB' },
-            { value: '6 GB ', text: '6 GB' },
+            { value: '4 GB', text: '4 GB' },
+            { value: '6 GB', text: '6 GB' },
             { value: '8 GB', text: '8 GB' },
             { value: '12 GB', text: '12 GB' },
             { value: '16 GB', text: '16 GB' },
@@ -162,7 +164,7 @@ const handleSubmit = () => {
         <FormField label="Tipo de Disco" :error="form.errors.tipo_disco">
           <FormControlSelect v-model="form.tipo_disco" type="text" :icon="mdiHarddisk" :options="[
             { value: 'SSD', text: 'SSD' },
-            { value: 'M2 ', text: 'M2' },
+            { value: 'M2', text: 'M2' },
             { value: 'HDD', text: 'HDD' },
             { value: 'HDD & SSD', text: 'HDD & SSD' },
           ]" required />
@@ -172,9 +174,9 @@ const handleSubmit = () => {
           <FormControlSelect v-model="form.capacidad_disco" type="text" :icon="mdiHarddisk" :options="[
             { value: 'Menos de 100 GB', text: 'Menos de 100 GB' },
             { value: '120 GB', text: '120 GB' },
-            { value: '256 GB ', text: '256 GB ' },
-            { value: '460 GB ', text: '460 GB ' },
-            { value: '512 GB', text: '512 GB ' },
+            { value: '256 GB', text: '256 GB' },
+            { value: '460 GB', text: '460 GB' },
+            { value: '512 GB', text: '512 GB' },
             { value: '1 TB', text: '1 TB' },
             { value: '2 TB', text: '2 TB' },
           ]" required />
@@ -209,11 +211,8 @@ const handleSubmit = () => {
         </FormField>
 
         <FormField v-if="form.software_remoto !== ''" label="Contraseña Remota" :error="form.errors.password_remoto">
-          <FormControl v-model="form.password_remoto" type="password" placeholder="Contraseña" required />
-        </FormField>
-
-
-
+          <FormControlPassword v-model="form.password_remoto" type="password" placeholder="Contraseña" required />
+        </FormField>     
 
         <FormField label="Nombre Arqueo" :error="form.errors.name_id">
           <FormControlSelect v-model="form.name_id" type="select" :icon="mdiAccount"

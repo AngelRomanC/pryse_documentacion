@@ -35,7 +35,7 @@ const props = defineProps({
 });
 
 const form = useForm({
-  fecha_registro: '',
+  //fecha_registro: '',
   nombre_persona: '',
   departamento_id: '',
   tipo_pc: '',
@@ -119,8 +119,8 @@ const handleSubmit = () => {
 
         <FormField label="Tarjeta Gráfica" :error="form.errors.tarjeta_grafica">
           <FormControlSelect v-model="form.tarjeta_grafica" type="text" :icon="mdiChip" :options="[
-            { value: 'INTEGRADA AL PROCESADOR', text: 'INTEGRADA AL PROCESADOR' },
-            { value: 'EXTERNA', text: 'EXTERNA' },
+            { value: 'Integrada al procesador', text: 'INTEGRADA AL PROCESADOR' },
+            { value: 'Externa', text: 'EXTERNA' },
 
           ]" required />
         </FormField>
@@ -134,7 +134,7 @@ const handleSubmit = () => {
           <FormControlSelect v-model="form.tipo_ram" type="text" :icon="mdiMemory" :options="[
             { value: 'DDR2', text: 'DDR2' },
             { value: 'DDR3', text: 'DDR3' },
-            { value: 'DDR4 ', text: 'DDR4 ' },
+            { value: 'DDR4', text: 'DDR4' },
             { value: 'DDR5', text: 'DDR5' },
           ]" required />
         </FormField>
@@ -142,8 +142,8 @@ const handleSubmit = () => {
         <FormField label="Capacidad RAM" :error="form.errors.capacidad_ram">
           <FormControlSelect v-model="form.capacidad_ram" type="select" :icon="mdiMemory" :options="[
             { value: '2 GB', text: '2 GB' },
-            { value: '4 GB ', text: '4 GB' },
-            { value: '6 GB ', text: '6 GB' },
+            { value: '4 GB', text: '4 GB' },
+            { value: '6 GB', text: '6 GB' },
             { value: '8 GB', text: '8 GB' },
             { value: '12 GB', text: '12 GB' },
             { value: '16 GB', text: '16 GB' },
@@ -170,9 +170,9 @@ const handleSubmit = () => {
           <FormControlSelect v-model="form.capacidad_disco" type="text" :icon="mdiHarddisk" :options="[
             { value: 'Menos de 100 GB', text: 'Menos de 100 GB' },
             { value: '120 GB', text: '120 GB' },
-            { value: '256 GB ', text: '256 GB ' },
-            { value: '460 GB ', text: '460 GB ' },
-            { value: '512 GB', text: '512 GB ' },
+            { value: '256 GB', text: '256 GB' },
+            { value: '460 GB', text: '460 GB' },
+            { value: '512 GB', text: '512 GB' },
             { value: '1 TB', text: '1 TB' },
             { value: '2 TB', text: '2 TB' },
           ]" required />

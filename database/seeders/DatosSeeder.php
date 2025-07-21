@@ -52,7 +52,7 @@ class DatosSeeder extends Seeder
 
 
 
-        ]);
+        
         /*
                 DB::table('tipo_de_documentos')->insert([
                     ['nombre_documento' => 'Autorización Aguascalientes'],
