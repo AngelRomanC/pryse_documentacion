@@ -15,7 +15,6 @@ import CatalogoRedirectButton from '@/Components/CatalogoRedirectButton.vue';
 import { ref } from 'vue'
 import LoadingOverlay from '@/components/LoadingOverlay.vue';
 
-
 const isUploading = ref(false)
 
 const props = defineProps({

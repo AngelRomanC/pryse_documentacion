@@ -39,6 +39,18 @@ class DatosSeeder extends Seeder
             ['nombre' => 'SISTEMAS'],
 
 
+        ]);
+
+        DB::table('tipo_de_documentos')->insert([
+            ['nombre_documento' => 'Autorización Aguascalientes'],
+            ['nombre_documento' => 'Autorización Baja California Sur'],
+            ['nombre_documento' => 'Autorización Campeche'],
+            ['nombre_documento' => 'Autorización CDMX'],
+            ['nombre_documento' => 'Acta Constitutiva'],
+            ['nombre_documento' => 'Identificación Oficial'],
+        ]);
+
+
 
         ]);
         /*
@@ -104,7 +116,11 @@ class DatosSeeder extends Seeder
                     ['nombre_modalidad' => 'III. Seguridad privada en el traslado de bienes o valores '],
                     ['nombre_modalidad' => 'IV. Servicios de alarmas y de monitoreo electrónico '],
 
+
+        ]); 
+
                 ]); */
+
 
     }
 }

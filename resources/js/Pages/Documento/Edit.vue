@@ -85,48 +85,40 @@ const marcarParaEliminar = (id, tipo) => {
 };
 
 const guardar = () => {
-
-    isUploading.value = true;
-
+    // Convertir el Proxy a un array normal
+    const archivosIds = [...form.archivos_a_eliminar];
+    
+    // Crear FormData para enviar archivos y datos
     const formData = new FormData();
-
-    // Serializar todos los campos excepto los archivos
+    
+    // Añadir todos los campos normales
     Object.entries(form.data()).forEach(([key, value]) => {
-        if (key === 'nuevos_documentos_principales' || key === 'nuevos_documentos_anexos') return;
-
-        if (Array.isArray(value)) {
-            value.forEach(v => formData.append(`${key}[]`, v));
-        } else {
+        if (key !== 'nuevos_documentos_principales' && key !== 'archivos_a_eliminar') {
             formData.append(key, value);
         }
     });
-
-    // Archivos principales
-    form.nuevos_documentos_principales.forEach((file, index) => {
-        formData.append(`nuevos_documentos_principales[${index}]`, file);
+    
+    // Añadir archivos nuevos
+    form.nuevos_documentos_principales.forEach(file => {
+        formData.append('nuevos_documentos_principales[]', file);
     });
-
-    // Archivos anexos
-    form.nuevos_documentos_anexos.forEach((file, index) => {
-        formData.append(`nuevos_documentos_anexos[${index}]`, file);
+    
+    // Añadir IDs a eliminar
+    archivosIds.forEach(id => {
+        formData.append('archivos_a_eliminar[]', id);
     });
-
-    // PATCH override
-    formData.append('_method', 'PATCH');
-
-    // Usar router.post pero enviando FormData REAL
-    router.post(route(`${props.routeName}update`, props.documento.id), formData, {
-        forceFormData: true,
-        preserveScroll: true,
-        onFinish: () => {
-            isUploading.value = false;
-        },
-        onError: (errors) => {
-                isUploading.value = false;
-                form.setError(errors); // <- ASÍ se vinculan manualmente
-
-            console.log('Errores de validación:', errors);
+    
+    isUploading.value = true;
+    
+    axios.post(route(`${props.routeName}update`, props.sistema.id), formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
         }
+    }).then(response => {
+        // Manejo de éxito
+    }).catch(error => {
+        console.error('Error detallado:', error.response);
+        // Manejo de error
     });
 };
 
