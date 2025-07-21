@@ -31,7 +31,7 @@ class InventarioEquipo extends Model
         'id_remoto',
         'password_remoto',
         
-        'nombre_arqueo',
+        'name_id',
         'observaciones',
     ];
 

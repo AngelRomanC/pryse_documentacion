@@ -2,7 +2,9 @@
 
 namespace App\Imports;
 
+use App\Models\Departamento;
 use App\Models\InventarioEquipo;
+use App\Models\User;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
@@ -19,9 +21,10 @@ class InventarioEquipoImport implements ToModel, WithHeadingRow
     {
         return new InventarioEquipo([
             //'fecha_registro'         => $row['marca_temporal'] ?? now(),
-            'fecha_registro' => $this->parseFecha($row['marca_temporal'] ?? null),
+            'fecha_registro'         => $this->parseFecha($row['marca_temporal'] ?? null),
             'nombre_persona'         => $row['nombre'],
-            'departamento_id'                   => $row['area'],
+            //'departamento_id'        => $row['area'],
+            'departamento_id'        => $this->getDepartamentoId($row['area']),
             'tipo_pc'                => $row['tipo_de_pc'],
             'marca_equipo'           => $row['marca_del_equipo'],
             'sistema_operativo'      => $row['sistema_operativo_modelo'],
@@ -37,7 +40,8 @@ class InventarioEquipoImport implements ToModel, WithHeadingRow
             'teclado_mouse'          => $row['teclado_y_mouse'],
             'camara_web'             => $row['camara_web'],
             'otro_periferico'        => $row['otro_periferico_asignado'],
-            'nombre_arqueo'          => $row['nombre_del_arqueo'],
+            'name_id'                => $row['nombre_del_arqueo'],
+            //'name_id'                => $this->getUserIdByName($row['nombre_del_arqueo']),
             'observaciones'          => $row['observaciones'] ?? 'N/A',
         ]);
     }
@@ -68,5 +72,22 @@ public function parseFecha($valor)
 
     return now(); // último recurso
 }
+private function getDepartamentoId($nombre)
+{
+    $id = Departamento::where('nombre', $nombre)->value('id');
+
+    if (!$id) {
+        // Puedes lanzar una excepción para detener la importación y mostrar el error
+        throw new \Exception("El departamento '{$nombre}' no existe en la base de datos.");
+    }
+
+    return $id;
+}
+
+
+    private function getUserIdByName($nombre)
+    {
+        return User::where('name', $nombre)->value('id') ?? null;
+    }
 
 }

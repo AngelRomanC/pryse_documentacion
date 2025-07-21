@@ -58,7 +58,8 @@ const form = useForm({
   id_remoto: '',
   password_remoto: '',
 
-  nombre_arqueo: '',
+
+  name_id: '',
   observaciones: '',
 });
 
@@ -161,6 +162,7 @@ const handleSubmit = () => {
             { value: 'SSD', text: 'SSD' },
             { value: 'M2 ', text: 'M2' },
             { value: 'HDD', text: 'HDD' },
+            { value: 'HDD & SSD', text: 'HDD & SSD'},
           ]" required />
         </FormField>
 
@@ -191,6 +193,7 @@ const handleSubmit = () => {
           <FormControl v-model="form.otro_periferico" type="text" :icon="mdiUsb"
             @input="form.otro_periferico = form.otro_periferico.toUpperCase()" />
         </FormField>
+        
         <FormField label="Software de Acceso Remoto" :error="form.errors.software_remoto">
           <FormControlSelect v-model="form.software_remoto" :options="[
             { value: 'TeamViewer', text: 'TeamViewer' },
@@ -212,8 +215,8 @@ const handleSubmit = () => {
 
      
 
-        <FormField label="Nombre Arqueo" :error="form.errors.nombre_arqueo">
-          <FormControlSelect v-model="form.nombre_arqueo" type="select" :icon="mdiAccount"
+        <FormField label="Nombre Arqueo" :error="form.errors.name_id">
+          <FormControlSelect v-model="form.name_id" type="select" :icon="mdiAccount"
             :options="props.usuariosArqueo.map(u => ({ value: u.id, text: u.name }))" required />
         </FormField>
 

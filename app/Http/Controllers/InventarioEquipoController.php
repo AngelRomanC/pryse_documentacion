@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreInventarioEquipoRequest;
+use App\Http\Requests\UpdateInventarioEquipoRequest;
 use App\Models\Departamento;
 use App\Models\InventarioEquipo;
 use App\Models\User;
@@ -35,7 +36,9 @@ class InventarioEquipoController extends Controller
 
     public function index(Request $request)
     {
-        $query = InventarioEquipo::query();
+        //$query = InventarioEquipo::query();
+        $query = InventarioEquipo::with('departamento'); // Cargar la relación
+
 
         if ($request->filled('search')) {
             $query->where('nombre_persona', 'like', '%' . $request->search . '%')
@@ -49,7 +52,7 @@ class InventarioEquipoController extends Controller
                 ->orWhere('tipo_ram', 'like', '%' . $request->search . '%')
                 ->orWhere('tipo_disco', 'like', '%' . $request->search . '%')
                 ->orWhere('capacidad_disco', 'like', '%' . $request->search . '%')
-                ->orWhere('nombre_arqueo', 'like', '%' . $request->search . '%');
+                ->orWhere('name_id', 'like', '%' . $request->search . '%');
         }
 
         $inventarios = $query->orderBy('id', 'desc')
@@ -124,6 +127,19 @@ class InventarioEquipoController extends Controller
     {
         //
         // dd($inventarioEquipo);
+        $usuariosArqueo = User::where('role', 'admin') // si tienes campo `role`
+            ->select('id', 'name')
+            ->orderBy('name')
+            ->get();
+
+        $tipos = ['marca_equipo', 'tarjeta_madre', 'camara_web', 'teclado_mouse', 'marca_ram'];
+        $marcasPorTipo = [];
+        foreach ($tipos as $tipo) {
+            $marcasPorTipo[$tipo] = Marca::whereHas('tipos', function ($query) use ($tipo) {
+                $query->where('tipo', $tipo);
+            })->orderBy('nombre')->get(['id', 'nombre']);
+        }
+
         $departamentos = Departamento::select('id', 'nombre as name')->get();
 
         return Inertia::render('Inventario/Edit', [
@@ -131,18 +147,23 @@ class InventarioEquipoController extends Controller
             'routeName' => $this->routeName,
             'departamentos' => $departamentos,
             'inventario' => $inventario,
+            'usuariosArqueo' => $usuariosArqueo,
+            'marcasPorTipo' => $marcasPorTipo,
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreInventarioEquipoRequest $request, InventarioEquipo $inventarioEquipo)
+    public function update(UpdateInventarioEquipoRequest $request, InventarioEquipo $inventario)
     {
         //
-        $inventarioEquipo->update($request->validated());
 
-        return redirect()->route($this->routeName . 'index')->with('success', 'Equipo actualizado correctamente.');
+        $inventario->update($request->validated());
+        //dd($request->validated());
+
+
+        return redirect()->route($this->routeName . 'index')->with('success', 'Registro de Equipo actualizado correctamente.');
     }
 
     /**
@@ -166,6 +187,6 @@ class InventarioEquipoController extends Controller
     }
     public function mostrar()
     {
-        return Inertia::render( 'Inventario/Importar');
+        return Inertia::render('Inventario/Importar');
     }
 }

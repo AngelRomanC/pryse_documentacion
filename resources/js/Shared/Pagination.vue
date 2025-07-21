@@ -2,16 +2,17 @@
     <div v-if="(total) > 1" class="p-3 lg:px-6 border-t border-gray-100 dark:border-slate-800">
         <BaseLevel>
             <BaseButtons>
-                <BaseButton v-for="page in total" :key="page" :active="page === currentPage" :label="page"
-                    :href="links[page].url" @click="() => {
-                        currentPage = page
-                        isLoading = true
-                    }"
-                    :color="page === currentPage ? 'lightDark' : 'whiteDark'" small />
+                
             </BaseButtons>
+            <BaseButton v-for="page in total" :key="page" :active="page === currentPage" :label="page"
+                :href="`?page=${page}`" @click="() => {
+                    currentPage = page
+                    isLoading = true
+                }" :color="page === currentPage ? 'lightDark' : 'whiteDark'" small />
+
             <small> Página {{ currentPage }} de {{
                 total
-            }}</small>
+                }}</small>
         </BaseLevel>
     </div>
 
@@ -43,4 +44,3 @@ export default {
     }
 }
 </script>
-
