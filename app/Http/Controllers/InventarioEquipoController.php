@@ -42,7 +42,7 @@ class InventarioEquipoController extends Controller
 
         if ($request->filled('search')) {
             $query->where('nombre_persona', 'like', '%' . $request->search . '%')
-                ->orWhere('departamento_id', 'like', '%' . $request->search . '%')
+                //->orWhere(column: 'departamento_id', 'like', '%' . $request->search . '%')
                 ->orWhere('tipo_pc', 'like', '%' . $request->search . '%')
                 ->orWhere('marca_equipo', 'like', '%' . $request->search . '%')
                 ->orWhere('sistema_operativo', 'like', '%' . $request->search . '%')
@@ -52,7 +52,10 @@ class InventarioEquipoController extends Controller
                 ->orWhere('tipo_ram', 'like', '%' . $request->search . '%')
                 ->orWhere('tipo_disco', 'like', '%' . $request->search . '%')
                 ->orWhere('capacidad_disco', 'like', '%' . $request->search . '%')
-                ->orWhere('name_id', 'like', '%' . $request->search . '%');
+                ->orWhere('name_id', 'like', '%' . $request->search . '%')
+                  ->orWhereHas('departamento', function ($q) use ($request) {
+                        $q->where('nombre', 'like', '%' . $request->search . '%');
+                    });
         }
 
         $inventarios = $query->orderBy('id', 'desc')
