@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Models;
-
 use Illuminate\Database\Eloquent\Model;
 
 class Sistema extends Model {
+    // Nombre de las columnas de la tabla en la base de datos
     protected $fillable = [
         'nombre',
         'descripcion',
@@ -23,12 +23,13 @@ class Sistema extends Model {
         'version_lenguaje',
     ];
         
+    // Relación con el modelo Departamento
     public function departamento() {
-        return $this->belongsTo(Departamento::class); //falto
+        return $this->belongsTo(Departamento::class); // Relacion muchos a uno con el modelo Departamento
     }
 
     //relación con archivosPDF
     public function archivos() {
-        return $this->hasMany(DocumentoSistema::class);
+        return $this->hasMany(DocumentoSistema::class); // Relacion muchos a uno con el modelo DocumentoSistema
     }
 }

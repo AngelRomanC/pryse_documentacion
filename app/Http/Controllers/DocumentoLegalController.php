@@ -59,7 +59,7 @@ class DocumentoLegalController extends Controller
                         $q->where('nombre_documento', 'like', $searchTerm);
                     })
                     ->orWhereHas('departamento', function ($q) use ($searchTerm) {
-                        $q->where('nombre_departamento', 'like', $searchTerm);
+                        $q->where('nombre', 'like', $searchTerm);
                     });
             });
         }
@@ -85,7 +85,7 @@ class DocumentoLegalController extends Controller
             'loadingResults' => false,
             'empresas' => Empresa::select('id', 'nombre as name')->get(), // Añadido as name
             'tipos_documento' => TipoDeDocumento::select('id', 'nombre_documento as name')->get(), // Añadido as name
-            'departamentos' => Departamento::select('id', 'nombre_departamento as name')->get(), // Añadido as name
+            'departamentos' => Departamento::select('id', 'nombre as name')->get(), // Añadido as name
             'filters' => $request->all(['search', 'empresa', 'tipo_de_documento', 'departamento']),
         ]);
     }
@@ -98,7 +98,7 @@ class DocumentoLegalController extends Controller
         $empresas = Empresa::select('id', 'nombre as name')->get();
         $tipos_documento = TipoDeDocumento::select('id', 'nombre_documento as name')->get();
         // $estados = Estado::select('id', 'nombre as name')->get();
-        $departamentos = Departamento::select('id', 'nombre_departamento as name')->get();
+        $departamentos = Departamento::select('id', 'nombre as name')->get();
         //$modalidades = Modalidad::select('id', 'nombre_modalidad as name')->get();
 
         return Inertia::render('DocumentoLegal/Create', [
@@ -228,7 +228,7 @@ class DocumentoLegalController extends Controller
         //dd($documento);  // Esto te permite ver qué contiene el objeto.
         $empresas = Empresa::select('id', 'nombre as name')->get();
         $tipos_documento = TipoDeDocumento::select('id', 'nombre_documento as name')->get();
-        $departamentos = Departamento::select('id', 'nombre_departamento as name')->get();
+        $departamentos = Departamento::select('id', 'nombre as name')->get();
 
         // Separar archivos principales y anexos
         $archivosPrincipales = $documentoLegal->archivos->where('tipo', 'principal')->values();

@@ -126,7 +126,6 @@ const handleSubmit = () => {
                         required
                     />
                 </FormField>
-                
                 <!-- Descripcion -->
                 <FormField label="Descripcion del sistema" :error="form.errors.descripcion">
                     <FormControl
@@ -137,7 +136,6 @@ const handleSubmit = () => {
                         required
                     />
                 </FormField>
-                
                 <!-- Departamento -->
                 <FormField label="Departamento" :error="form.errors.departamento_id">
                     <FormControl
@@ -150,7 +148,6 @@ const handleSubmit = () => {
                         required
                     />
                 </FormField>
-                
                 <!-- URL del sistema -->
                 <FormField label="URL del sistema" :error="form.errors.url">
                     <FormControl
@@ -161,7 +158,6 @@ const handleSubmit = () => {
                         required
                     />
                 </FormField>
-                
                 <!-- Fecha de creación -->
                 <FormField label="Fecha de creación" :error="form.errors.fecha_creacion">
                     <FormControl
@@ -172,7 +168,6 @@ const handleSubmit = () => {
                         required
                     />
                 </FormField>
-                
                 <!-- Fecha de Producción -->
                 <FormField label="Fecha de Producción" :error="form.errors.fecha_produccion">
                     <FormControl
@@ -183,21 +178,21 @@ const handleSubmit = () => {
                         required
                     />
                 </FormField>
-                
                 <!-- Estatus -->
                 <FormField label="Estatus" :error="form.errors.estatus">
-                    <FormControl
+                    <select
                         v-model="form.estatus"
-                        type="text"
-                        :options="$page.props.estatus"
-                        placeholder="Selecciona un estatus"
-                        label-key="nombre"
-                        value-key="id"
-                        :icon="mdiMapMarker"
+                        class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required
-                    />
+                    >
+                        <option value="" disabled>Selecciona un estatus</option>
+                        <option value="En Diseño">En Diseño</option>
+                        <option value="Producción">Producción</option>
+                        <option value="En Pruebas">En Pruebas</option>
+                        <option value="Desarrollo">Desarrollo</option>
+                        <option value="Mantenimiento">Mantenimiento</option>
+                    </select>
                 </FormField>
-                
                 <!-- Número de usuarios -->
                 <FormField label="Número de usuarios" :error="form.errors.numero_usuarios">
                     <FormControl
@@ -209,7 +204,6 @@ const handleSubmit = () => {
                         min="0"
                     />
                 </FormField>
-                
                 <!-- Nombre del servidor -->
                 <FormField label="Nombre del servidor" :error="form.errors.nombre_servidor">
                     <FormControl
@@ -220,7 +214,6 @@ const handleSubmit = () => {
                         required
                     />
                 </FormField>
-                
                 <!-- IP del servidor -->
                 <FormField label="IP del servidor" :error="form.errors.ip_servidor">
                     <FormControl
@@ -231,7 +224,6 @@ const handleSubmit = () => {
                         required
                     />
                 </FormField>
-                
                 <!-- Sistema operativo -->
                 <FormField label="Sistema operativo" :error="form.errors.sistema_operativo">
                     <FormControl
@@ -242,7 +234,6 @@ const handleSubmit = () => {
                         required
                     />
                 </FormField>
-                
                 <!-- Nombre del servidor de base de datos -->
                 <FormField label="Nombre del servidor BD" :error="form.errors.nombre_servidor_bd">
                     <FormControl
@@ -253,7 +244,6 @@ const handleSubmit = () => {
                         required
                     />
                 </FormField>
-                
                 <!-- IP del servidor de base de datos -->
                 <FormField label="IP del servidor BD" :error="form.errors.ip_servidor_bd">
                     <FormControl
@@ -264,7 +254,6 @@ const handleSubmit = () => {
                         required
                     />
                 </FormField>
-                
                 <!-- lenguaje de desarrollo -->
                 <FormField label="Lenguaje de desarrollo" :error="form.errors.lenguaje_desarrollo">
                     <FormControl
@@ -275,7 +264,6 @@ const handleSubmit = () => {
                         required
                     />
                 </FormField>
-                
                 <!-- version de lenguaje -->
                 <FormField label="Versión de lenguaje" :error="form.errors.version_lenguaje">
                     <FormControl
@@ -287,7 +275,6 @@ const handleSubmit = () => {
                     />
                 </FormField>
             </div>
-
             <!-- Sección de archivos existentes -->
             <div class="mt-8">
                 <h3 class="text-lg font-medium text-gray-900 mb-4">Documentos existentes</h3>

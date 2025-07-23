@@ -1,16 +1,13 @@
 <?php
 
 namespace App\Http\Requests;
-
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateSistemaRequest extends FormRequest
-{
+class UpdateSistemaRequest extends FormRequest {
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
-    {
+    public function authorize(): bool {
         return true;
     }
 
@@ -19,8 +16,7 @@ class UpdateSistemaRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
-    public function rules(): array
-    {
+    public function rules(): array {
         return [
             // Sistema fields
             'nombre' => 'required|string|max:255',
@@ -39,16 +35,16 @@ class UpdateSistemaRequest extends FormRequest
             'lenguaje_desarrollo' => 'required|string|max:255',
             'version_lenguaje' => 'required|string|max:255',
             
-            // File handling
-            'nuevos_documentos_principales' => 'nullable|array|max:10', // Limit to 10 files max
-            'nuevos_documentos_principales.*' => 'file|mimes:pdf|max:10240', // 10MB max per file
-            'archivos_a_eliminar' => 'nullable|array',
-            'archivos_a_eliminar.*' => 'integer|exists:documento_sistemas,id', // Changed to match your model name
+            // Archivos de documentos 
+            'nuevos_documentos_principales' => 'nullable|array|max:10', // Arreglo de rutas de documentos como máximo 10
+            'nuevos_documentos_principales.*' => 'file|mimes:pdf|max:10240', // Archivo PDF con máximo 100MB
+            'archivos_a_eliminar' => 'nullable|array', // Arreglo de IDs de documentos a eliminar
+            'archivos_a_eliminar.*' => 'integer|exists:documento_sistemas,id', // IDs de documentos existentes
         ];
     }
 
-    public function messages(): array 
-    {
+    public function messages(): array  {
+        // Retorna mensajes personalizados para las reglas de validación
         return [
             'fecha_produccion.after_or_equal' => 'La fecha de producción debe ser igual o posterior a la fecha de creación.',
             'ip_servidor.regex' => 'La dirección IP del servidor no tiene un formato válido.',
@@ -59,8 +55,7 @@ class UpdateSistemaRequest extends FormRequest
         ];
     }
 
-    public function attributes(): array 
-    {
+    public function attributes(): array {
         return [
             'departamento_id' => 'departamento',
             'nuevos_documentos_principales.*' => 'documento PDF',
