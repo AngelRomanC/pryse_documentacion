@@ -17,11 +17,14 @@ import LoadingOverlay from '@/components/LoadingOverlay.vue';
 
 const isUploading = ref(false)
 
+// Función para manejar el inicio de la carga
 const props = defineProps({
     titulo: String,
     routeName: String,
     departamentos: Array,
 });
+
+console.log("props", props.estatusOptions)
 
 const form = useForm({
     nombre: '',
@@ -81,14 +84,14 @@ const handleSubmit = () => {
                 <!-- Departamento -->
                 <FormField label="Departamento" :error="form.errors.departamento_id">
                     <FormControl
-                                v-model="form.departamento_id"
-                                :options="departamentos"
-                                type="select"
-                                label-key="nombre_departamento"
-                                value-key="id"
-                                :icon="mdiOfficeBuilding"
-                                required
-                            />
+                        v-model="form.departamento_id"
+                        :options="departamentos"
+                        type="select"
+                        label-key="nombre_departamento"
+                        value-key="id"
+                        :icon="mdiOfficeBuilding"
+                        required
+                    />
                 </FormField>
                 <!-- URL del sistema -->
                 <FormField label="URL del sistema" :error="form.errors.url">
@@ -122,16 +125,18 @@ const handleSubmit = () => {
                 </FormField>
                 <!-- Estatus -->
                 <FormField label="Estatus" :error="form.errors.estatus">
-                    <FormControl
+                    <select
                         v-model="form.estatus"
-                        type="text"
-                        :options="$page.props.estatus"
-                        placeholder="Selecciona un estatus"
-                        label-key="nombre"
-                        value-key="id"
-                        :icon="mdiMapMarker"
+                        class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required
-                    />
+                    >
+                        <option value="" disabled>Selecciona un estatus</option>
+                        <option value="En Diseño">En Diseño</option>
+                        <option value="Producción">Producción</option>
+                        <option value="En Pruebas">En Pruebas</option>
+                        <option value="Desarrollo">Desarrollo</option>
+                        <option value="Mantenimiento">Mantenimiento</option>
+                    </select>
                 </FormField>
                 <!-- Número de usuarios -->
                 <FormField label="Número de usuarios" :error="form.errors.numero_usuarios">
