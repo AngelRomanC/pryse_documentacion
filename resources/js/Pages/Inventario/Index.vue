@@ -49,11 +49,7 @@ const destroy = (id) => {
   <LayoutMain>
     <SectionTitleLineWithButton :title="props.titulo" main>
       <BaseButton :href="route('inventario.form')" color="danger" label="Cargar Datos" />
-        <Link :href="route('inventario.form')" class="bg-red-600 text-white px-4 py-2 rounded">
-    Cargar Datos Link
-  </Link>
-
-
+   
       <BaseButton :href="route(`${props.routeName}create`)" color="warning" label="Registrar Equipo" />
     </SectionTitleLineWithButton>
 
@@ -103,20 +99,14 @@ const destroy = (id) => {
             </td>
           </tr>
         </tbody>
-      </table>
-
-  
-        
-    
+      </table>  
+            
         <Pagination
-  :currentPage="inventarios.current_page"
-  :links="inventarios.links"
-  :total="inventarios.last_page"
-/>
-
-
-
+          :currentPage="inventarios.current_page"
+          :links="inventarios.links"
+          :total="inventarios.last_page"
         
+        />       
         
     </CardBox>
   </LayoutMain>
