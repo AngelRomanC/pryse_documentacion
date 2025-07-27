@@ -53,9 +53,9 @@ class InventarioEquipoController extends Controller
                 ->orWhere('tipo_disco', 'like', '%' . $request->search . '%')
                 ->orWhere('capacidad_disco', 'like', '%' . $request->search . '%')
                 ->orWhere('name_id', 'like', '%' . $request->search . '%')
-                  ->orWhereHas('departamento', function ($q) use ($request) {
-                        $q->where('nombre', 'like', '%' . $request->search . '%');
-                    });
+                ->orWhereHas('departamento', function ($q) use ($request) {
+                    $q->where('nombre', 'like', '%' . $request->search . '%');
+                });
         }
 
         $inventarios = $query->orderBy('id', 'desc')
@@ -101,7 +101,6 @@ class InventarioEquipoController extends Controller
             'usuariosArqueo' => $usuariosArqueo, // <--- nuevo
 
         ]);
-
     }
 
     /**
@@ -172,9 +171,19 @@ class InventarioEquipoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(InventarioEquipo $inventarioEquipo)
+    public function destroy(InventarioEquipo $inventario)
     {
-        //
+        try {
+            $inventario->delete();
+
+            return redirect()
+                ->route($this->routeName . 'index')
+                ->with('success', 'El equipo fue eliminado correctamente.');
+        } catch (\Exception $e) {
+            return redirect()
+                ->route($this->routeName . 'index')
+                ->with('error', 'No se pudo eliminar el equipo. Intenta nuevamente.');
+        }
     }
 
     public function importarExcel(Request $request)
