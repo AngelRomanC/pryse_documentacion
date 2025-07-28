@@ -5,7 +5,7 @@ import BaseButton from '@/components/BaseButton.vue';
 import BaseButtons from "@/components/BaseButtons.vue";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
 import Swal from "sweetalert2";
-import { mdiTagEdit, mdiDeleteOutline, mdiInformation } from "@mdi/js";
+import { mdiTagEdit, mdiDeleteOutline, mdiInformation, mdiFilePdfBox } from "@mdi/js";
 import Pagination from '@/Shared/Pagination.vue';
 import CardBoxComponentEmpty from "@/components/CardBoxComponentEmpty.vue";
 import CardBox from "@/components/CardBox.vue";
@@ -93,6 +93,13 @@ const destroy = (id) => {
             <td class="border p-2">{{ item.fecha_registro }}</td>
             <td class="border p-2 whitespace-nowrap">
               <BaseButtons type="justify-start lg:justify-end" no-wrap>
+                   <BaseButton 
+        color="success" 
+        :icon="mdiFilePdfBox" 
+        small 
+        :href="route(`${props.routeName}responsiva`, item.id)"
+        target="_blank"
+    />
                 <BaseButton color="info" :icon="mdiTagEdit" small :href="route(`${props.routeName}edit`, item.id)" />
                 <BaseButton color="danger" :icon="mdiDeleteOutline" small @click="destroy(item.id)" />
               </BaseButtons>

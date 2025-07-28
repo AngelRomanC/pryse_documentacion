@@ -12,6 +12,7 @@ use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\InventarioEquipoImport;
 use App\Models\Marca;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 
@@ -200,5 +201,25 @@ class InventarioEquipoController extends Controller
     public function mostrar()
     {
         return Inertia::render('Inventario/Importar');
+    }
+
+
+    // ...
+
+    public function generarResponsiva($id)
+    {
+        $equipo = InventarioEquipo::with('departamento')->findOrFail($id);
+
+        $pdf = Pdf::loadView('pdf.responsiva', [
+            'equipo' => $equipo,
+            'fecha' => now()->format('d/m/Y')
+         ])->setPaper('a4', 'portrait')
+      ->setOption('margin-top', '15mm')
+      ->setOption('margin-bottom', '15mm')
+      ->setOption('margin-left', '15mm')
+      ->setOption('margin-right', '15mm')
+      ->setOption('isHtml5ParserEnabled', true);
+
+        return $pdf->download('responsiva-' . $equipo->nombre_persona . '.pdf');
     }
 }
