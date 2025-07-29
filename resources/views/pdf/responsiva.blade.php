@@ -72,7 +72,11 @@
         <li><strong>Procesador:</strong> {{ $equipo->procesador }}</li>
         <li><strong>Memoria RAM:</strong> {{ $equipo->capacidad_ram }} {{ $equipo->tipo_ram ? '('.$equipo->tipo_ram.')' : '' }}</li>
         <li><strong>Disco Duro/SSD:</strong> {{ $equipo->tipo_disco }} {{ $equipo->capacidad_disco }}</li>
-        <li><strong>Accesorios entregados:</strong> {{ $equipo->otro_periferico ?? 'Monitor, teclado y mouse' }}</li>
+        <li><strong>Accesorios entregados:</strong> 
+            {{ $equipo->otro_periferico ?? 
+                ($equipo->tipo_pc === 'Laptop' ? 'N/A' : 'Monitor, teclado y mouse') 
+            }}
+        </li>
     </ul>
     
     <p>Me comprometo a hacer un uso adecuado y responsable de este equipo, dándole únicamente el uso
@@ -88,7 +92,7 @@
     <div class="signature-section" style="text-align: center;">
         <div class="signature-line" style="margin: 0 auto;"><strong>Firma</strong></div>
         
-        <div style="height: 30Px;"></div> <!-- Espacio controlado entre texto y firmas -->
+        <div style="height: 50Px;"></div> <!-- Espacio controlado entre texto y firmas -->
 
         <div style="margin-top: 50px;">
             <div class="signature-line" style="margin: 0 auto;"><strong>Nombre y Firma del responsable TI</strong></div>
