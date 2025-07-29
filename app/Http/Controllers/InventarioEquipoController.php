@@ -210,15 +210,21 @@ class InventarioEquipoController extends Controller
     {
         $equipo = InventarioEquipo::with('departamento')->findOrFail($id);
 
+        // Ruta absoluta a tu imagen (ajusta esta ruta)
+        $logoPath = public_path('/storage/imagenes/pryse_pdf.jpg'); // o storage_path('app/public/logo.jpg')
+
+        // Convertir imagen a Base64
+        $logoBase64 = base64_encode(file_get_contents($logoPath));
         $pdf = Pdf::loadView('pdf.responsiva', [
             'equipo' => $equipo,
+            'logoBase64' => $logoBase64,
             'fecha' => now()->format('d/m/Y')
-         ])->setPaper('a4', 'portrait')
-      ->setOption('margin-top', '15mm')
-      ->setOption('margin-bottom', '15mm')
-      ->setOption('margin-left', '15mm')
-      ->setOption('margin-right', '15mm')
-      ->setOption('isHtml5ParserEnabled', true);
+        ])->setPaper('a4', 'portrait')
+            ->setOption('margin-top', '10mm')
+            ->setOption('margin-bottom', '10mm')
+            ->setOption('margin-left', '15mm')
+            ->setOption('margin-right', '15mm')
+            ->setOption('isHtml5ParserEnabled', true);
 
         return $pdf->download('responsiva-' . $equipo->nombre_persona . '.pdf');
     }

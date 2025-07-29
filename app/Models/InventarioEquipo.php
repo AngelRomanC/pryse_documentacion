@@ -11,6 +11,7 @@ class InventarioEquipo extends Model
         'fecha_registro',
         'nombre_persona',
         'departamento_id',
+        'puesto',
         'tipo_pc',
         'marca_equipo',
         'sistema_operativo',
