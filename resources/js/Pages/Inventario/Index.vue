@@ -5,7 +5,7 @@ import BaseButton from '@/components/BaseButton.vue';
 import BaseButtons from "@/components/BaseButtons.vue";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
 import Swal from "sweetalert2";
-import { mdiTagEdit, mdiDeleteOutline, mdiInformation } from "@mdi/js";
+import { mdiTagEdit, mdiDeleteOutline, mdiInformation, mdiFilePdfBox } from "@mdi/js";
 import Pagination from '@/Shared/Pagination.vue';
 import CardBoxComponentEmpty from "@/components/CardBoxComponentEmpty.vue";
 import CardBox from "@/components/CardBox.vue";
@@ -42,6 +42,14 @@ const destroy = (id) => {
     }
   });
 };
+// Función para descargar PDF
+const openPDF = (id) => {
+  const iframe = document.createElement('iframe');
+  iframe.src = route(`${props.routeName}responsiva`, id);
+  iframe.style.display = 'none';
+  document.body.appendChild(iframe);
+  setTimeout(() => document.body.removeChild(iframe), 1000);
+};
 
 </script>
 
@@ -49,10 +57,6 @@ const destroy = (id) => {
   <LayoutMain>
     <SectionTitleLineWithButton :title="props.titulo" main>
       <BaseButton :href="route('inventario.form')" color="danger" label="Cargar Datos" />
-        <Link :href="route('inventario.form')" class="bg-red-600 text-white px-4 py-2 rounded">
-    Cargar Datos Link
-  </Link>
-
 
       <BaseButton :href="route(`${props.routeName}create`)" color="warning" label="Registrar Equipo" />
     </SectionTitleLineWithButton>
@@ -96,7 +100,8 @@ const destroy = (id) => {
             <td class="border p-2">{{ item.capacidad_disco }} {{ item.tipo_disco }}</td>
             <td class="border p-2">{{ item.fecha_registro }}</td>
             <td class="border p-2 whitespace-nowrap">
-              <BaseButtons type="justify-start lg:justify-end" no-wrap>
+              <BaseButtons type="justify-start lg:justify-end" no-wrap>               
+                <BaseButton color="success" :icon="mdiFilePdfBox" small @click="openPDF(item.id)" title="Descargar PDF"/>
                 <BaseButton color="info" :icon="mdiTagEdit" small :href="route(`${props.routeName}edit`, item.id)" />
                 <BaseButton color="danger" :icon="mdiDeleteOutline" small @click="destroy(item.id)" />
               </BaseButtons>
@@ -105,19 +110,8 @@ const destroy = (id) => {
         </tbody>
       </table>
 
-  
-        
-    
-        <Pagination
-  :currentPage="inventarios.current_page"
-  :links="inventarios.links"
-  :total="inventarios.last_page"
-/>
+      <Pagination :currentPage="inventarios.current_page" :links="inventarios.links" :total="inventarios.last_page" />
 
-
-
-        
-        
     </CardBox>
   </LayoutMain>
 </template>

@@ -12,6 +12,7 @@ use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\InventarioEquipoImport;
 use App\Models\Marca;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 
@@ -42,7 +43,7 @@ class InventarioEquipoController extends Controller
 
         if ($request->filled('search')) {
             $query->where('nombre_persona', 'like', '%' . $request->search . '%')
-                ->orWhere('departamento_id', 'like', '%' . $request->search . '%')
+                //->orWhere(column: 'departamento_id', 'like', '%' . $request->search . '%')
                 ->orWhere('tipo_pc', 'like', '%' . $request->search . '%')
                 ->orWhere('marca_equipo', 'like', '%' . $request->search . '%')
                 ->orWhere('sistema_operativo', 'like', '%' . $request->search . '%')
@@ -52,7 +53,10 @@ class InventarioEquipoController extends Controller
                 ->orWhere('tipo_ram', 'like', '%' . $request->search . '%')
                 ->orWhere('tipo_disco', 'like', '%' . $request->search . '%')
                 ->orWhere('capacidad_disco', 'like', '%' . $request->search . '%')
-                ->orWhere('name_id', 'like', '%' . $request->search . '%');
+                ->orWhere('name_id', 'like', '%' . $request->search . '%')
+                ->orWhereHas('departamento', function ($q) use ($request) {
+                    $q->where('nombre', 'like', '%' . $request->search . '%');
+                });
         }
 
         $inventarios = $query->orderBy('id', 'desc')
@@ -98,7 +102,6 @@ class InventarioEquipoController extends Controller
             'usuariosArqueo' => $usuariosArqueo, // <--- nuevo
 
         ]);
-
     }
 
     /**
@@ -169,9 +172,19 @@ class InventarioEquipoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(InventarioEquipo $inventarioEquipo)
+    public function destroy(InventarioEquipo $inventario)
     {
-        //
+        try {
+            $inventario->delete();
+
+            return redirect()
+                ->route($this->routeName . 'index')
+                ->with('success', 'El equipo fue eliminado correctamente.');
+        } catch (\Exception $e) {
+            return redirect()
+                ->route($this->routeName . 'index')
+                ->with('error', 'No se pudo eliminar el equipo. Intenta nuevamente.');
+        }
     }
 
     public function importarExcel(Request $request)
@@ -188,5 +201,31 @@ class InventarioEquipoController extends Controller
     public function mostrar()
     {
         return Inertia::render('Inventario/Importar');
+    }
+
+
+    // ...
+
+    public function generarResponsiva($id)
+    {
+        $equipo = InventarioEquipo::with('departamento')->findOrFail($id);
+
+        // Ruta absoluta a tu imagen (ajusta esta ruta)
+        $logoPath = public_path('/storage/imagenes/pryse_pdf.jpg'); // o storage_path('app/public/logo.jpg')
+
+        // Convertir imagen a Base64
+        $logoBase64 = base64_encode(file_get_contents($logoPath));
+        $pdf = Pdf::loadView('pdf.responsiva', [
+            'equipo' => $equipo,
+            'logoBase64' => $logoBase64,
+            'fecha' => now()->format('d/m/Y')
+        ])->setPaper('a4', 'portrait')
+            ->setOption('margin-top', '10mm')
+            ->setOption('margin-bottom', '10mm')
+            ->setOption('margin-left', '15mm')
+            ->setOption('margin-right', '15mm')
+            ->setOption('isHtml5ParserEnabled', true);
+
+        return $pdf->download('responsiva-' . $equipo->nombre_persona . '.pdf');
     }
 }

@@ -5,6 +5,9 @@
       <input type="file" @change="handleFile" accept=".xlsx,.xls,.csv" />
       <button type="submit" class="mt-2 bg-blue-600 text-white px-4 py-2">Importar</button>
     </form>
+
+          <BaseButton :href="route('inventario.index')" color="danger" label="Index" />
+
   </div>
 </template>
 
@@ -12,6 +15,8 @@
 import LayoutMain from '@/layouts/LayoutMain.vue' // <-- Asegúrate que esté correcto
 import { ref } from 'vue'
 import { useForm } from '@inertiajs/vue3'
+import BaseButton from '@/components/BaseButton.vue';
+
 
 defineOptions({ layout: LayoutMain })
 

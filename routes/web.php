@@ -117,7 +117,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/inventario/importar', [InventarioEquipoController::class, 'importarExcel'])->name('inventario.importar');
     //Route::get('/form', [InventarioEquipoController::class, 'mostrar'])->name('inventario.form');
-
+    
+    Route::get('inventario/{id}/responsiva', [InventarioEquipoController::class, 'generarResponsiva'])->name('inventario.responsiva'); //genera pdf
 
     //Catalogo
     Route::resource('marcas', MarcaController::class);

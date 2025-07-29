@@ -47,30 +47,7 @@ export default [
     icon: mdiLibrary ,
     role: "Admin",
     menu: [
-      {
-        href:"/empresa",
-        label: "Empresa",
-        icon: mdiBookshelf,
-        role: "Admin",
-      }, 
-      {
-        href:"/tipo-de-documento",
-        label: "Documento",
-        icon: mdiFileDocumentOutline,
-        role: "Admin",
-      }, 
-      {
-        href:"/departamento",
-        label: "Departamento",
-        icon: mdiAccountGroup,
-        role: "Admin",
-      }, 
-      {
-        href:"/modalidad",
-        label: "Modalidades",
-        icon: mdiFormatListChecks,
-        role: "Admin",
-      }, 
+     
        {
     route: "marcas.index",
     label: "Registrar Marcas",
@@ -80,24 +57,8 @@ export default [
     ]
   },
   
-  {
-    href:"/documento",
-    label: "Documentos Técnicos ",
-    icon: mdiFileSign,
-    role: "Admin",
-  }, 
-  {
-    href:"/documento-legal",
-    label: "Documentos Legales ",
-    icon: mdiScaleBalance,
-    role: "Admin",
-  }, 
-    {
-    href:"/licitacion",
-    label: "Licitaciones",
-    icon: mdiGavel ,
-    role: "Admin",
-  }, 
+
+  
  
 
   //Modulos a Usuario de sistema 

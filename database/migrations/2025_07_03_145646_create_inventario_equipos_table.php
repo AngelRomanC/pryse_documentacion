@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->dateTime('fecha_registro');
             $table->string('nombre_persona');
             $table->string('departamento_id');
+            $table->string('puesto')->default('N/A');
             $table->string('tipo_pc');
             $table->string('marca_equipo');
             $table->string('sistema_operativo');
@@ -29,7 +30,7 @@ return new class extends Migration {
             $table->string('capacidad_disco');
             $table->string('teclado_mouse');
             $table->string('camara_web')->nullable();
-            $table->string('otro_periferico')->nullable();
+            $table->string('otro_periferico')->nullable()->default('N/A');
             $table->string('software_remoto')->nullable();
             $table->string('id_remoto')->nullable();
             $table->string('password_remoto')->nullable();

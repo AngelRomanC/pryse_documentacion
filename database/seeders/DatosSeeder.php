@@ -52,6 +52,7 @@ class DatosSeeder extends Seeder
             ['nombre_documento' => 'Identificación Oficial'],
         ]);
 
+
         /*
                 DB::table('tipo_de_documentos')->insert([
                     ['nombre_documento' => 'Autorización Aguascalientes'],
