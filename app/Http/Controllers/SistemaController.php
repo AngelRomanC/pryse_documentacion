@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Sistema;
 use App\Http\Requests\StoreSistemaRequest;
 use App\Http\Requests\UpdateSistemaRequest;
+use App\Imports\InformacionSistemaImport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Log;
 use App\Models\Departamento;
 use Illuminate\Support\Facades\DB;
@@ -30,16 +32,17 @@ class SistemaController extends Controller {
 
     // Muestra la lista de sistemas
     public function index(Request $request) {
-        $query = Sistema::query(); // Crea una consulta para obtener todos los sistemas
+        $query = Sistema::with('departamento'); // Crea una consulta para obtener todos los sistemas
 
-        // Verifica si se ha enviado un valor de búsqueda
-        if ($request->filled('search')) { 
-            // Si se ha enviado un valor de búsqueda, filtra los sistemas por el nombre
-            $query->where('nombre', 'like', '%' . $request->search . '%');
+        if ($request->filled('search')) { // Verifica si hay un término de búsqueda
+            $query->where('nombre', 'like', '%' . $request->search . '%') // Filtra por nombre del sistema
+                ->orWhere('departamento_id', 'like', '%' . $request->search . '%') // Filtra por ID del departamento
+                ->orWhereHas('departamento', function($q) use ($request) { // Filtra por nombre del departamento
+                    $q->where('nombre', 'like', '%' . $request->search . '%'); // Filtra por nombre del departamento
+                });
         }
 
-        $sistemas = $query->with('departamento') // Obtiene el departamento asociado a cada sistema
-            ->orderBy('id', 'desc') // Ordena los sistemas por ID en orden descendente
+        $sistemas = $query->orderBy('id', 'desc') // Ordena los sistemas por ID en orden descendente
             ->paginate(8) // Pagina los sistemas por 8
             ->withQueryString(); // Mantiene el valor en el buscador
 
@@ -204,18 +207,18 @@ class SistemaController extends Controller {
         }
     }
 
-    public function importarExcel(Request $request) {
+    public function importarExcel(Request $request){
         $request->validate([
             'archivo' => 'required|file|mimes:xlsx,xls,csv',
         ]);
 
-        Excel::import(new InventarioEquipoImport, $request->file('archivo'));
+        Excel::import(new InformacionSistemaImport, $request->file('archivo'));
 
 
         return redirect()->back()->with('success', 'Archivo importado correctamente.');
     }
-    public function mostrar()
-    {
-        return Inertia::render('Inventario/Importar');
+
+    public function mostrar(){
+        return Inertia::render('Sistema/Importar');
     }
 }
