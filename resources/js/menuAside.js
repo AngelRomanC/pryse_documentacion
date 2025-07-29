@@ -10,6 +10,7 @@ import {
   mdiLibrary,
   mdiFormatListChecks, 
   mdiGavel , 
+  mdiLaptop,
 } from "@mdi/js";
 
 export default [
@@ -34,7 +35,7 @@ export default [
       }, 
       {
         href:"/usuarios-sistema",
-        label: "Usuario",
+        label: "Desarrolladores",
         icon: mdiAccountTie   ,
         role: "Admin",
       }, 
@@ -46,14 +47,13 @@ export default [
     label: "Catálogos",
     icon: mdiLibrary ,
     role: "Admin",
-    menu: [
-     
-       {
-    route: "marcas.index",
-    label: "Registrar Marcas",
-    icon: mdiGavel ,
-    role: "Admin",
-  }, 
+    menu: [     
+      {
+        route: "marcas.index",
+        label: "Registrar Marcas",
+        icon: mdiLaptop ,
+        role: "Admin",
+      }, 
     ]
   },
   

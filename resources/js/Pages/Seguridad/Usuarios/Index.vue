@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import Pagination from '@/Shared/Pagination.vue';
 import { router } from '@inertiajs/vue3'
 import LayoutMain from '@/layouts/LayoutMain.vue';
-import { mdiTagEdit, mdiDeleteOutline,mdiInformation } from "@mdi/js";
+import { mdiTagEdit, mdiDeleteOutline,mdiInformation,mdiPlus } from "@mdi/js";
 import CardBox from "@/components/CardBox.vue";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
@@ -45,7 +45,7 @@ const eliminarAdmin = (id) => {
 <template>
     <LayoutMain>
         <SectionTitleLineWithButton  :title="titulo" main>
-            <BaseButton :href="'usuarios/create'" color="warning" label="Agregar administrador" />
+            <BaseButton :href="'usuarios/create'" color="warning" label="Agregar administrador" :icon="mdiPlus" />
         </SectionTitleLineWithButton>
 
         <SearchBar   v-model="filters.search"  :routeName="routeName"  placeholder="Buscar admin por nombre..."  />
