@@ -40,85 +40,10 @@ const destroy = (id) => {
 const filters = ref({ ...props.filters })
 </script>
 
-<script>
-export default {
-    methods: {
-        showFileUploadAlert() {
-        Swal.fire({
-            title: 'Subir archivo Excel',
-            html: `
-            <input type="file" id="excelFile" class="swal2-file" accept=".xlsx, .xls, .csv">
-            <p class="text-sm text-gray-500 mt-2">Por favor seleccione un archivo Excel</p>
-            `,
-            showCancelButton: true,
-            confirmButtonText: 'Enviar',
-            cancelButtonText: 'Cancelar',
-            showLoaderOnConfirm: true,
-            preConfirm: () => {
-            const fileInput = document.getElementById('excelFile');
-            const file = fileInput.files[0];
-            
-            if (!file) {
-                Swal.showValidationMessage('Por favor seleccione un archivo');
-                return false;
-            }
-            
-            // Validar que sea un archivo Excel
-            const validExtensions = ['.xlsx', '.xls', '.csv'];
-            const fileName = file.name.toLowerCase();
-            const isValidFile = validExtensions.some(ext => fileName.endsWith(ext));
-            
-            if (!isValidFile) {
-                Swal.showValidationMessage('Por favor suba un archivo Excel válido (.xlsx, .xls, .csv)');
-                return false;
-            }
-            
-            // Aquí puedes manejar la subida del archivo
-            return this.uploadFile(file);
-            },
-            allowOutsideClick: () => !Swal.isLoading()
-        }).then((result) => {
-            if (result.isConfirmed) {
-            Swal.fire(
-                'Éxito!',
-                'El archivo ha sido subido correctamente.',
-                'success'
-            );
-            }
-        });
-        },
-        
-        async uploadFile(file) {
-        try {
-            const formData = new FormData();
-            formData.append('excel_file', file);
-            
-            // Reemplaza con tu endpoint real
-            const response = await axios.post(route('tu.ruta.de.subida'), formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-            });
-            
-            return response.data;
-        } catch (error) {
-            Swal.showValidationMessage(
-            `Error al subir el archivo: ${error.response?.data?.message || error.message}`
-            );
-            return false;
-        }
-        }
-    }
-    }
-</script>
 <template>
     <LayoutMain>
         <SectionTitleLineWithButton :title="props.titulo" main>
-            <BaseButton 
-                @click="showFileUploadAlert" 
-                color="danger" 
-                label="Cargar Datos" 
-            />
+            <BaseButton :href="route('sistema.form')" color="danger" label="Cargar Datos" />
             <BaseButton :href="route(`${props.routeName}create`)" color="warning" label="Crear" />
         </SectionTitleLineWithButton>
         
@@ -131,8 +56,6 @@ export default {
         <NotificationBar v-if="$page.props.flash.error" color="danger" :icon="mdiInformation" :outline="false">
             {{ $page.props.flash.error }}
         </NotificationBar>
-
-     
 
         <CardBox v-if="sistemas.data.length < 1">
             <CardBoxComponentEmpty />

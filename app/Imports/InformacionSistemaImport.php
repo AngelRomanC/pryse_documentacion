@@ -4,89 +4,75 @@ namespace App\Imports;
 
 use App\Models\Departamento;
 use App\Models\InventarioEquipo;
+use App\Models\Sistema;
 use App\Models\User;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Carbon\Carbon;
 
-class InformacionSistemaImport implements ToModel, WithHeadingRow
-{
-    public function headingRow(): int
-    {
+class InformacionSistemaImport implements ToModel, WithHeadingRow {
+    public function headingRow(): int {
         return 1; // encabezado en la primera fila
     }
 
-    public function model(array $row)
-    {
-        return new InventarioEquipo([
-            //'fecha_registro'         => $row['marca_temporal'] ?? now(),
-            'fecha_registro'         => $this->parseFecha($row['marca_temporal'] ?? null),
-            'nombre_persona'         => $row['nombre'],
-            //'departamento_id'        => $row['area'],
-            'departamento_id'        => $this->getDepartamentoId($row['area']),
-            'tipo_pc'                => $row['tipo_de_pc'],
-            'marca_equipo'           => $row['marca_del_equipo'],
-            'sistema_operativo'      => $row['sistema_operativo_modelo'],
-            'procesador'             => $row['procesador'],
-            'tarjeta_madre'          => $row['tarjeta_madre'],
-            'tarjeta_grafica'        => $row['tarjeta_grafica'],
-            'datos_tarjeta_grafica'  => $row['datos_de_tarjeta_grafica_externa'] ?? 'N/A',
-            'tipo_ram'               => $row['tipo_memoria_ram'],
-            'capacidad_ram'          => $row['capacidad_memoria_ram'],
-            'marca_ram'              => $row['marca_memoria_ram'],
-            'tipo_disco'             => $row['tipo_disco_duro'],
-            'capacidad_disco'        => $row['capacidad_disco_duro'],
-            'teclado_mouse'          => $row['teclado_y_mouse'],
-            'camara_web'             => $row['camara_web'],
-            'otro_periferico'        => $row['otro_periferico_asignado'],
-            'name_id'                => $row['nombre_del_arqueo'],
-            //'name_id'                => $this->getUserIdByName($row['nombre_del_arqueo']),
-            'observaciones'          => $row['observaciones'] ?? 'N/A',
+    public function model(array $row) {
+        return new Sistema([
+            'nombre'                => $row['nombre'],
+            'descripcion'           => $row['descripcion'] ?? 'N/A',
+            'departamento_id'       => $this->getDepartamentoId($row['departamento_id'] ?? 'ADMINISTRACIÓN'),
+            'url'                   => $row['url'] ?? 'N/A',
+            'fecha_creacion'        =>  $this->parseFecha($row['fecha_creacion'] ?? '01-01-2025 00:00:00'),
+            'fecha_produccion'      =>  $this->parseFecha($row['fecha_produccion'] ?? '01-01-2025 00:00:00'),
+            'estatus'               => $row['estatus'],
+            'numero_usuarios'       => $row['numero_usuarios'],
+            'nombre_servidor'       => $row['nombre_servidor'] ?? 'N/A',
+            'ip_servidor'           => $row['ip_servidor'] ?? 'N/A',  
+            'sistema_operativo'     => $row['sistema_operativo'] ?? 'N/A',
+            'nombre_servidor_bd'    => $row['nombre_servidor_bd'] ?? 'N/A',
+            'ip_servidor_bd'        => $row['ip_servidor_bd'] ?? 'N/A',
+            'lenguaje_desarrollo'   => $row['lenguaje_desarrollo'] ?? 'N/A',
+            'version_lenguaje'      => $row['version_lenguaje'] ?? 'N/A',
         ]);
     }
 
 
 
-public function parseFecha($valor)
-{
-    if (!$valor) return now(); // si está vacío, usa la actual
+    public function parseFecha($valor) {
+        if (!$valor) return now(); // si está vacío, usa la actual
 
-    // Si es número, probablemente es formato serial de Excel
-    if (is_numeric($valor)) {
-        return Date::excelToDateTimeObject($valor);
+        // Si es número, probablemente es formato serial de Excel
+        if (is_numeric($valor)) {
+            return Date::excelToDateTimeObject($valor);
+        }
+
+        // Si es string: intenta múltiples formatos comunes
+        try {
+            return Carbon::createFromFormat('d/m/Y H:i:s', $valor); // ej: 2/10/2025 16:50:19
+        } catch (\Exception $e) {}
+
+        try {
+            return Carbon::createFromFormat('d/m/Y', $valor); // ej: 12/05/2025
+        } catch (\Exception $e) {}
+
+        try {
+            return Carbon::parse($valor); // fallback (intenta cualquier otro válido)
+        } catch (\Exception $e) {}
+
+        return now(); // último recurso
+    }
+    private function getDepartamentoId($nombre) {
+        $id = Departamento::where('nombre', $nombre)->value('id');
+
+        if (!$id) {
+            // Puedes lanzar una excepción para detener la importación y mostrar el error
+            throw new \Exception("El departamento '{$nombre}' no existe en la base de datos.");
+        }
+
+        return $id;
     }
 
-    // Si es string: intenta múltiples formatos comunes
-    try {
-        return Carbon::createFromFormat('d/m/Y H:i:s', $valor); // ej: 2/10/2025 16:50:19
-    } catch (\Exception $e) {}
-
-    try {
-        return Carbon::createFromFormat('d/m/Y', $valor); // ej: 12/05/2025
-    } catch (\Exception $e) {}
-
-    try {
-        return Carbon::parse($valor); // fallback (intenta cualquier otro válido)
-    } catch (\Exception $e) {}
-
-    return now(); // último recurso
-}
-private function getDepartamentoId($nombre)
-{
-    $id = Departamento::where('nombre', $nombre)->value('id');
-
-    if (!$id) {
-        // Puedes lanzar una excepción para detener la importación y mostrar el error
-        throw new \Exception("El departamento '{$nombre}' no existe en la base de datos.");
-    }
-
-    return $id;
-}
-
-
-    private function getUserIdByName($nombre)
-    {
+    private function getUserIdByName($nombre) {
         return User::where('name', $nombre)->value('id') ?? null;
     }
 

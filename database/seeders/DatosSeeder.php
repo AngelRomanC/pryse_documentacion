@@ -37,8 +37,10 @@ class DatosSeeder extends Seeder
             ['nombre' => 'SALUD'],
             ['nombre' => 'FLEX'],
             ['nombre' => 'SISTEMAS'],
-
-
+            ['nombre' => 'Operaciones y Administradores de Cuenta'],
+            ['nombre' => 'Coorporativo de Grupo Pryse'],
+            ['nombre' => 'Coorporativo y visitantes de Grupo Pryse'],
+            ['nombre' => 'Area de Contabilidad y Coorporativo de Grupo Pryse'],
         ]);
 
         DB::table('tipo_de_documentos')->insert([
@@ -51,8 +53,6 @@ class DatosSeeder extends Seeder
         ]);
 
 
-
-        
         /*
                 DB::table('tipo_de_documentos')->insert([
                     ['nombre_documento' => 'Autorización Aguascalientes'],
