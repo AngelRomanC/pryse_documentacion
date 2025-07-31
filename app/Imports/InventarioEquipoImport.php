@@ -40,8 +40,8 @@ class InventarioEquipoImport implements ToModel, WithHeadingRow
             'teclado_mouse'          => $row['teclado_y_mouse'],
             'camara_web'             => $row['camara_web'],
             'otro_periferico'        => $row['otro_periferico_asignado'],
-            'name_id'                => $row['nombre_del_arqueo'],
-            //'name_id'                => $this->getUserIdByName($row['nombre_del_arqueo']),
+            //'name_id'                => $row['nombre_del_arqueo'],
+            'name_id'                => $this->getUserIdByName($row['nombre_del_arqueo']),
             'observaciones'          => $row['observaciones'] ?? 'N/A',
         ]);
     }

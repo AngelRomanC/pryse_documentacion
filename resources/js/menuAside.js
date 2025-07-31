@@ -126,7 +126,6 @@ export default [
   {
     route: "inventario.index",
     //href:"/inventario",
-
     label: "Inventario Equipos",
     icon: mdiGavel ,
     role: "Admin",
@@ -135,7 +134,6 @@ export default [
     {
     route: "sistema.index",
     //href:"/inventario",
-
     label: "Inventario Sistema",
     icon: mdiGavel ,
     role: "Admin",

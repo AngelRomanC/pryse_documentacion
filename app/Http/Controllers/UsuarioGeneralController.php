@@ -27,7 +27,7 @@ class UsuarioGeneralController extends Controller
 
     public function index2()
     {
-        $usuarios = User::role('Desarrolladores')->with('roles')->paginate(8);
+        $usuarios = User::role('Desarrollador')->with('roles')->paginate(8);
 
         return Inertia::render("{$this->source}Index", [
             'usuarios' => $usuarios,
@@ -38,7 +38,7 @@ class UsuarioGeneralController extends Controller
     
     public function index(Request $request)
     {
-        $query = User::role('Desarrolladores')->with('roles');
+        $query = User::role('Desarrollador')->with('roles');
 
         if ($request->has('search') && $request->search !== null) {
             $query->where('name', 'like', '%' . $request->search . '%');
