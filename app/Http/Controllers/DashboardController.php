@@ -25,14 +25,28 @@ class DashboardController extends Controller
     //     }
     // }
     public function index()
-{
-    return Inertia::render('Dashboard/Admin', [
-        'sistemasCount' => Sistema::count(),
-        'equiposCount' => InventarioEquipo::count(),
-        'equiposPorTipo' => InventarioEquipo::groupBy('tipo_pc')->selectRaw('tipo_pc, count(*) as total')->pluck('total', 'tipo_pc'),
-        'sistemasPorEstatus' => Sistema::groupBy('estatus')->selectRaw('estatus, count(*) as total')->pluck('total', 'estatus'),
-        'ultimosEquipos' => InventarioEquipo::with('departamento')->latest()->take(5)->get(),
-        'sistemasRecientes' => Sistema::with('departamento')->latest()->take(5)->get()
-    ]);
-}
+    {
+        $user = auth()->user();
+
+        if ($user->hasRole('Admin')) {
+            return Inertia::render('Dashboard/Admin', [
+                'sistemasCount' => Sistema::count(),
+                'equiposCount' => InventarioEquipo::count(),
+                'equiposPorTipo' => InventarioEquipo::groupBy('tipo_pc')->selectRaw('tipo_pc, count(*) as total')->pluck('total', 'tipo_pc'),
+                'sistemasPorEstatus' => Sistema::groupBy('estatus')->selectRaw('estatus, count(*) as total')->pluck('total', 'estatus'),
+                'ultimosEquipos' => InventarioEquipo::with('departamento')->latest()->take(5)->get(),
+                'sistemasRecientes' => Sistema::with('departamento')->latest()->take(5)->get()
+            ]);
+        }
+
+        if ($user->hasRole('Desarrollador')) {
+            $sistemas = $user->sistemas()->with('departamento')->get(); // Relación sistemas asignados
+
+            return Inertia::render('Dashboard/Desarrollador', [
+                'sistemasAsignados' => $sistemas->count(),
+                'sistemasEnDesarrollo' => $sistemas->where('estatus', 'Desarrollo')->count(),
+                'sistemasAsignadosLista' => $sistemas->take(5),
+            ]);
+        }
+    }
 }

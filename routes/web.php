@@ -88,6 +88,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/sistema/form', [SistemaController::class, 'mostrar'])->name('sistema.form'); //declarar antes de la ruta principal
     Route::resource('sistema', controller: SistemaController::class);
     Route::post('/sistema/importar', [SistemaController::class, 'importarExcel'])->name('sistema.importar');
+    
 });
 
 require __DIR__ . '/auth.php';

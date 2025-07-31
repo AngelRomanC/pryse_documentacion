@@ -34,7 +34,7 @@ const form = useForm({
   numero: '',
   email: '',
   password: '',
-  role: 'Desarrolladores',
+  role: 'Desarrollador',
 })
 
 const submit = () => {

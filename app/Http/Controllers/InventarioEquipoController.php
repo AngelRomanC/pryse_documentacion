@@ -87,7 +87,7 @@ class InventarioEquipoController extends Controller
                 $query->where('tipo', $tipo);
             })->orderBy('nombre')->get(['id', 'nombre']);
         }
-        $usuariosArqueo = User::where('role', 'admin') // si tienes campo `role`
+        $usuariosArqueo = User::where('role', 'Desarrollador')
             ->select('id', 'name')
             ->orderBy('name')
             ->get();
@@ -98,8 +98,8 @@ class InventarioEquipoController extends Controller
             'titulo' => 'Inventario de Equipos',
             'routeName' => $this->routeName,
             'departamentos' => $departamentos,
-            'marcasPorTipo' => $marcasPorTipo, // <--- lo nuevo
-            'usuariosArqueo' => $usuariosArqueo, // <--- nuevo
+            'marcasPorTipo' => $marcasPorTipo, // 
+            'usuariosArqueo' => $usuariosArqueo, 
 
         ]);
     }
@@ -130,7 +130,7 @@ class InventarioEquipoController extends Controller
     {
         //
         // dd($inventarioEquipo);
-        $usuariosArqueo = User::where('role', 'admin') // si tienes campo `role`
+        $usuariosArqueo = User::where('role', 'Desarrollador') // si tienes campo `role`
             ->select('id', 'name')
             ->orderBy('name')
             ->get();
@@ -164,8 +164,6 @@ class InventarioEquipoController extends Controller
 
         $inventario->update($request->validated());
         //dd($request->validated());
-
-
         return redirect()->route($this->routeName . 'index')->with('success', 'Registro de Equipo actualizado correctamente.');
     }
 

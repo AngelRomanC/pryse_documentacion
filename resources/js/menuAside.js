@@ -57,75 +57,8 @@ export default [
     ]
   },
   
-
-  
- 
-
-  //Modulos a Usuario de sistema 
-  {
-    href: "/dashboard",
-    to: "/dashboard",
-    icon: mdiMonitor,
-    label: "Dashboard",
-    role: "Usuario" // Vistas 
-  },
-
-  {
-    label: "Catálogos",
-    icon: mdiLibrary ,
-    role: "Usuario",
-    menu: [
-      {
-        href:"/empresa",
-        label: "Empresa",
-        icon: mdiBookshelf,
-        role: "Usuario",
-      }, 
-      {
-        href:"/tipo-de-documento",
-        label: "Documento",
-        icon: mdiFileDocumentOutline,
-        role: "Usuario",
-      }, 
-      {
-        href:"/departamento",
-        label: "Departamento",
-        icon: mdiAccountGroup,
-        role: "Usuario",
-      }, 
-      {
-        href:"/modalidad",
-        label: "Modalidades",
-        icon: mdiFormatListChecks,
-        role: "Usuario",
-      }, 
-    ]
-  },
-  {
-    href:"/documento",
-    label: "Documentos Técnicos ",
-    icon: mdiFileSign,
-    role: "Usuario",
-  }, 
-  {
-    href:"/documento-legal",
-    label: "Documentos Legales ",
-    icon: mdiScaleBalance,
-    role: "Usuario",
-  }, 
-  {
-    href:"/licitacion",
-    label: "Licitaciones",
-    icon: mdiGavel ,
-    role: "Usuario",
-  }, 
-
-
-
-//   Modulo de Inventario Definir el usuario aún 
-  {
+    {
     route: "inventario.index",
-    //href:"/inventario",
     label: "Inventario Equipos",
     icon: mdiGavel ,
     role: "Admin",
@@ -133,10 +66,37 @@ export default [
 
     {
     route: "sistema.index",
-    //href:"/inventario",
     label: "Inventario Sistema",
     icon: mdiGavel ,
     role: "Admin",
+  }, 
+
+  
+ 
+
+  //Modulos a Desarrollador de sistema 
+  {
+    href: "/dashboard",
+    to: "/dashboard",
+    icon: mdiMonitor,
+    label: "Dashboard",
+    role: "Desarrollador" 
+  },
+
+  {
+    route: "inventario.index",
+    //href:"/inventario",
+    label: "Inventario Equipos",
+    icon: mdiGavel ,
+    role: "Desarrollador",
+  }, 
+
+    {
+    route: "sistema.index",
+    //href:"/inventario",
+    label: "Inventario Sistema",
+    icon: mdiGavel ,
+    role: "Desarrollador",
   }, 
 
 ];

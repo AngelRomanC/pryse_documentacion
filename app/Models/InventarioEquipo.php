@@ -31,7 +31,7 @@ class InventarioEquipo extends Model
         'software_remoto',
         'id_remoto',
         'password_remoto',
-        
+
         'name_id',
         'observaciones',
     ];
@@ -48,4 +48,9 @@ class InventarioEquipo extends Model
             $model->fecha_registro = now();
         });
     }
+    public function usuario()
+    {
+        return $this->belongsTo(User::class, 'name_id');
+    }
+
 }

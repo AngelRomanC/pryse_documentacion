@@ -106,34 +106,14 @@ class User extends Authenticatable
             return [$permission['name'] => true];
         });
     }
-    public function alumno()
+
+    // app/Models/User.php
+    public function sistemas()
     {
-        return $this->hasOne(Alumno::class);
-    }
-    public function profesor()
-    {
-        return $this->hasOne(Profesor::class);
-    }
-    public function academico()
-    {
-        return $this->hasOne(Academico::class);
-    }
-    public function habito()
-    {
-        return $this->hasOne(Habito::class);
-    }
-    public function inteligencia()
-    {
-        return $this->hasOne(Inteligencia::class);
-    }
-    public function grupoAlumnos()
-    {
-        return $this->hasMany(Grupo_Alumnos::class);
+        return $this->hasMany(Sistema::class, 'user_id'); // Cambia 'user_id' si tu columna se llama diferente
     }
 
-   /* public function notifications()
-    {
-        return $this->morphMany(DatabaseNotification::class, 'notifiable')->orderBy('created_at', 'desc');
-    }*/
-    
+ 
+
+
 }
