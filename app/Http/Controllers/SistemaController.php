@@ -36,6 +36,10 @@ class SistemaController extends Controller
     public function index(Request $request)
     {
         $query = Sistema::with('departamento'); // Crea una consulta para obtener todos los sistemas
+        // Si el usuario NO es admin, que solo vea los sistemas que él creó
+        if (!auth()->user()->hasRole('Admin')) {
+            $query->where('user_id', auth()->id());
+        }
 
         if ($request->filled('search')) { // Verifica si hay un término de búsqueda
             $query->where('nombre', 'like', '%' . $request->search . '%') // Filtra por nombre del sistema
@@ -83,7 +87,6 @@ class SistemaController extends Controller
             }
 
             $Sistema = Sistema::create($request->validated()); // Crea el registro del sistema con los datos validados
-            $Sistema['user_id'] = auth()->id(); // Capturamos el ID del usuario autenticado
 
 
             if ($request->hasFile('ruta_documento')) { // Verifica si se han enviado archivos

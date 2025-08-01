@@ -39,6 +39,10 @@ class InventarioEquipoController extends Controller
     {
         //$query = InventarioEquipo::query();
         $query = InventarioEquipo::with('departamento'); // Cargar la relación
+        
+        if (!auth()->user()->hasRole('Admin')) {
+            $query->where('name_id', auth()->id());
+        }
 
 
         if ($request->filled('search')) {
@@ -99,7 +103,7 @@ class InventarioEquipoController extends Controller
             'routeName' => $this->routeName,
             'departamentos' => $departamentos,
             'marcasPorTipo' => $marcasPorTipo, // 
-            'usuariosArqueo' => $usuariosArqueo, 
+            'usuariosArqueo' => $usuariosArqueo,
 
         ]);
     }
