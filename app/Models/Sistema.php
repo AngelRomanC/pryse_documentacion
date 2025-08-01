@@ -3,7 +3,8 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
-class Sistema extends Model {
+class Sistema extends Model
+{
     // Nombre de las columnas de la tabla en la base de datos
     protected $fillable = [
         'nombre',
@@ -21,15 +22,29 @@ class Sistema extends Model {
         'ip_servidor_bd',
         'lenguaje_desarrollo',
         'version_lenguaje',
+        'user_id',
     ];
-        
+
     // Relación con el modelo Departamento
-    public function departamento() {
+    public function departamento()
+    {
         return $this->belongsTo(Departamento::class); // Relacion muchos a uno con el modelo Departamento
     }
 
     //relación con archivosPDF
-    public function archivos() {
+    public function archivos()
+    {
         return $this->hasMany(DocumentoSistema::class); // Relacion muchos a uno con el modelo DocumentoSistema
     }
+    protected static function booted()
+    {
+        static::creating(function ($sistema) {
+            $sistema->user_id = auth()->id();
+        });
+    }
+    public function usuario()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
 }

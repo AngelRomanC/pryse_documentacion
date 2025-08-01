@@ -15,13 +15,15 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
 
-class SistemaController extends Controller {
+class SistemaController extends Controller
+{
     // Guarda el nombre de la ruta para el formulario
     private string $routeName; // Nombre de la ruta para el formulario
     protected string $module = 'sistema'; // Nombre del módulo para los permisos
 
     // Constructor que verifica si el usuario tiene permisos para acceder a la ruta
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth'); // Requiere autenticación
         $this->routeName = 'sistema.'; // Define el nombre de la ruta para el formulario
         // $this->middleware("permission:{$this->module}.index")->only(['index', 'show']); // 
@@ -31,13 +33,14 @@ class SistemaController extends Controller {
     }
 
     // Muestra la lista de sistemas
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $query = Sistema::with('departamento'); // Crea una consulta para obtener todos los sistemas
 
         if ($request->filled('search')) { // Verifica si hay un término de búsqueda
             $query->where('nombre', 'like', '%' . $request->search . '%') // Filtra por nombre del sistema
                 ->orWhere('departamento_id', 'like', '%' . $request->search . '%') // Filtra por ID del departamento
-                ->orWhereHas('departamento', function($q) use ($request) { // Filtra por nombre del departamento
+                ->orWhereHas('departamento', function ($q) use ($request) { // Filtra por nombre del departamento
                     $q->where('nombre', 'like', '%' . $request->search . '%'); // Filtra por nombre del departamento
                 });
         }
@@ -55,7 +58,8 @@ class SistemaController extends Controller {
     }
 
     // Muestra el formulario para crear un nuevo sistema
-    public function create() {
+    public function create()
+    {
         $departamentos = Departamento::select('id', 'nombre as name')->get(); // Obtiene los departamentos
 
         return Inertia::render('Sistema/Create', [ // Renderiza la vista con los departamentos
@@ -66,7 +70,8 @@ class SistemaController extends Controller {
     }
 
     // Almacena el formulario para crear un nuevo sistema
-    public function store(StoreSistemaRequest $request) {
+    public function store(StoreSistemaRequest $request)
+    {
         // dd($request->all()); // Debugging: Verifica los datos recibidos
         DB::beginTransaction(); // Inicia una transacción para asegurarse de que se guarden los datos de manera atomica
 
@@ -78,6 +83,8 @@ class SistemaController extends Controller {
             }
 
             $Sistema = Sistema::create($request->validated()); // Crea el registro del sistema con los datos validados
+            $Sistema['user_id'] = auth()->id(); // Capturamos el ID del usuario autenticado
+
 
             if ($request->hasFile('ruta_documento')) { // Verifica si se han enviado archivos
                 foreach ($request->file('ruta_documento') as $file) { // Itera sobre los archivos enviados
@@ -87,7 +94,7 @@ class SistemaController extends Controller {
                     ]);
                 }
             }
-            
+
             DB::commit(); // Confirma la transacción exitosa
 
             // Redirige a la lista de sistemas con un mensaje de éxito
@@ -98,9 +105,10 @@ class SistemaController extends Controller {
             return back()->withErrors(['error' => 'Ocurrió un error al guardar el sistema: ' . $e->getMessage()]);
         }
     }
-    
+
     // Guarda un archivo en el disco público y devuelve su ruta
-    private function storeFile($file, $folder) {
+    private function storeFile($file, $folder)
+    {
         // Genera un nombre único para el archivo
         $originalName = Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME));
         $extension = $file->getClientOriginalExtension(); // Obtiene la extensión del archivo
@@ -108,13 +116,15 @@ class SistemaController extends Controller {
         return $file->storeAs($folder, $fileName, 'public'); // Guarda el archivo en el disco público y devuelve la ruta
     }
 
-    public function show(Sistema $sistema) {
+    public function show(Sistema $sistema)
+    {
     }
 
     // Muestra el formulario para editar un sistema con los datos del sistema
-    public function edit(Sistema $sistema) {
+    public function edit(Sistema $sistema)
+    {
         // Crea un array de departamentos para el select
-        $departamentos = Departamento::select('id', 'nombre as name')->get();        
+        $departamentos = Departamento::select('id', 'nombre as name')->get();
         $sistema->load('archivos'); // Carga los archivos asociados al sistema
 
         return Inertia::render('Sistema/Edit', [ // Renderiza la vista de edición con los datos del sistema
@@ -127,21 +137,33 @@ class SistemaController extends Controller {
     }
 
     // Actualiza los datos del sistema y sus archivos asociados
-    public function update(UpdateSistemaRequest $request, Sistema $sistema) {
+    public function update(UpdateSistemaRequest $request, Sistema $sistema)
+    {
         // dd($request->all()); // Debugging: Verifica los datos recibidos
         DB::beginTransaction(); // Inicia una transacción para asegurarse de que se guarden los datos de manera atomica
-        
+
         try {
-            $sistema->update($request->only([ 
-                'nombre', 'descripcion', 'departamento_id', 'url', 'fecha_creacion',
-                'fecha_produccion', 'estatus', 'numero_usuarios', 'nombre_servidor', 
-                'ip_servidor', 'sistema_operativo', 'nombre_servidor_bd',
-                'ip_servidor_bd', 'lenguaje_desarrollo', 'version_lenguaje'
+            $sistema->update($request->only([
+                'nombre',
+                'descripcion',
+                'departamento_id',
+                'url',
+                'fecha_creacion',
+                'fecha_produccion',
+                'estatus',
+                'numero_usuarios',
+                'nombre_servidor',
+                'ip_servidor',
+                'sistema_operativo',
+                'nombre_servidor_bd',
+                'ip_servidor_bd',
+                'lenguaje_desarrollo',
+                'version_lenguaje'
             ])); // Actualiza los datos del sistema con los datos proporcionados
 
             if (!empty($request->archivos_a_eliminar)) { // Verifica si hay archivos a eliminar
                 // Elimina los archivos seleccionados
-                $this->eliminarArchivos($sistema, $request->archivos_a_eliminar); 
+                $this->eliminarArchivos($sistema, $request->archivos_a_eliminar);
             }
 
             if ($request->hasFile('nuevos_documentos_principales')) { // Verifica si hay archivos nuevos para guardar
@@ -161,10 +183,11 @@ class SistemaController extends Controller {
     }
 
     // Elimina un sistema y sus archivos asociados
-    protected function eliminarArchivos(Sistema $sistema, array $archivosIds) {
+    protected function eliminarArchivos(Sistema $sistema, array $archivosIds)
+    {
         // Obtener los archivos a eliminar de la base de datos por sus IDs
         $archivos = $sistema->archivos()->whereIn('id', $archivosIds)->get();
-        
+
         foreach ($archivos as $archivo) { // Recorrer cada archivo
             // Eliminar los archivos del storage
             Storage::disk('public')->delete($archivo->ruta_archivo);
@@ -173,7 +196,8 @@ class SistemaController extends Controller {
     }
 
     // Guarda nuevos archivos en el storage y registros en la base de datos
-    protected function guardarNuevosArchivos(Sistema $sistema, array $archivos) {
+    protected function guardarNuevosArchivos(Sistema $sistema, array $archivos)
+    {
         $folder = 'documentos_sistema'; // Define el folder donde se guardarán los archivos
         foreach ($archivos as $archivo) { // Recorre cada archivo            
             $sistema->archivos()->create([ // Crea un registro en la tabla DocumentoSistema
@@ -184,7 +208,8 @@ class SistemaController extends Controller {
     }
 
     // Función para eliminar un sistema
-    public function destroy(Sistema $sistema) {
+    public function destroy(Sistema $sistema)
+    {
         DB::beginTransaction(); // Inicia una transacción para asegurar que todas las operaciones se completen correctamente
 
         try {
@@ -207,7 +232,8 @@ class SistemaController extends Controller {
         }
     }
 
-    public function importarExcel(Request $request){
+    public function importarExcel(Request $request)
+    {
         $request->validate([
             'archivo' => 'required|file|mimes:xlsx,xls,csv',
         ]);
@@ -218,7 +244,8 @@ class SistemaController extends Controller {
         return redirect()->back()->with('success', 'Archivo importado correctamente.');
     }
 
-    public function mostrar(){
+    public function mostrar()
+    {
         return Inertia::render('Sistema/Importar');
     }
 }
