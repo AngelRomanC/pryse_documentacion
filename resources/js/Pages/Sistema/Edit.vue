@@ -60,7 +60,6 @@ const archivosExistentes = ref(
         : []
 );
 
-console.log(archivosExistentes.value);
 
 // Ver archivo
 const mostrarArchivo = (ruta) => {
@@ -186,9 +185,9 @@ const handleSubmit = () => {
                         required
                     >
                         <option value="" disabled>Selecciona un estatus</option>
-                        <option value="En Diseño">En Diseño</option>
+                        <option value="Diseño">En Diseño</option>
                         <option value="Producción">Producción</option>
-                        <option value="En Pruebas">En Pruebas</option>
+                        <option value="Pruebas">En Pruebas</option>
                         <option value="Desarrollo">Desarrollo</option>
                         <option value="Mantenimiento">Mantenimiento</option>
                     </select>

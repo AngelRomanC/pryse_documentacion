@@ -5,7 +5,7 @@ import BaseButton from '@/components/BaseButton.vue';
 import BaseButtons from "@/components/BaseButtons.vue";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
 import Swal from "sweetalert2";
-import { mdiTagEdit, mdiDeleteOutline, mdiInformation, mdiFilePdfBox,mdiPlus } from "@mdi/js";
+import { mdiTagEdit, mdiDeleteOutline, mdiInformation, mdiFilePdfBox,mdiPlus, mdiClipboardList } from "@mdi/js";
 import Pagination from '@/Shared/Pagination.vue';
 import CardBoxComponentEmpty from "@/components/CardBoxComponentEmpty.vue";
 import CardBox from "@/components/CardBox.vue";
@@ -55,8 +55,8 @@ const openPDF = (id) => {
 
 <template>
   <LayoutMain>
-    <SectionTitleLineWithButton :title="props.titulo" main>
-      <BaseButton :href="route('inventario.form')" color="danger" label="Cargar Datos" />
+    <SectionTitleLineWithButton :title="props.titulo" main :icon="mdiClipboardList" >
+      <BaseButton :href="route('inventario.form')" color="danger" label="Cargar Datos"  />
 
       <BaseButton :href="route(`${props.routeName}create`)" color="warning" label="Registrar Equipo" :icon="mdiPlus" />
     </SectionTitleLineWithButton>
