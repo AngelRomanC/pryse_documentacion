@@ -5,7 +5,7 @@ import SectionMain from "@/Components/SectionMain.vue";
 import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
 import CardBox from "@/components/CardBox.vue";
 import BaseButton from "@/components/BaseButton.vue";
-import { mdiPlus, mdiArrowRight, mdiMonitor, mdiLaptop, mdiServer, mdiChartBar } from "@mdi/js";
+import { mdiMonitorDashboard, mdiPlus, mdiArrowRight, mdiMonitor, mdiLaptop, mdiServer, mdiChartBar } from "@mdi/js";
 import { Chart, registerables } from 'chart.js';
 import { ref, onMounted } from 'vue';
 
@@ -125,7 +125,7 @@ onMounted(() => {
   <Head title="Dashboard Admin" />
   <LayoutDashboard>
     <SectionMain>
-      <SectionTitleLineWithButton title="Panel de Administración de TI" main class="mb-6">
+      <SectionTitleLineWithButton title="Panel de Administración de TI" main class="mb-6"  :icon="mdiMonitorDashboard" >
           <div class="flex space-x-2">
             <BaseButton label="Nuevo Sistema" :icon="mdiPlus" color="info" small routeName="sistema.create" />
             <BaseButton label="Registrar Equipo" :icon="mdiPlus" color="success" small routeName="inventario.create" />

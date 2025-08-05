@@ -5,7 +5,7 @@ import BaseButton from '@/components/BaseButton.vue'
 import BaseButtons from "@/components/BaseButtons.vue"
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue"
 import Swal from "sweetalert2"
-import { mdiTagEdit, mdiDeleteOutline,mdiInformation,mdiPlus } from "@mdi/js"
+import { mdiTagEdit, mdiDeleteOutline,mdiInformation,mdiPlus, mdiCodeJson   } from "@mdi/js"
 import Pagination from '@/Shared/Pagination.vue'
 import CardBoxComponentEmpty from "@/components/CardBoxComponentEmpty.vue"
 import CardBox from "@/components/CardBox.vue"
@@ -40,7 +40,7 @@ const destroy = (id) => {
 
 <template>
   <LayoutMain>
-    <SectionTitleLineWithButton :title="props.titulo" main>
+    <SectionTitleLineWithButton :title="props.titulo" main :icon="mdiCodeJson   ">
       <BaseButton :href="route(`${props.routeName}create`)" color="warning" label="Crear" :icon="mdiPlus" />
     </SectionTitleLineWithButton>
       

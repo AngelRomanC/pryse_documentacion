@@ -92,13 +92,13 @@ const openPDF = (id) => {
         </thead>
         <tbody>
           <tr v-for="item in inventarios.data" :key="item.id">
-            <td class="border p-2">{{ item.nombre_persona }}</td>
-            <td class="border p-2">{{ item.departamento.nombre }}</td>
-            <td class="border p-2">{{ item.tipo_pc }} {{ item.marca_equipo }} {{ item.sistema_operativo }}</td>
-            <td class="border p-2">{{ item.procesador }}</td>
-            <td class="border p-2">{{ item.capacidad_ram }} {{ item.tipo_ram }}</td>
-            <td class="border p-2">{{ item.capacidad_disco }} {{ item.tipo_disco }}</td>
-            <td class="border p-2">{{ item.fecha_registro }}</td>
+            <td data-label="Nombre">{{ item.nombre_persona }}</td>
+            <td data-label="Departamento">>{{ item.departamento.nombre }}</td>
+            <td data-label="PC S.O.">>{{ item.tipo_pc }} {{ item.marca_equipo }} {{ item.sistema_operativo }}</td>
+            <td data-label="Procesador">>{{ item.procesador }}</td>
+            <td data-label="RAM">>{{ item.capacidad_ram }} {{ item.tipo_ram }}</td>
+            <td data-label="Disco">>{{ item.capacidad_disco }} {{ item.tipo_disco }}</td>
+            <td data-label="Fecha">>{{ item.fecha_registro }}</td>
             <td class="border p-2 whitespace-nowrap">
               <BaseButtons type="justify-start lg:justify-end" no-wrap>               
                 <BaseButton color="success" :icon="mdiFilePdfBox" small @click="openPDF(item.id)" title="Descargar PDF"/>

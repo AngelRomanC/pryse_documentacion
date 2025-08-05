@@ -6,7 +6,7 @@ import BaseButtons from '@/components/BaseButtons.vue'
 import CardBox from '@/components/CardBox.vue'
 import CardBoxComponentEmpty from "@/components/CardBoxComponentEmpty.vue";
 import NotificationBar from '@/components/NotificationBar.vue'
-import { mdiPlus, mdiTagEdit, mdiDelete } from '@mdi/js'
+import { mdiPlus, mdiTagEdit, mdiDelete, mdiLaptop   } from '@mdi/js'
 import { router } from '@inertiajs/vue3'
 import Swal from "sweetalert2";
 import Pagination from '@/Shared/Pagination.vue';
@@ -47,7 +47,7 @@ const destroy = (id) => {
 
 <template>
   <LayoutMain title="Marcas">
-    <SectionTitleLineWithButton title="Catálogo de Marcas" main>
+    <SectionTitleLineWithButton title="Catálogo de Marcas" main :icon="mdiLaptop   ">
       <BaseButton :href="route(`${props.routeName}create`)" :icon="mdiPlus" color="warning" label="Nueva Marca" />
     </SectionTitleLineWithButton>
 
@@ -74,9 +74,9 @@ const destroy = (id) => {
         </thead>
         <tbody>
           <tr v-for="(marca, index) in props.marcas.data" :key="marca.id">
-            <td class="border px-4 py-2">{{ index + 1 }}</td>
-            <td class="border px-4 py-2">{{ marca.nombre }}</td>
-            <td class="border px-4 py-2">
+            <td data-label="#" class="border px-4 py-2">{{ index + 1 }}</td>
+            <td data-label="Nombre" class="border px-4 py-2">{{ marca.nombre }}</td>
+            <td data-label="Asociados" class="border px-4 py-2">
               <ul class="list-disc ml-4">
                 <li v-for="tipo in marca.tipos" :key="tipo.id">
                   {{ tipo.tipo.replace('_', ' ') }}

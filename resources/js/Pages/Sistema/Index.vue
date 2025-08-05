@@ -5,7 +5,7 @@ import BaseButton from '@/components/BaseButton.vue';
 import BaseButtons from "@/components/BaseButtons.vue";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
 import Swal from "sweetalert2";
-import { mdiTagEdit, mdiDeleteOutline, mdiInformation, mdiMagnify, mdiFilterVariant,mdiPlus, mdiApps } from "@mdi/js";
+import { mdiTagEdit, mdiDeleteOutline, mdiInformation, mdiMagnify, mdiFilterVariant, mdiPlus, mdiApps } from "@mdi/js";
 import Pagination from '@/Shared/Pagination.vue';
 import CardBoxComponentEmpty from "@/components/CardBoxComponentEmpty.vue";
 import CardBox from "@/components/CardBox.vue";
@@ -44,10 +44,10 @@ const filters = ref({ ...props.filters })
     <LayoutMain>
         <SectionTitleLineWithButton :title="props.titulo" main :icon="mdiApps">
             <BaseButton :href="route('sistema.form')" color="danger" label="Cargar Datos" />
-            <BaseButton :href="route(`${props.routeName}create`)" color="warning" label="Crear" :icon="mdiPlus"/>
+            <BaseButton :href="route(`${props.routeName}create`)" color="warning" label="Crear" :icon="mdiPlus" />
         </SectionTitleLineWithButton>
-        
-        <SearchBar   v-model="filters.search"  :routeName="routeName"  placeholder="Buscar sistema por nombre..."  />
+
+        <SearchBar v-model="filters.search" :routeName="routeName" placeholder="Buscar sistema por nombre..." />
 
         <NotificationBar v-if="$page.props.flash.success" color="success" :icon="mdiInformation" :outline="false">
             {{ $page.props.flash.success }}
@@ -66,21 +66,29 @@ const filters = ref({ ...props.filters })
                 <thead>
                     <tr>
                         <th />
-                        <th class="border p-2">Nombre de Sistema</th>                                              
-                        <th class="border p-2">Departamento</th>                        
+                        <th class="border p-2">Nombre de Sistema</th>
+                        <th class="border p-2">Departamento</th>
                         <th class="border p-2">URL</th>
                         <th class="border p-2">Estatus</th>
-                        <th class="border p-2">Acciones</th>                       
+                        <th class="border p-2">Acciones</th>
                         <th />
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="documento in sistemas.data" :key="documento.id">
                         <td class="align-items-center"></td>
-                        <td data-label="Nombre de Sistema" class="border p-2">{{documento.nombre}}</td>        
-                        <td data-label="Departamento" class="border p-2">{{ documento.departamento.nombre}}</td>
-                        <td data-label="URL del sistema " class="border p-2">{{ documento.url}} </td> 
-                        <td data-label="Estatus del sistema " class="border p-2">{{ documento.estatus}} </td>        
+                        <td data-label="Nombre de Sistema" class="border p-2">{{ documento.nombre }}</td>
+                        <td data-label="Departamento" class="border p-2">{{ documento.departamento.nombre }}</td>
+                        <td data-label="URL">
+                            <div class="max-w-[200px] sm:max-w-[300px] lg:max-w-full">
+                                <a :href="documento.url" target="_blank"
+                                    class="text-blue-500 hover:underline truncate block" :title="documento.url">
+                                    {{ documento.url }}
+                                </a>
+                            </div>
+                        </td>
+                        
+                        <td data-label="Estatus del sistema " class="border p-2">{{ documento.estatus }} </td>
                         <td class="before:hidden lg:w-1 whitespace-nowrap">
                             <BaseButtons type="justify-start lg:justify-end" no-wrap>
                                 <BaseButton color="info" :icon="mdiTagEdit" small
