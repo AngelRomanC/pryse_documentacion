@@ -43,7 +43,7 @@ const filters = ref({ ...props.filters })
 <template>
     <LayoutMain>
         <SectionTitleLineWithButton :title="props.titulo" main :icon="mdiApps">
-            <BaseButton :href="route('sistema.form')" color="danger" label="Cargar Datos" />
+     <!--        <BaseButton :href="route('sistema.form')" color="danger" label="Cargar Datos" /> -->
             <BaseButton :href="route('sistemas.export', { search: filters.search })" color="success" label="Exportar excel" />
             <BaseButton :href="route(`${props.routeName}create`)" color="warning" label="Registrar nuevo sistema" :icon="mdiPlus" />
         </SectionTitleLineWithButton>

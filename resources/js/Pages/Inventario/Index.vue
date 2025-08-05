@@ -56,7 +56,7 @@ const openPDF = (id) => {
 <template>
   <LayoutMain>
     <SectionTitleLineWithButton :title="props.titulo" main :icon="mdiClipboardList" >
-      <BaseButton :href="route('inventario.form')" color="danger" label="Cargar Datos"  />
+<!--    <BaseButton :href="route('inventario.form')" color="danger" label="Cargar Datos"  /> -->
       <BaseButton :href="route('inventario.export', { search: filters.search })" color="success" label="Exporta excel" />
       <BaseButton :href="route(`${props.routeName}create`)" color="warning" label="Registrar Equipo" :icon="mdiPlus" />
     </SectionTitleLineWithButton>
