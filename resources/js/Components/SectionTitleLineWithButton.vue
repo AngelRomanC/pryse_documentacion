@@ -23,7 +23,7 @@ const hasSlot = computed(() => useSlots().default);
 <template>
   <section
     :class="{ 'pt-6': !main }"
-    class="mb-6 flex items-center justify-between"
+    class="mb-6 flex flex-col sm:flex-row items-center justify-between gap-4"
   >
     <div class="flex items-center justify-start">
       <IconRounded
@@ -38,6 +38,8 @@ const hasSlot = computed(() => useSlots().default);
         {{ title }}
       </h1>
     </div>
-    <slot v-if="hasSlot" />
+    <div class="flex flex-wrap justify-end gap-2 w-full sm:w-auto">
+      <slot v-if="hasSlot" />
+    </div>
   </section>
 </template>
