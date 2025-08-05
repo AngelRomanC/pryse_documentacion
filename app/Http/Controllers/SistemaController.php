@@ -6,6 +6,7 @@ use App\Models\Sistema;
 use App\Http\Requests\StoreSistemaRequest;
 use App\Http\Requests\UpdateSistemaRequest;
 use App\Imports\InformacionSistemaImport;
+use App\Exports\SistemasExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Log;
 use App\Models\Departamento;
@@ -35,7 +36,7 @@ class SistemaController extends Controller
     // Muestra la lista de sistemas
     public function index(Request $request)
     {
-        $query = Sistema::with('departamento'); // Crea una consulta para obtener todos los sistemas
+        $query = Sistema::with('departamento', 'usuario'); // Crea una consulta para obtener todos los sistemas
         // Si el usuario NO es admin, que solo vea los sistemas que él creó
         if (!auth()->user()->hasRole('Admin')) {
             $query->where('user_id', auth()->id());
@@ -250,5 +251,11 @@ class SistemaController extends Controller
     public function mostrar()
     {
         return Inertia::render('Sistema/Importar');
+    }
+
+    public function exportExcel(Request $request) 
+    {
+        $filters = $request->all(); // Obtener los filtros del request
+        return Excel::download(new SistemasExport($filters), 'sistemas_' . now()->format('Y-m-d') . '.xlsx');
     }
 }

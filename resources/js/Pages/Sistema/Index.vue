@@ -44,10 +44,11 @@ const filters = ref({ ...props.filters })
     <LayoutMain>
         <SectionTitleLineWithButton :title="props.titulo" main :icon="mdiApps">
             <BaseButton :href="route('sistema.form')" color="danger" label="Cargar Datos" />
-            <BaseButton :href="route(`${props.routeName}create`)" color="warning" label="Crear" :icon="mdiPlus" />
+            <BaseButton :href="route('sistemas.export', { search: filters.search })" color="success" label="Exportar excel" />
+            <BaseButton :href="route(`${props.routeName}create`)" color="warning" label="Registrar nuevo sistema" :icon="mdiPlus" />
         </SectionTitleLineWithButton>
 
-        <SearchBar v-model="filters.search" :routeName="routeName" placeholder="Buscar sistema por nombre..." />
+        <SearchBar v-model="filters.search" :routeName="routeName" placeholder="Buscar sistema por nombre o departamento..." />
 
         <NotificationBar v-if="$page.props.flash.success" color="success" :icon="mdiInformation" :outline="false">
             {{ $page.props.flash.success }}
@@ -70,6 +71,7 @@ const filters = ref({ ...props.filters })
                         <th class="border p-2">Departamento</th>
                         <th class="border p-2">URL</th>
                         <th class="border p-2">Estatus</th>
+                        <th class="border p-2">Developer</th>
                         <th class="border p-2">Acciones</th>
                         <th />
                     </tr>
@@ -87,8 +89,9 @@ const filters = ref({ ...props.filters })
                                 </a>
                             </div>
                         </td>
-                        
+
                         <td data-label="Estatus del sistema " class="border p-2">{{ documento.estatus }} </td>
+                        <td data-label="Developer" class="border p-2">{{ documento.usuario.name }}</td>
                         <td class="before:hidden lg:w-1 whitespace-nowrap">
                             <BaseButtons type="justify-start lg:justify-end" no-wrap>
                                 <BaseButton color="info" :icon="mdiTagEdit" small

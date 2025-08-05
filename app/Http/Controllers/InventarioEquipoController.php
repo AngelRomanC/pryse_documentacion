@@ -11,12 +11,9 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\InventarioEquipoImport;
+use App\Exports\InventariosExport;
 use App\Models\Marca;
 use Barryvdh\DomPDF\Facade\Pdf;
-
-
-
-
 
 class InventarioEquipoController extends Controller
 {
@@ -43,7 +40,6 @@ class InventarioEquipoController extends Controller
         if (!auth()->user()->hasRole('Admin')) {
             $query->where('name_id', auth()->id());
         }
-
 
         if ($request->filled('search')) {
             $query->where('nombre_persona', 'like', '%' . $request->search . '%')
@@ -205,8 +201,11 @@ class InventarioEquipoController extends Controller
         return Inertia::render('Inventario/Importar');
     }
 
-
-    // ...
+    public function exportExcel(Request $request) 
+    {
+        $filters = $request->all(); // Obtener los filtros del request
+        return Excel::download(new InventariosExport($filters), 'Inventario_' . now()->format('Y-m-d') . '.xlsx');
+    }
 
     public function generarResponsiva($id)
     {
