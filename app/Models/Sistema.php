@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+
 use Illuminate\Database\Eloquent\Model;
 
 class Sistema extends Model
@@ -36,7 +37,7 @@ class Sistema extends Model
     {
         return $this->hasMany(DocumentoSistema::class); // Relacion muchos a uno con el modelo DocumentoSistema
     }
-    protected static function booted()
+    protected static function booted2()
     {
         static::creating(function ($sistema) {
             $sistema->user_id = auth()->id();
@@ -47,4 +48,14 @@ class Sistema extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+
+    protected static function booted()
+    {
+        static::creating(function ($sistema) {
+            // Solo asigna auth()->id() si user_id no está definido
+            if (empty($sistema->user_id)) {
+                $sistema->user_id = auth()->id();
+            }
+        });
+    }
 }

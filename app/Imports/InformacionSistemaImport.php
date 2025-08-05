@@ -33,6 +33,8 @@ class InformacionSistemaImport implements ToModel, WithHeadingRow {
             'ip_servidor_bd'        => $row['ip_servidor_bd'] ?? 'N/A',
             'lenguaje_desarrollo'   => $row['lenguaje_desarrollo'] ?? 'N/A',
             'version_lenguaje'      => $row['version_lenguaje'] ?? 'N/A',
+            'user_id'                => $this->getUserIdByName($row['user_id']),
+
         ]);
     }
 
@@ -75,5 +77,6 @@ class InformacionSistemaImport implements ToModel, WithHeadingRow {
     private function getUserIdByName($nombre) {
         return User::where('name', $nombre)->value('id') ?? null;
     }
+    
 
 }
