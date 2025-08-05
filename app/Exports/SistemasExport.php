@@ -32,16 +32,15 @@ class SistemasExport implements FromCollection, WithHeadings, WithMapping, Shoul
                     ->orWhereHas('departamento', function ($q2) {
                         $q2->where('nombre', 'like', '%' . $this->filters['search'] . '%');
                     });
-                });
+            });
         }
-
-        return $query->get();
+        
+        return $query->orderBy('id', 'desc')->get();
     }
 
     public function headings(): array
     {
         return [
-            'ID',
             'Nombre del Sistema',
             'Descripción',
             'Departamento',
@@ -66,7 +65,6 @@ class SistemasExport implements FromCollection, WithHeadings, WithMapping, Shoul
     public function map($sistema): array
     {
         return [
-            $sistema->id,
             $sistema->nombre,
             $sistema->descripcion,
             $sistema->departamento->nombre ?? 'No asignado', // Accede a la relación
@@ -96,7 +94,7 @@ class SistemasExport implements FromCollection, WithHeadings, WithMapping, Shoul
                 'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
                 'fill' => ['fillType' => 'solid', 'startColor' => ['rgb' => '2A629A']]
             ],
-            
+
             // Estilo para las celdas de fechas
             'F' => ['numberFormat' => ['formatCode' => 'dd/mm/yyyy']],
             'G' => ['numberFormat' => ['formatCode' => 'dd/mm/yyyy']],

@@ -49,7 +49,6 @@ class InventariosExport implements FromCollection, WithHeadings, WithMapping, Sh
     public function headings(): array
     {
         return [
-            'ID',
             'Registro del Sistema',
             'Nombre de la Persona',
             'Departamento',
@@ -82,7 +81,6 @@ class InventariosExport implements FromCollection, WithHeadings, WithMapping, Sh
     public function map($inventario): array
     {
         return [
-            $inventario->id,
             $inventario->fecha_registro,
             $inventario->nombre_persona,
             $inventario->departamento->nombre ?? 'No asignado', // Accede a la relación

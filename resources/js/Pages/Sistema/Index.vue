@@ -104,7 +104,7 @@ const filters = ref({ ...props.filters })
                 </tbody>
             </table>
             <Pagination :currentPage="sistemas.current_page" :links="sistemas.links"
-                :total="sistemas.links.length - 2" />
+                :total="sistemas.last_page" />
         </CardBox>
     </LayoutMain>
 </template>
