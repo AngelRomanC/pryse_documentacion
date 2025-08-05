@@ -77,6 +77,7 @@ Route::middleware('auth')->group(function () {
 
     //Rutas para modulo de inventario  
     Route::get('/inventario/form', [InventarioEquipoController::class, 'mostrar'])->name('inventario.form'); //declarar antes de la ruta principal
+    Route::get('/inventario/exportar', [InventarioEquipoController::class, 'exportExcel'])->name('inventario.export');
     Route::resource('inventario', InventarioEquipoController::class);
     Route::post('/inventario/importar', [InventarioEquipoController::class, 'importarExcel'])->name('inventario.importar');    
     Route::get('inventario/{id}/responsiva', [InventarioEquipoController::class, 'generarResponsiva'])->name('inventario.responsiva'); //genera pdf
@@ -86,6 +87,7 @@ Route::middleware('auth')->group(function () {
 
     //Rutas para modulo de sistema
     Route::get('/sistema/form', [SistemaController::class, 'mostrar'])->name('sistema.form'); //declarar antes de la ruta principal
+    Route::get('/sistemas/exportar', [SistemaController::class, 'exportExcel'])->name('sistemas.export');
     Route::resource('sistema', controller: SistemaController::class);
     Route::post('/sistema/importar', [SistemaController::class, 'importarExcel'])->name('sistema.importar');
     

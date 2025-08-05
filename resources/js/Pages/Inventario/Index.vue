@@ -57,7 +57,7 @@ const openPDF = (id) => {
   <LayoutMain>
     <SectionTitleLineWithButton :title="props.titulo" main :icon="mdiClipboardList" >
       <BaseButton :href="route('inventario.form')" color="danger" label="Cargar Datos"  />
-
+      <BaseButton :href="route('inventario.export', { search: filters.search })" color="success" label="Exporta excel" />
       <BaseButton :href="route(`${props.routeName}create`)" color="warning" label="Registrar Equipo" :icon="mdiPlus" />
     </SectionTitleLineWithButton>
 
@@ -93,12 +93,12 @@ const openPDF = (id) => {
         <tbody>
           <tr v-for="item in inventarios.data" :key="item.id">
             <td data-label="Nombre">{{ item.nombre_persona }}</td>
-            <td data-label="Departamento">>{{ item.departamento.nombre }}</td>
-            <td data-label="PC S.O.">>{{ item.tipo_pc }} {{ item.marca_equipo }} {{ item.sistema_operativo }}</td>
-            <td data-label="Procesador">>{{ item.procesador }}</td>
-            <td data-label="RAM">>{{ item.capacidad_ram }} {{ item.tipo_ram }}</td>
-            <td data-label="Disco">>{{ item.capacidad_disco }} {{ item.tipo_disco }}</td>
-            <td data-label="Fecha">>{{ item.fecha_registro }}</td>
+            <td data-label="Departamento">{{ item.departamento.nombre }}</td>
+            <td data-label="PC S.O.">{{ item.tipo_pc }} {{ item.marca_equipo }} {{ item.sistema_operativo }}</td>
+            <td data-label="Procesador">{{ item.procesador }}</td>
+            <td data-label="RAM">{{ item.capacidad_ram }} {{ item.tipo_ram }}</td>
+            <td data-label="Disco">{{ item.capacidad_disco }} {{ item.tipo_disco }}</td>
+            <td data-label="Fecha">{{ item.fecha_registro }}</td>
             <td class="border p-2 whitespace-nowrap">
               <BaseButtons type="justify-start lg:justify-end" no-wrap>               
                 <BaseButton color="success" :icon="mdiFilePdfBox" small @click="openPDF(item.id)" title="Descargar PDF"/>

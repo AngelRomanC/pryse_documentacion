@@ -43,11 +43,11 @@ class Sistema extends Model
             $sistema->user_id = auth()->id();
         });
     }
+
     public function usuario()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
 
     protected static function booted()
     {
