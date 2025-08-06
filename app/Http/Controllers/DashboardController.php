@@ -48,5 +48,25 @@ class DashboardController extends Controller
                 'sistemasAsignadosLista' => $sistemas->take(5),
             ]);
         }
+          
+        if ($user->hasRole('Procesos')) {
+            $sistemas = $user->sistemas()->with('departamento')->get(); // Relación sistemas asignados
+
+            return Inertia::render('Dashboard/Desarrollador', [
+                'sistemasAsignados' => $sistemas->count(),
+                'sistemasEnDesarrollo' => $sistemas->where('estatus', 'Desarrollo')->count(),
+                'sistemasAsignadosLista' => $sistemas->take(5),
+            ]);
+        }
+        
+        if ($user->hasRole('Ejecutivo')) {
+            $sistemas = $user->sistemas()->with('departamento')->get(); // Relación sistemas asignados
+
+            return Inertia::render('Dashboard/Desarrollador', [
+                'sistemasAsignados' => $sistemas->count(),
+                'sistemasEnDesarrollo' => $sistemas->where('estatus', 'Desarrollo')->count(),
+                'sistemasAsignadosLista' => $sistemas->take(5),
+            ]);
+        }
     }
 }

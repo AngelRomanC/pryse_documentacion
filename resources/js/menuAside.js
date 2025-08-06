@@ -111,4 +111,28 @@ export default [
     role: "Desarrollador",
   }, 
 
+   //Modulos a Procesos de sistema 
+  {
+    href: "/dashboard",
+    to: "/dashboard",
+    icon: mdiMonitor,
+    label: "Dashboard",
+    role: "Procesos" 
+  },
+
+     
+  
+  
+  //Modulos a Ejecutivo de sistema 
+  {
+    href: "/dashboard",
+    to: "/dashboard",
+    icon: mdiMonitor,
+    label: "Dashboard",
+    role: "Ejecutivo" 
+  },
+
+
+
+
 ];

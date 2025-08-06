@@ -17,21 +17,29 @@ class AdminSeeder extends Seeder
    */
   public function run(): void
   {
-    DB::table('users')->insert(['name' => 'Admin', 'apellido_paterno' => 'Admin', 'apellido_materno' => 'Admin', 'numero' => '7775420768', 'email' => 'pryselicitaciones@gmail.com', 'email_verified_at' => '2024-01-17 04:50:32', 'password' => Hash::make('Password.1'), 'role' => 'Admin']);
-    DB::table('users')->insert(['name' => 'Miguel', 'apellido_paterno' => 'Roman', 'apellido_materno' => 'Chano', 'numero' => '7772052238', 'email' => 'rcmo202029@gmail.com', 'email_verified_at' => '2024-01-17 04:50:32', 'password' => Hash::make('Password.1'), 'role' => 'Desarrollador']);
+    DB::table('users')->insert(['name' => 'Admin', 'apellido_paterno' => 'Admin', 'apellido_materno' => 'Admin', 'numero' => '7775420768', 'email' => 'admin@gmail.com', 'email_verified_at' => '2024-01-17 04:50:32', 'password' => Hash::make('Password.1'), 'role' => 'Admin']);
+    DB::table('users')->insert(['name' => 'Miguel', 'apellido_paterno' => 'Roman', 'apellido_materno' => 'Chano', 'numero' => '7772052238', 'email' => 'miguel@gmail.com', 'email_verified_at' => '2024-01-17 04:50:32', 'password' => Hash::make('Password.1'), 'role' => 'Desarrollador']);
     DB::table('users')->insert(['name' => 'Moises', 'apellido_paterno' => 'Roman', 'apellido_materno' => 'Chano', 'numero' => '7774449107', 'email' => 'moi@gmail.com', 'email_verified_at' => '2024-01-17 04:50:32', 'password' => Hash::make('Password.1'), 'role' => 'Desarrollador']);
     DB::table('users')->insert(['name' => 'Ricardo', 'apellido_paterno' => 'Roman', 'apellido_materno' => 'Chano', 'numero' => '5540175196', 'email' => 'ricardo@gmail.com', 'email_verified_at' => '2024-01-17 04:50:32', 'password' => Hash::make('Password.1'), 'role' => 'Desarrollador']);
 
-    $user1 = User::where('email', 'pryselicitaciones@gmail.com')->first();
+    DB::table('users')->insert(['name' => 'Javier', 'apellido_paterno' => 'Javier', 'apellido_materno' => 'Javier', 'numero' => '7772056987', 'email' => 'javier@gmail.com', 'email_verified_at' => '2024-01-17 04:50:32', 'password' => Hash::make('Password.1'), 'role' => 'Procesos']);
+    DB::table('users')->insert(['name' => 'Mario', 'apellido_paterno' => 'Javier', 'apellido_materno' => 'Javier', 'numero' => '7772056987', 'email' => 'mario@gmail.com', 'email_verified_at' => '2024-01-17 04:50:32', 'password' => Hash::make('Password.1'), 'role' => 'Ejecutivo']);
+
+    $user1 = User::where('email', 'admin@gmail.com')->first();
     $user1->assignRole('Admin');
 
-    $user4 = User::where('email', 'rcmo202029@gmail.com')->first();
+    $user4 = User::where('email', 'miguel@gmail.com')->first();
     $user4->assignRole('Desarrollador');
     $user4 = User::where('email', 'moi@gmail.com')->first();
     $user4->assignRole('Desarrollador');
     $user4 = User::where('email', 'ricardo@gmail.com')->first();
     $user4->assignRole('Desarrollador');
+    
+    $user5 = User::where('email', 'javier@gmail.com')->first();
+    $user5->assignRole('Procesos');
 
+    $user6 = User::where('email', 'mario@gmail.com')->first();
+    $user6->assignRole('Ejecutivo');
 
     //Aca aignamos las variables para permisos
     $perfil = Role::where('name', 'Admin')->first();
