@@ -55,12 +55,18 @@ function limpiar() {
       @input="buscar"
       :placeholder="placeholder"
       type="text"
-      class="border p-2 rounded w-full"
+      class="border p-2 rounded w-full dark:bg-gray-800 dark:border-gray-600 dark:text-white dark:placeholder-gray-400"
     />
-    <button @click="buscar" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+    <button 
+      @click="buscar" 
+      class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800"
+    >
       Buscar
     </button>
-    <button @click="limpiar" class="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400">
+    <button 
+      @click="limpiar" 
+      class="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400 dark:bg-gray-600 dark:text-white dark:hover:bg-gray-500"
+    >
       Limpiar
     </button>
   </div>
