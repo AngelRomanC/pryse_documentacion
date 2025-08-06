@@ -23,7 +23,7 @@ class InformacionSistemaImport implements ToModel, WithHeadingRow {
             'departamento_id'       => $this->getDepartamentoId($row['departamento_id'] ?? 'ADMINISTRACIÓN'),
             'url'                   => $row['url'] ?? 'N/A',
             'fecha_creacion'        =>  $this->parseFecha($row['fecha_creacion'] ?? '01-01-2025 00:00:00'),
-            'fecha_produccion'      =>  $this->parseFecha($row['fecha_produccion'] ?? '01-01-2025 00:00:00'),
+            'fecha_produccion'      =>  $this->parseFecha($row['fecha_produccion'] ?? NOW()),
             'estatus'               => $row['estatus'],
             'numero_usuarios'       => $row['numero_usuarios'],
             'nombre_servidor'       => $row['nombre_servidor'] ?? 'N/A',
