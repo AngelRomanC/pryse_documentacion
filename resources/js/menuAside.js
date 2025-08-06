@@ -82,7 +82,19 @@ export default [
     label: "Dashboard",
     role: "Desarrollador" 
   },
-
+  {
+    label: "Catálogos",
+    icon: mdiLibrary ,
+    role: "Desarrollador",
+    menu: [     
+      {
+        route: "marcas.index",
+        label: "Registrar Marcas",
+        icon: mdiLaptop ,
+        role: "Desarrollador",
+      }, 
+    ]
+  },
   {
     route: "inventario.index",
     //href:"/inventario",
