@@ -147,23 +147,7 @@ class SistemaController extends Controller
         DB::beginTransaction(); // Inicia una transacción para asegurarse de que se guarden los datos de manera atomica
 
         try {
-            $sistema->update($request->only([
-                'nombre',
-                'descripcion',
-                'departamento_id',
-                'url',
-                'fecha_creacion',
-                'fecha_produccion',
-                'estatus',
-                'numero_usuarios',
-                'nombre_servidor',
-                'ip_servidor',
-                'sistema_operativo',
-                'nombre_servidor_bd',
-                'ip_servidor_bd',
-                'lenguaje_desarrollo',
-                'version_lenguaje'
-            ])); // Actualiza los datos del sistema con los datos proporcionados
+            $sistema->update($request->validated()); // Actualiza los datos del sistema con los datos proporcionados
 
             if (!empty($request->archivos_a_eliminar)) { // Verifica si hay archivos a eliminar
                 // Elimina los archivos seleccionados

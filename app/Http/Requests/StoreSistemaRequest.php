@@ -39,7 +39,7 @@ class StoreSistemaRequest extends FormRequest {
 
             // Archivos de documentos
             'ruta_documento' => 'nullable|array|max:10', // Arreglo de rutas de documentos como máximo 10
-            'ruta_documento.*' => 'file|mimes:pdf|max:102400', // Archivo PDF con máximo 100MB
+            'ruta_documento.*' => 'file|mimes:pdf', // Archivo PDF con máximo 100MB
         ];
     }
 

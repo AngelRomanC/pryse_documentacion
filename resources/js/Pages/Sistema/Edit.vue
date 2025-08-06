@@ -7,6 +7,7 @@ import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.
 import CardBox from "@/components/CardBox.vue";
 import FormField from "@/components/FormField.vue";
 import FormControl from "@/components/FormControl.vue";
+import FormControlSelect from "@/components/FormControlSelect.vue"
 import { mdiAbjadHebrew, mdiBallotOutline, mdiFormatListChecks, mdiOfficeBuilding, mdiFileDocument, mdiMapMarker, mdiCalendar, mdiPlus, mdiTrashCan, mdiEye } from "@mdi/js";
 import FileUploader from '@/Components/FileUploader.vue';
 import { ref } from 'vue';
@@ -179,18 +180,13 @@ const handleSubmit = () => {
                 </FormField>
                 <!-- Estatus -->
                 <FormField label="Estatus" :error="form.errors.estatus">
-                    <select
-                        v-model="form.estatus"
-                        class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        required
-                    >
-                        <option value="" disabled>Selecciona un estatus</option>
-                        <option value="Diseño">En Diseño</option>
-                        <option value="Producción">Producción</option>
-                        <option value="Pruebas">En Pruebas</option>
-                        <option value="Desarrollo">Desarrollo</option>
-                        <option value="Mantenimiento">Mantenimiento</option>
-                    </select>
+                    <FormControlSelect v-model="form.estatus" type="select" :icon="mdiFormatListChecks" :options="[
+                    { value: 'Diseño', text: 'En Diseño' },
+                    { value: 'Producción', text: 'Producción' },
+                    { value: 'Pruebas', text: 'En Pruebas' },
+                    { value: 'Desarrollo', text: 'Desarrollo' },
+                    { value: 'Mantenimiento', text: 'Mantenimiento' }
+                    ]" required />
                 </FormField>
                 <!-- Número de usuarios -->
                 <FormField label="Número de usuarios" :error="form.errors.numero_usuarios">

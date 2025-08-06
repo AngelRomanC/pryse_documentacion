@@ -37,7 +37,7 @@ class UpdateSistemaRequest extends FormRequest {
             
             // Archivos de documentos 
             'nuevos_documentos_principales' => 'nullable|array|max:10', // Arreglo de rutas de documentos como máximo 10
-            'nuevos_documentos_principales.*' => 'file|mimes:pdf|max:10240', // Archivo PDF con máximo 100MB
+            'nuevos_documentos_principales.*' => 'file|mimes:pdf', // Archivo PDF con máximo 10MB
             'archivos_a_eliminar' => 'nullable|array', // Arreglo de IDs de documentos a eliminar
             'archivos_a_eliminar.*' => 'integer|exists:documento_sistemas,id', // IDs de documentos existentes
         ];
