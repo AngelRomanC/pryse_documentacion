@@ -42,6 +42,12 @@ export default [
 
     ],
   },
+    {
+    icon: mdiThemeLightDark,
+    label: 'Light/Dark',
+    isDesktopNoLabel: true,
+    isToggleLightDark: true,
+  },
   {
     icon: mdiAccount,
     isRol: true,

@@ -43,12 +43,15 @@ const filters = ref({ ...props.filters })
 <template>
     <LayoutMain>
         <SectionTitleLineWithButton :title="props.titulo" main :icon="mdiApps">
-     <!--        <BaseButton :href="route('sistema.form')" color="danger" label="Cargar Datos" /> -->
-            <BaseButton :href="route('sistemas.export', { search: filters.search })" color="success" label="Exportar excel" />
-            <BaseButton :href="route(`${props.routeName}create`)" color="warning" label="Registrar nuevo sistema" :icon="mdiPlus" />
+            <BaseButton :href="route('sistema.form')" color="danger" label="Cargar Datos" />
+            <BaseButton :href="route('sistemas.export', { search: filters.search })" color="success"
+                label="Exportar excel" />
+            <BaseButton :href="route(`${props.routeName}create`)" color="warning" label="Registrar nuevo sistema"
+                :icon="mdiPlus" />
         </SectionTitleLineWithButton>
 
-        <SearchBar v-model="filters.search" :routeName="routeName" placeholder="Buscar sistema por nombre o departamento..." />
+        <SearchBar v-model="filters.search" :routeName="routeName"
+            placeholder="Buscar sistema por nombre o departamento..." />
 
         <NotificationBar v-if="$page.props.flash.success" color="success" :icon="mdiInformation" :outline="false">
             {{ $page.props.flash.success }}
@@ -103,8 +106,7 @@ const filters = ref({ ...props.filters })
                     </tr>
                 </tbody>
             </table>
-            <Pagination :currentPage="sistemas.current_page" :links="sistemas.links"
-                :total="sistemas.last_page" />
+            <Pagination :currentPage="sistemas.current_page" :links="sistemas.links" :total="sistemas.last_page" />
         </CardBox>
     </LayoutMain>
 </template>

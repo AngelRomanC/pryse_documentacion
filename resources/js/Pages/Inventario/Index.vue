@@ -5,7 +5,7 @@ import BaseButton from '@/components/BaseButton.vue';
 import BaseButtons from "@/components/BaseButtons.vue";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
 import Swal from "sweetalert2";
-import { mdiTagEdit, mdiDeleteOutline, mdiInformation, mdiFilePdfBox,mdiPlus, mdiClipboardList } from "@mdi/js";
+import { mdiTagEdit, mdiDeleteOutline, mdiInformation, mdiFilePdfBox, mdiPlus, mdiClipboardList } from "@mdi/js";
 import Pagination from '@/Shared/Pagination.vue';
 import CardBoxComponentEmpty from "@/components/CardBoxComponentEmpty.vue";
 import CardBox from "@/components/CardBox.vue";
@@ -55,9 +55,10 @@ const openPDF = (id) => {
 
 <template>
   <LayoutMain>
-    <SectionTitleLineWithButton :title="props.titulo" main :icon="mdiClipboardList" >
-<!--    <BaseButton :href="route('inventario.form')" color="danger" label="Cargar Datos"  /> -->
-      <BaseButton :href="route('inventario.export', { search: filters.search })" color="success" label="Exporta excel" />
+    <SectionTitleLineWithButton :title="props.titulo" main :icon="mdiClipboardList">
+      <BaseButton :href="route('inventario.form')" color="danger" label="Cargar Datos" />
+      <BaseButton :href="route('inventario.export', { search: filters.search })" color="success"
+        label="Exporta excel" />
       <BaseButton :href="route(`${props.routeName}create`)" color="warning" label="Registrar Equipo" :icon="mdiPlus" />
     </SectionTitleLineWithButton>
 
@@ -100,8 +101,9 @@ const openPDF = (id) => {
             <td data-label="Disco">{{ item.capacidad_disco }} {{ item.tipo_disco }}</td>
             <td data-label="Fecha">{{ item.fecha_registro }}</td>
             <td class="border p-2 whitespace-nowrap">
-              <BaseButtons type="justify-start lg:justify-end" no-wrap>               
-                <BaseButton color="success" :icon="mdiFilePdfBox" small @click="openPDF(item.id)" title="Descargar PDF"/>
+              <BaseButtons type="justify-start lg:justify-end" no-wrap>
+                <BaseButton color="success" :icon="mdiFilePdfBox" small @click="openPDF(item.id)"
+                  title="Descargar PDF" />
                 <BaseButton color="info" :icon="mdiTagEdit" small :href="route(`${props.routeName}edit`, item.id)" />
                 <BaseButton color="danger" :icon="mdiDeleteOutline" small @click="destroy(item.id)" />
               </BaseButtons>
