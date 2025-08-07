@@ -32,7 +32,7 @@ class InventarioEquipo extends Model
         'id_remoto',
         'password_remoto',
 
-        'name_id',
+        'user_id',
         'observaciones',
     ];
 
@@ -50,7 +50,7 @@ class InventarioEquipo extends Model
     }
     public function usuario()
     {
-        return $this->belongsTo(User::class, 'name_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
 }

@@ -121,7 +121,7 @@ export default [
   },
 
   {
-    route: "proceso.index",
+    route: "procesos.index",
     label: "Procesos",
     icon: mdiGavel ,
     role: "Procesos",

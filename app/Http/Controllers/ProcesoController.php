@@ -11,13 +11,13 @@ class ProcesoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    protected string $routeName = 'proceso.';
-    protected string $module = 'usuarios-sistema';
+    protected string $routeName;
+    protected string $module = 'proceso'; //Nombre en singular buena práctica
 
     public function __construct()
     {
         $this->middleware('auth');
-        $this->routeName = 'inventario.';
+        $this->routeName = 'procesos.';
         // $this->middleware("permission:{$this->module}.index")->only(['index', 'show']);
         // $this->middleware("permission:{$this->module}.store")->only(['store', 'create']);
         // $this->middleware("permission:{$this->module}.update")->only(['edit', 'update']);
@@ -26,10 +26,28 @@ class ProcesoController extends Controller
     public function index(Request $request)
     {
         //
+        $query = Proceso::with('departamento'); // Cargar la relación
+
+        if (!auth()->user()->hasRole('Admin')) {
+            $query->where('user_id', auth()->id());
+        }
+
+        if ($request->filled('search')) {
+            $query->where('nombre', 'like', '%' . $request->search . '%')               
+                ->orWhereHas('departamento', function ($q) use ($request) {
+                    $q->where('nombre', 'like', '%' . $request->search . '%');
+                });
+        }
+
+        $procesos = $query->orderBy('id', 'desc')
+            ->paginate(10)
+            ->withQueryString();
+
         return Inertia::render('Proceso/Index', [
             'titulo' => 'Lista de Procesos',
             'routeName' => $this->routeName,
             'filters' => $request->only('search'),
+            'procesos' => $procesos,
         ]);
     }
 

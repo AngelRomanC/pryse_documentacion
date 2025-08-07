@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -15,16 +14,18 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->string('descripcion');
-            $table->string('departamento_id');
-            $table->string('fechac_inicio');
-            $table->string('fechac_entrega');
-            $table->string('fechac_valdacion');
-            $table->string('fechac_vigencia');
+            $table->foreignId('departamento_id')->nullable()->constrained('departamentos')->onDelete('set null'); 
+            $table->string('fecha_solicitud');
+            $table->string('fecha_entrega');
+            $table->string('fecha_inicio_vigencia');
+            $table->string('fecha_fin_vigencia');
             $table->string('estatus');
             $table->string('numero_usuarios');
             $table->string('nombre_creador');
             $table->string('nombre_autorizacion');
-            
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null'); 
+
+
             $table->timestamps();
         });
     }

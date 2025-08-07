@@ -94,7 +94,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/sistema/importar', [SistemaController::class, 'importarExcel'])->name('sistema.importar');
 
     //Procesos
-    Route::resource('proceso', controller: ProcesoController::class);
+    Route::resource('procesos', controller: ProcesoController::class);
 
     //Certificación
     Route::resource('certificacion', CertificacionController::class);

@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->dateTime('fecha_registro');
             $table->string('nombre_persona');
-            $table->string('departamento_id');
+            $table->foreignId('departamento_id')->nullable()->constrained('departamentos')->onDelete('set null');
             $table->string('puesto')->default('N/A');
             $table->string('tipo_pc');
             $table->string('marca_equipo');
@@ -34,11 +34,12 @@ return new class extends Migration {
             $table->string('software_remoto')->nullable();
             $table->string('id_remoto')->nullable();
             $table->string('password_remoto')->nullable();
-            $table->string('name_id');
+            //$table->unsignedBigInteger('name_id');
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null');
             $table->string('observaciones')->nullable()->default('N/A');
-            ;
 
             $table->timestamps();
+
 
         });
     }

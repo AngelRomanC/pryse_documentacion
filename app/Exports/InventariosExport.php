@@ -103,7 +103,10 @@ class InventariosExport implements FromCollection, WithHeadings, WithMapping, Sh
             $inventario->software_remoto,
             $inventario->id_remoto,
             $inventario->password_remoto,
-            $inventario->usuario->name ?? 'No asignado', // Accede al usuario
+            //$inventario->usuario->name ?? 'No asignado', // Accede al usuario
+            $inventario->usuario->name . ' ' . 
+            $inventario->usuario->apellido_paterno . ' ' . 
+            $inventario->usuario->apellido_materno ?? 'No asignado',
             $inventario->observaciones,
             $inventario->created_at->format('d/m/Y H:i'),
             $inventario->updated_at->format('d/m/Y H:i')
