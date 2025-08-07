@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCertificacionRequest;
+use App\Http\Requests\UpdateCertificacionRequest;
+use App\Http\Requests\UpdateSistemaRequest;
 use App\Models\Certificacion;
 use App\Models\Departamento;
 use Illuminate\Http\Request;
@@ -133,15 +135,49 @@ class CertificacionController extends Controller
      */
     public function edit(Certificacion $certificacion)
     {
-        //
+        // Crea un array de departamentos para el select
+        $departamentos = Departamento::select('id', 'nombre as name')->get();
+        $certificacion->load('archivos'); // Carga los archivos asociados al sistema
+
+        return Inertia::render('Certificacion/Edit', [ // Renderiza la vista de edición con los datos del sistema
+            'titulo' => 'Editar Registro de Certificación', // Título de la página
+            'certificacion' => $certificacion, // Datos del sistema
+            'routeName' => $this->routeName, // Nombre de la ruta para el formulario
+            'departamentos' => $departamentos, // Departamentos para el select
+            'archivosPrincipales' => $certificacion->archivos, // Archivos principales del sistema
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Certificacion $certificacion)
+    public function update(UpdateCertificacionRequest $request, Certificacion $certificacion)
     {
-        //
+        // dd($request->all()); // Debugging: Verifica los datos recibidos
+        DB::beginTransaction(); // Inicia una transacción para asegurarse de que se guarden los datos de manera atomica
+
+        try {
+            $certificacion->update($request->validated()); // Actualiza los datos del sistema con los datos proporcionados
+
+            if (!empty($request->archivos_a_eliminar)) { // Verifica si hay archivos a eliminar
+                // Elimina los archivos seleccionados
+                $this->eliminarArchivos($certificacion, $request->archivos_a_eliminar);
+            }
+
+            if ($request->hasFile('nuevos_documentos_principales')) { // Verifica si hay archivos nuevos para guardar
+                // Guarda los nuevos archivos
+                $this->guardarNuevosArchivos($certificacion, $request->file('nuevos_documentos_principales'));
+            }
+
+            DB::commit(); // Confirma la transacción
+
+            // Redirigir con mensaje de éxito
+            return redirect()->route($this->routeName . 'index')->with('success', 'Información del sistema actualizado con éxito.');
+        } catch (\Exception $e) {
+            DB::rollBack(); // Revierte la transacción en caso de error
+            // Redirige de vuelta con un mensaje de error
+            return back()->withErrors(['error' => 'Ocurrió un error al guardar el sistema: ' . $e->getMessage()]);
+        }
     }
 
     // Elimina un sistema y sus archivos asociados
@@ -160,7 +196,7 @@ class CertificacionController extends Controller
     // Guarda nuevos archivos en el storage y registros en la base de datos
     protected function guardarNuevosArchivos(Certificacion $certificacion, array $archivos)
     {
-        $folder = 'documentos_sistema'; // Define el folder donde se guardarán los archivos
+        $folder = 'documentos_certificacion'; // Define el folder donde se guardarán los archivos
         foreach ($archivos as $archivo) { // Recorre cada archivo            
             $certificacion->archivos()->create([ // Crea un registro en la tabla DocumentoSistema
                 'ruta_archivo' => $this->storeFile($archivo, $folder), // Ruta del archivo en el storage

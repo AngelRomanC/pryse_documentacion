@@ -42,7 +42,7 @@ class StoreCertificacionRequest extends FormRequest {
     public function messages(): array {
         // Retorna mensajes personalizados para las reglas de validación
         return [
-            'fecha_produccion.after_or_equal' => 'La fecha de producción debe ser igual o posterior a la fecha de creación.',
+            'fecha_entrega.after_or_equal' => 'La fecha de entrega debe ser igual o posterior a la fecha de creación.',
         ];
     }
 

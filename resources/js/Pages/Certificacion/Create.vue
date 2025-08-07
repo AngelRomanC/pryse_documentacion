@@ -135,5 +135,4 @@ const handleSubmit = () => {
     <!-- Overlay de carga -->
     <LoadingOverlay :visible="isUploading" title="Subiendo archivo(s)..."
         subtitle="Por favor, no cierres esta ventana." />
-
 </template>
