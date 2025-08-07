@@ -127,9 +127,12 @@ export default [
     role: "Procesos",
   }, 
 
-
-     
-  
+  {
+    route: "certificacion.index",
+    label: "Certificaciones",
+    icon: mdiGavel ,
+    role: "Procesos",
+  },
   
   //Modulos a Ejecutivo de sistema 
   {

@@ -61,7 +61,6 @@ const archivosExistentes = ref(
         : []
 );
 
-
 // Ver archivo
 const mostrarArchivo = (ruta) => {
     if (!ruta) {

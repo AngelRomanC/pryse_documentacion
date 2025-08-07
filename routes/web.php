@@ -3,6 +3,7 @@ use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\InventarioEquipoController;
 use App\Http\Controllers\MarcaController;
 use App\Http\Controllers\ProcesoController;
+use App\Http\Controllers\CertificacionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UsuarioGeneralController;
 use App\Http\Controllers\AlumnoController;
@@ -95,7 +96,8 @@ Route::middleware('auth')->group(function () {
     //Procesos
     Route::resource('proceso', controller: ProcesoController::class);
 
-
+    //Certificación
+    Route::resource('certificacion', CertificacionController::class);
 
     
 });
