@@ -103,7 +103,7 @@ export default [
     role: "Desarrollador",
   }, 
 
-    {
+  {
     route: "sistema.index",
     //href:"/inventario",
     label: "Inventario Sistema",
@@ -119,6 +119,14 @@ export default [
     label: "Dashboard",
     role: "Procesos" 
   },
+
+  {
+    route: "proceso.index",
+    label: "Procesos",
+    icon: mdiGavel ,
+    role: "Procesos",
+  }, 
+
 
      
   

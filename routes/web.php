@@ -2,6 +2,7 @@
 use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\InventarioEquipoController;
 use App\Http\Controllers\MarcaController;
+use App\Http\Controllers\ProcesoController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UsuarioGeneralController;
 use App\Http\Controllers\AlumnoController;
@@ -90,6 +91,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/sistemas/exportar', [SistemaController::class, 'exportExcel'])->name('sistemas.export');
     Route::resource('sistema', controller: SistemaController::class);
     Route::post('/sistema/importar', [SistemaController::class, 'importarExcel'])->name('sistema.importar');
+
+    //Procesos
+    Route::resource('proceso', controller: ProcesoController::class);
+
+
+
     
 });
 
