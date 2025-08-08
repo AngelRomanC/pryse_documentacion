@@ -54,13 +54,13 @@ const handleSubmit = () => {
         <CardBox form @submit.prevent="handleSubmit" enctype="multipart/form-data">
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <!-- Nombre de certificacion -->
-                <FormField label="Nombre del sistema" :error="form.errors.nombre">
+                <FormField label="Nombre del proceso" :error="form.errors.nombre">
                     <FormControl v-model="form.nombre" type="text" placeholder="Nombre de certificación "
                         :icon="mdiAbjadHebrew " required class="bg-gray-100 cursor-not-allowed"
                         title="Campo no editable - Documento Técnico fijo" />
                 </FormField>
                 <!-- Descripcion -->
-                <FormField label="Descripcion de la certificación" :error="form.errors.descripcion">
+                <FormField label="Descripcion del proceso" :error="form.errors.descripcion">
                     <FormControl v-model="form.descripcion" type="text" placeholder="Descripcion de la certificación "
                         :icon="mdiFormatListChecks" required class="bg-gray-100 cursor-not-allowed"
                         title="Campo no editable - Documento Técnico fijo" />

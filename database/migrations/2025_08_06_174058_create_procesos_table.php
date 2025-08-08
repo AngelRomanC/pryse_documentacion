@@ -21,7 +21,7 @@ return new class extends Migration {
             $table->string('fecha_fin_vigencia');
             $table->string('estatus');
             $table->string('numero_usuarios');
-            $table->string('nombre_creador');
+            $table->string('nombre_responsable');
             $table->string('nombre_autorizacion');
             $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null'); 
 

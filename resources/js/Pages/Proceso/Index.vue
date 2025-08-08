@@ -17,11 +17,12 @@ import { Link } from '@inertiajs/vue3'
 
 
 const props = defineProps({
- 
   titulo: String,
   routeName: String,
   procesos: Object,
- 
+  filters: Object,
+
+
 });
 
 const filters = ref({
@@ -50,12 +51,11 @@ const destroy = (id) => {
 <template>
   <LayoutMain>
     <SectionTitleLineWithButton :title="props.titulo" main :icon="mdiClipboardList">
-     
+
       <BaseButton :href="route(`${props.routeName}create`)" color="warning" label="Registrar Proceso" :icon="mdiPlus" />
     </SectionTitleLineWithButton>
 
-    <SearchBar v-model="filters.search" :routeName="routeName"
-      placeholder="Buscar por nombre o departamento..." />
+    <SearchBar v-model="filters.search" :routeName="routeName" placeholder="Buscar por nombre o departamento..." />
 
     <NotificationBar v-if="$page.props.flash.success" color="success" :icon="mdiInformation" :outline="false">
       {{ $page.props.flash.success }}
@@ -70,7 +70,35 @@ const destroy = (id) => {
     </CardBox>
 
     <CardBox v-else class="mb-6" has-table>
-      
+      <table class="w-full border-collapse border mt-4 text-xs md:text-sm">
+        <thead>
+          <tr>
+            <th class="border p-2">Nombre</th>
+            <th class="border p-2">Departamento</th>
+            <th class="border p-2">Fecha de Creación</th>
+            <th class="border p-2">Fecha de Inicio Vigencia</th>
+            <th class="border p-2">Fecha de Fin Vigencia</th>
+            <th class="border p-2">Estatus</th>
+            <th class="border p-2">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in procesos.data" :key="item.id">
+            <td data-label="Nombre">{{ item.nombre }}</td>
+            <td data-label="Departamento">{{ item.departamento.nombre }}</td>
+            <td data-label="Estatus del sistema " class="border p-2">{{ item.fecha_solicitud }} </td>
+            <td data-label="Estatus del sistema " class="border p-2">{{ item.fecha_inicio_vigencia }} </td>
+            <td data-label="Estatus del sistema " class="border p-2">{{ item.fecha_fin_vigencia }} </td>
+            <td data-label="Estatus del sistema " class="border p-2">{{ item.estatus }} </td>
+            <td class="border p-2 whitespace-nowrap">
+              <BaseButtons type="justify-start lg:justify-end" no-wrap>               
+                <BaseButton color="info" :icon="mdiTagEdit" small :href="route(`${props.routeName}edit`, item.id)" />
+                <BaseButton color="danger" :icon="mdiDeleteOutline" small @click="destroy(item.id)" />
+              </BaseButtons>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
       <Pagination :currentPage="procesos.current_page" :links="procesos.links" :total="procesos.last_page" />
 

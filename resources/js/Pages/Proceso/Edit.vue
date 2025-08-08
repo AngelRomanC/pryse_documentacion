@@ -8,253 +8,222 @@ import CardBox from "@/components/CardBox.vue";
 import FormField from "@/components/FormField.vue";
 import FormControl from "@/components/FormControl.vue";
 import FormControlSelect from "@/components/FormControlSelect.vue";
-import { onMounted } from 'vue';
-import FormControlPassword from "@/components/FormControlPassword.vue"
-import Accordion from '@/components/Accordion.vue'
+import { ref } from 'vue'
+import { mdiAbjadHebrew, mdiBallotOutline, mdiFormatListChecks, mdiOfficeBuilding, mdiFileDocument, mdiMapMarker, mdiCalendar, mdiPlus, mdiTrashCan, mdiEye } from "@mdi/js";
+import Swal from 'sweetalert2';
+import LoadingOverlay from '@/components/LoadingOverlay.vue';
+import FileUploader from '@/Components/FileUploader.vue';
 
-
-
-import {
-  mdiBallotOutline,
-  mdiAccount,
-  mdiHomeCity,
-  mdiCalendar,
-  mdiDesktopClassic,
-  mdiMicrosoftWindows,
-  mdiChip,
-  mdiMemory,
-  mdiHarddisk,
-  mdiUsb,
-  mdiCamera,
-  mdiCommentTextOutline,
-  mdiBriefcaseAccount
-} from "@mdi/js";
+const isUploading = ref(false)
 
 const props = defineProps({
   titulo: String,
   routeName: String,
   departamentos: Array,
-  inventario: Object,
-  usuariosArqueo: Array,
-  marcasPorTipo: Object,
+  proceso: Object,
+  archivosPrincipales: {
+    type: Array,
+    default: () => []
+  },
 
 });
 
 const form = useForm({
-  //fecha_registro: props.inventario.fecha_registro,
-  nombre_persona: props.inventario.nombre_persona,
-  departamento_id: props.inventario.departamento_id,
-  puesto: props.inventario.puesto,
-  tipo_pc: props.inventario.tipo_pc,
-  marca_equipo: props.inventario.marca_equipo,
-  sistema_operativo: props.inventario.sistema_operativo,
-  procesador: props.inventario.procesador,
-  tarjeta_madre: props.inventario.tarjeta_madre,
-  tarjeta_grafica: props.inventario.tarjeta_grafica,
-  datos_tarjeta_grafica: props.inventario.datos_tarjeta_grafica,
-  tipo_ram: props.inventario.tipo_ram,
-  capacidad_ram: props.inventario.capacidad_ram,
-  marca_ram: props.inventario.marca_ram,
-  tipo_disco: props.inventario.tipo_disco,
-  capacidad_disco: props.inventario.capacidad_disco,
-  teclado_mouse: props.inventario.teclado_mouse,
-  camara_web: props.inventario.camara_web,
-  otro_periferico: props.inventario.otro_periferico,
-
-  software_remoto: props.inventario.software_remoto || '',
-  id_remoto: props.inventario.id_remoto || '',
-  password_remoto: props.inventario.password_remoto || '',
-
-  name_id: props.inventario.name_id,
-  observaciones: props.inventario.observaciones,
+  _method: 'PUT', // Importante para las actualizaciones
+  id: props.proceso?.id,
+  nombre: props.proceso?.nombre || '',
+  descripcion: props.proceso?.descripcion || '',
+  departamento_id: props.proceso?.departamento_id || '',
+  fecha_solicitud: props.proceso?.fecha_solicitud || '',
+  fecha_entrega: props.proceso?.fecha_entrega || '',
+  fecha_inicio_vigencia: props.proceso?.fecha_inicio_vigencia || '',
+  fecha_fin_vigencia: props.proceso?.fecha_fin_vigencia || '',
+  estatus: props.proceso?.estatus || '',
+  numero_usuarios: props.proceso?.numero_usuarios || '',
+  nombre_responsable: props.proceso?.nombre_responsable || '',
+  nombre_autorizacion: props.proceso?.nombre_autorizacion || '',
+  nuevos_documentos_principales: [],
+  archivos_a_eliminar: []
 });
 
 
-const handleSubmit = () => {
-  console.log(form);
-  form.put(route(`${props.routeName}update`, props.inventario.id));
+// Manejar archivos existentes
+const archivosExistentes = ref(
+  Array.isArray(props.archivosPrincipales)
+    ? props.archivosPrincipales.map(a => ({
+      id: a.id,
+      nombre_original: a.nombre_original || 'Documento sin nombre',
+      ruta_archivo: a.ruta_archivo
+    }))
+    : []
+);
 
+// Ver archivo
+const mostrarArchivo = (ruta) => {
+  if (!ruta) {
+    Swal.fire({
+      icon: 'error',
+      title: '¡Error!',
+      text: 'No se ha proporcionado una ruta válida para el archivo PDF.',
+    });
+    return;
+  }
+  Swal.fire({
+    html: `
+            <div style="width: 100%; height: 500px;">
+                <iframe src="/storage/${ruta}" style="width: 100%; height: 100%;" frameborder="0"></iframe>
+            </div>
+        `,
+    width: "80%",
+    showCloseButton: true,
+    showConfirmButton: true,
+    confirmButtonText: "Cerrar",
+    allowOutsideClick: true,
+    allowEscapeKey: true,
+  });
 };
-const sections = [
-  { title: "Datos Generales", slotName: "datos-generales" },
-  { title: "Hardware", slotName: "hardware" },
-  { title: "Acceso Remoto", slotName: "acceso-remoto" },
-  { title: "Otros", slotName: "otros" },
-]
+
+// Manejar eliminación de archivos
+const toggleEliminarArchivo = (archivoId) => {
+  const index = form.archivos_a_eliminar.indexOf(archivoId);
+  if (index === -1) {
+    form.archivos_a_eliminar.push(archivoId);
+  } else {
+    form.archivos_a_eliminar.splice(index, 1);
+  }
+};
+
+// Enviar formulario
+const handleSubmit = () => {
+  isUploading.value = true;
+
+
+  form.post(route(`${props.routeName}update`, props.proceso.id), {
+    onFinish: () => {
+      isUploading.value = false;
+    }
+  });
+};
+
 
 
 </script>
-
 <template>
   <LayoutMain :title="titulo">
     <SectionTitleLineWithButton :icon="mdiBallotOutline" :title="titulo" main />
+    <CardBox form @submit.prevent="handleSubmit" enctype="multipart/form-data">
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <!-- Nombre de certificacion -->
+        <FormField label="Nombre del sistema" :error="form.errors.nombre">
+          <FormControl v-model="form.nombre" type="text" placeholder="Nombre de certificación " :icon="mdiAbjadHebrew"
+            required class="bg-gray-100 cursor-not-allowed" title="Campo no editable - Documento Técnico fijo" />
+        </FormField>
+        <!-- Descripcion -->
+        <FormField label="Descripcion de la certificación" :error="form.errors.descripcion">
+          <FormControl v-model="form.descripcion" type="text" placeholder="Descripcion de la certificación "
+            :icon="mdiFormatListChecks" required class="bg-gray-100 cursor-not-allowed"
+            title="Campo no editable - Documento Técnico fijo" />
+        </FormField>
+        <!-- Departamento -->
+        <FormField label="Departamento" :error="form.errors.departamento_id">
+          <FormControl v-model="form.departamento_id" :options="departamentos" type="select"
+            label-key="nombre_departamento" value-key="id" :icon="mdiOfficeBuilding" required />
+        </FormField>
+        <!-- Fecha de creación -->
+        <FormField label="Fecha de creación" :error="form.errors.fecha_solicitud">
+          <FormControl v-model="form.fecha_solicitud" type="date" placeholder="Fecha de creación" :icon="mdiCalendar"
+            required />
+        </FormField>
+        <!-- Fecha de Entrega -->
+        <FormField label="Fecha de Entrega" :error="form.errors.fecha_entrega">
+          <FormControl v-model="form.fecha_entrega" type="date" placeholder="Fecha de entrega" :icon="mdiCalendar"
+            required />
+        </FormField>
+        <!-- Fecha de Inicio Vigencia -->
+        <FormField label="Fecha de Inicio Vigencia" :error="form.errors.fecha_inicio_vigencia">
+          <FormControl v-model="form.fecha_inicio_vigencia" type="date" placeholder="Fecha de inicio vigencia"
+            :icon="mdiCalendar" required />
+        </FormField>
+        <!-- Fecha de Fin Vigencia -->
+        <FormField label="Fecha de Fin Vigencia" :error="form.errors.fecha_fin_vigencia">
+          <FormControl v-model="form.fecha_fin_vigencia" type="date" placeholder="Fecha de fin vigencia"
+            :icon="mdiCalendar" required />
+        </FormField>
+        <!-- Estatus -->
+        <FormField label="Estatus" :error="form.errors.estatus">
+          <FormControlSelect v-model="form.estatus" type="select" :icon="mdiFormatListChecks" :options="[
+            { value: 'Diseño', text: 'En Diseño' },
+            { value: 'Producción', text: 'Producción' },
+            { value: 'Pruebas', text: 'En Pruebas' },
+            { value: 'Desarrollo', text: 'Desarrollo' },
+            { value: 'Mantenimiento', text: 'Mantenimiento' }
+          ]" required />
+        </FormField>
+        <!-- Número de usuarios -->
+        <FormField label="Número de usuarios" :error="form.errors.numero_usuarios">
+          <FormControl v-model="form.numero_usuarios" type="text" placeholder="Número de usuarios"
+            :icon="mdiFormatListChecks" required />
+        </FormField>
+        <!-- Nombre del Responsable -->
+        <FormField label="Nombre del responsable" :error="form.errors.nombre_responsable">
+          <FormControl v-model="form.nombre_responsable" type="text" placeholder="Nombre del responsable"
+            :icon="mdiOfficeBuilding" required />
+        </FormField>
+        <!-- Nombre de la autorización -->
+        <FormField label="Nombre de la autorización" :error="form.errors.nombre_autorizacion">
+          <FormControl v-model="form.nombre_autorizacion" type="text" placeholder="Nombre de la autorización"
+            :icon="mdiMapMarker" required />
+        </FormField>
+      </div>
+      <!-- Sección de archivos existentes -->
+      <div class="mt-8">
+        <h3 class="text-lg font-medium text-gray-900 mb-4">Documentos existentes</h3>
+        <div v-if="archivosExistentes.length > 0" class="space-y-3">
+          <div v-for="archivo in archivosExistentes" :key="archivo.id"
+            class="flex items-center justify-between p-3 border rounded-lg"
+            :class="{ 'bg-red-50': form.archivos_a_eliminar.includes(archivo.id) }">
 
-    <CardBox form @submit.prevent="handleSubmit">
-      <Accordion :sections="sections">
+            <div class="flex items-center space-x-3">
+              <span class="text-sm font-medium text-gray-700 truncate max-w-xs">
+                {{ archivo.nombre_original }}
+              </span>
+            </div>
 
-        <!-- Datos Generales -->
-        <template #datos-generales>
-          <FormField label="Nombre de Persona" :error="form.errors.nombre_persona">
-            <FormControl v-model="form.nombre_persona" type="text" :icon="mdiAccount" required />
-          </FormField>
+            <div class="flex space-x-2">
+              <BaseButton @click="mostrarArchivo(archivo.ruta_archivo)" color="info" :icon="mdiEye" small
+                title="Ver documento" />
+              <BaseButton @click="toggleEliminarArchivo(archivo.id)"
+                :color="form.archivos_a_eliminar.includes(archivo.id) ? 'success' : 'danger'" :icon="mdiTrashCan" small
+                :title="form.archivos_a_eliminar.includes(archivo.id) ? 'Cancelar eliminación' : 'Eliminar documento'" />
+            </div>
+          </div>
+        </div>
+        <div v-else class="text-sm text-gray-500 italic">
+          No hay documentos asociados a este sistema.
+        </div>
+      </div>
 
-          <FormField label="Departamento" :error="form.errors.departamento_id">
-            <FormControl v-model="form.departamento_id" :options="departamentos" type="select" :icon="mdiHomeCity"
-              required />
-          </FormField>
-
-          <!-- Nuevo campo Puesto -->
-          <FormField label="Puesto" :error="form.errors.puesto">
-            <FormControl v-model="form.puesto" type="text" :icon="mdiBriefcaseAccount" required
-              @input="form.puesto = form.puesto.toUpperCase()" />
-          </FormField>
-
-          <FormField label="Tipo de PC" :error="form.errors.tipo_pc">
-            <FormControlSelect v-model="form.tipo_pc" type="select" :icon="mdiDesktopClassic" :options="[
-              { value: 'Laptop', text: 'Laptop' },
-              { value: 'PC Escritorio', text: 'PC Escritorio' },
-              { value: 'PC Escritorio (Servidor)', text: 'PC Escritorio (Servidor)' },
-              { value: 'Impresora', text: 'Impresora' }
-            ]" required />
-          </FormField>
-
-          <FormField label="Marca del Equipo" :error="form.errors.marca_equipo">
-            <FormControlSelect v-model="form.marca_equipo" type="select" :icon="mdiDesktopClassic"
-              :options="props.marcasPorTipo.marca_equipo.map(m => ({ value: m.nombre, text: m.nombre }))" required />
-          </FormField>
-
-          <FormField label="Sistema Operativo" :error="form.errors.sistema_operativo">
-            <FormControl v-model="form.sistema_operativo" type="text" :icon="mdiMicrosoftWindows" required />
-          </FormField>
-
-          <FormField label="Procesador" :error="form.errors.procesador">
-            <FormControl v-model="form.procesador" type="text" :icon="mdiChip" required />
-          </FormField>
-        </template>
-
-        <!-- Hardware -->
-        <template #hardware>
-          <FormField label="Tarjeta Madre" :error="form.errors.tarjeta_madre">
-            <FormControlSelect v-model="form.tarjeta_madre" type="select" :icon="mdiChip"
-              :options="props.marcasPorTipo.tarjeta_madre.map(m => ({ value: m.nombre, text: m.nombre }))" required />
-          </FormField>
-
-          <FormField label="Tarjeta Gráfica" :error="form.errors.tarjeta_grafica">
-            <FormControlSelect v-model="form.tarjeta_grafica" type="text" :icon="mdiChip" :options="[
-              { value: 'Integrada al procesador', text: 'INTEGRADA AL PROCESADOR' },
-              { value: 'Externa', text: 'EXTERNA' },
-            ]" required />
-          </FormField>
-
-          <FormField label="Datos Tarjeta Gráfica" :error="form.errors.datos_tarjeta_grafica">
-            <FormControl v-model="form.datos_tarjeta_grafica" type="text" :icon="mdiChip" />
-          </FormField>
-
-          <FormField label="Tipo de RAM" :error="form.errors.tipo_ram">
-            <FormControlSelect v-model="form.tipo_ram" type="text" :icon="mdiMemory" :options="[
-              { value: 'DDR2', text: 'DDR2' },
-              { value: 'DDR3', text: 'DDR3' },
-              { value: 'DDR4', text: 'DDR4' },
-              { value: 'DDR5', text: 'DDR5' },
-            ]" required />
-          </FormField>
-
-          <FormField label="Capacidad RAM" :error="form.errors.capacidad_ram">
-            <FormControlSelect v-model="form.capacidad_ram" type="select" :icon="mdiMemory" :options="[
-              { value: '2 GB', text: '2 GB' },
-              { value: '4 GB', text: '4 GB' },
-              { value: '6 GB', text: '6 GB' },
-              { value: '8 GB', text: '8 GB' },
-              { value: '12 GB', text: '12 GB' },
-              { value: '16 GB', text: '16 GB' },
-              { value: '20 GB', text: '20 GB' },
-              { value: '32 GB', text: '32 GB' },
-            ]" required />
-          </FormField>
-
-          <FormField label="Marca RAM" :error="form.errors.marca_ram">
-            <FormControlSelect v-model="form.marca_ram" type="select" :icon="mdiMemory"
-              :options="props.marcasPorTipo.marca_ram.map(m => ({ value: m.nombre, text: m.nombre }))" required />
-          </FormField>
-
-          <FormField label="Tipo de Disco" :error="form.errors.tipo_disco">
-            <FormControlSelect v-model="form.tipo_disco" type="text" :icon="mdiHarddisk" :options="[
-              { value: 'SSD', text: 'SSD' },
-              { value: 'M2', text: 'M2' },
-              { value: 'HDD', text: 'HDD' },
-              { value: 'HDD & SSD', text: 'HDD & SSD' },
-            ]" required />
-          </FormField>
-
-          <FormField label="Capacidad Disco" :error="form.errors.capacidad_disco">
-            <FormControlSelect v-model="form.capacidad_disco" type="text" :icon="mdiHarddisk" :options="[
-              { value: 'Menos de 100 GB', text: 'Menos de 100 GB' },
-              { value: '120 GB', text: '120 GB' },
-              { value: '256 GB', text: '256 GB' },
-              { value: '460 GB', text: '460 GB' },
-              { value: '512 GB', text: '512 GB' },
-              { value: '1 TB', text: '1 TB' },
-              { value: '2 TB', text: '2 TB' },
-            ]" required />
-          </FormField>
-
-          <FormField label="Teclado y Mouse" :error="form.errors.teclado_mouse">
-            <FormControlSelect v-model="form.teclado_mouse" type="select" :icon="mdiUsb"
-              :options="props.marcasPorTipo.teclado_mouse.map(m => ({ value: m.nombre, text: m.nombre }))" required />
-          </FormField>
-
-          <FormField label="Cámara Web" :error="form.errors.camara_web">
-            <FormControlSelect v-model="form.camara_web" type="select" :icon="mdiCamera"
-              :options="props.marcasPorTipo.camara_web.map(m => ({ value: m.nombre, text: m.nombre }))" required />
-          </FormField>
-
-          <FormField label="Otro Periférico" :error="form.errors.otro_periferico">
-            <FormControl v-model="form.otro_periferico" type="text" :icon="mdiUsb" />
-          </FormField>
-        </template>
-
-        <!-- Acceso Remoto -->
-        <template #acceso-remoto>
-          <FormField label="Software de Acceso Remoto" :error="form.errors.software_remoto">
-            <FormControlSelect v-model="form.software_remoto" :options="[
-              { value: 'TeamViewer', text: 'TeamViewer' },
-              { value: 'AnyDesk', text: 'AnyDesk' },
-              { value: 'Chrome Remote Desktop', text: 'Chrome Remote Desktop' },
-              { value: 'RustDesk', text: 'RustDesk' },
-              { value: 'Otro', text: 'Otro' },
-            ]" required />
-          </FormField>
-
-          <FormField v-if="form.software_remoto !== ''" label="ID Remoto" :error="form.errors.id_remoto">
-            <FormControl v-model="form.id_remoto" type="text" placeholder="Ej. 123 456 789" required />
-          </FormField>
-
-          <FormField v-if="form.software_remoto !== ''" label="Contraseña Remota" :error="form.errors.password_remoto">
-            <FormControlPassword v-model="form.password_remoto" type="password" placeholder="Contraseña" required />
-          </FormField>
-        </template>
-
-        <!-- Otros -->
-        <template #otros>
-          <FormField label="Nombre Arqueo" :error="form.errors.name_id">
-            <FormControlSelect v-model="form.name_id" type="select" :icon="mdiAccount"
-              :options="props.usuariosArqueo.map(u => ({ value: u.id, text: u.name }))" required />
-          </FormField>
-
-          <FormField label="Observaciones" :error="form.errors.observaciones">
-            <FormControl v-model="form.observaciones" type="text" :icon="mdiCommentTextOutline" required />
-          </FormField>
-        </template>
-
-      </Accordion>
-
+      <!-- Sección para nuevos archivos -->
+      <div class="mt-8">
+        <FormField label="Agregar nuevos documentos" :error="form.errors.nuevos_documentos_principales">
+          <FileUploader v-model="form.nuevos_documentos_principales" :error="form.errors.nuevos_documentos_principales"
+            :icon="mdiPlus" accept="application/pdf" multiple />
+        </FormField>
+        <p class="text-xs text-gray-500 mt-1">
+          Formatos aceptados: PDF. Tamaño máximo por archivo: 10MB.
+        </p>
+      </div>
 
       <template #footer>
         <BaseButtons>
-          <BaseButton @click="handleSubmit" type="submit" color="info" outline label="Actualizar" />
-          <BaseButton :href="route(`${props.routeName}index`)" type="reset" color="danger" outline label="Cancelar" />
+          <BaseButton @click="handleSubmit" type="submit" color="info" outline label="Actualizar"
+            :disabled="form.processing" />
+          <BaseButton :href="route(`${routeName}index`)" type="button" color="danger" outline label="Cancelar" />
         </BaseButtons>
       </template>
     </CardBox>
   </LayoutMain>
+  <!-- Overlay de carga -->
+  <LoadingOverlay :visible="isUploading" title="Subiendo archivo(s)..."
+    subtitle="Por favor, no cierres esta ventana." />
 </template>

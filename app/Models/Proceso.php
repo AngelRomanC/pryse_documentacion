@@ -17,13 +17,13 @@ class Proceso extends Model
         'fecha_fin_vigencia',
         'estatus',
         'numero_usuarios',
-        'nombre_creador',
+        'nombre_responsable',
         'nombre_autorizacion',
         'user_id',
     ];
 
 
-
+    //analizar esta funcion para que sirve
     protected static function booted()
     {
         static::creating(function ($sistema) {
@@ -40,6 +40,10 @@ class Proceso extends Model
     public function departamento()
     {
         return $this->belongsTo(Departamento::class); // Relacion muchos a uno con el modelo Departamento
+    }
+    public function archivos()
+    {
+        return $this->morphMany(Archivo::class, 'archivable');
     }
 
 
