@@ -54,6 +54,12 @@ export default [
         icon: mdiLaptop ,
         role: "Admin",
       }, 
+      {
+        route: "departamentos.index",
+        label: "Departamentos",
+        icon: mdiLaptop ,
+        role: "Admin",
+      }, 
     ]
   },
   
@@ -118,6 +124,20 @@ export default [
     icon: mdiMonitor,
     label: "Dashboard",
     role: "Procesos" 
+  },
+    {
+    label: "Catálogos",
+    icon: mdiLibrary ,
+    role: "Procesos",
+    menu: [     
+   
+      {
+        route: "departamentos.index",
+        label: "Departamentos",
+        icon: mdiLaptop ,
+        role: "Procesos",
+      }, 
+    ]
   },
 
   {

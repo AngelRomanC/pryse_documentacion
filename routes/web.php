@@ -59,14 +59,14 @@ Route::middleware('auth')->group(function () {
     Route::resource('usuarios', controller: UserController::class)->parameters(['usuarios' => 'usuarios']);
     Route::get('/perfil', [UserController::class, 'perfil'])->name('usuarios.perfil');
     Route::post('actualizarPerfil', [UserController::class, 'updatePerfil'])->name('usuarios.update-perfil');
-    
+
     //Desarrolladores
     Route::resource('usuarios-sistema', controller: UsuarioGeneralController::class);
 
 
 
     //Alumno
-    Route::resource('alumno', AlumnoController::class)->parameters(['alumno' => 'alumno']);   
+    Route::resource('alumno', AlumnoController::class)->parameters(['alumno' => 'alumno']);
 
     //Notificaciones 
     //Route::get('/notificaciones', [NotificationController::class, 'index']);
@@ -81,11 +81,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/inventario/form', [InventarioEquipoController::class, 'mostrar'])->name('inventario.form'); //declarar antes de la ruta principal
     Route::get('/inventario/exportar', [InventarioEquipoController::class, 'exportExcel'])->name('inventario.export');
     Route::resource('inventario', InventarioEquipoController::class);
-    Route::post('/inventario/importar', [InventarioEquipoController::class, 'importarExcel'])->name('inventario.importar');    
+    Route::post('/inventario/importar', [InventarioEquipoController::class, 'importarExcel'])->name('inventario.importar');
     Route::get('inventario/{id}/responsiva', [InventarioEquipoController::class, 'generarResponsiva'])->name('inventario.responsiva'); //genera pdf
 
     //Catalogo
     Route::resource('marcas', MarcaController::class);
+    Route::resource('departamentos', DepartamentoController::class);
+
 
     //Rutas para modulo de sistema
     Route::get('/sistema/form', [SistemaController::class, 'mostrar'])->name('sistema.form'); //declarar antes de la ruta principal
@@ -99,7 +101,7 @@ Route::middleware('auth')->group(function () {
     //Certificación
     Route::resource('certificacion', CertificacionController::class);
 
-    
+
 });
 
 require __DIR__ . '/auth.php';

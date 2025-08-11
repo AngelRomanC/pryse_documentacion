@@ -13,7 +13,7 @@ class DepartamentoController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->routeName = 'departamento.';
+        $this->routeName = 'departamentos.';
     }
     public function index(Request $request)
     {
