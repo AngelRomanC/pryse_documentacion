@@ -11,6 +11,8 @@ import FormField from "@/components/FormField.vue"
 import FormControl from "@/components/FormControl.vue"
 import FormControlSelect from "@/components/FormControlSelect.vue"
 import Accordion from '@/components/Accordion.vue'
+import FileUploader from '@/Components/FileUploader.vue';
+
 
 import {
   mdiBallotOutline,
@@ -61,12 +63,12 @@ const handleSubmit = () => {
     <CardBox form @submit.prevent="handleSubmit" enctype="multipart/form-data">
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <!-- Nombre de certificacion -->
-        <FormField label="Nombre del sistema" :error="form.errors.nombre">
+        <FormField label="Nombre del Proceso" :error="form.errors.nombre">
           <FormControl v-model="form.nombre" type="text" placeholder="Nombre de certificación " :icon="mdiAbjadHebrew"
             required class="bg-gray-100 cursor-not-allowed" title="Campo no editable - Documento Técnico fijo" />
         </FormField>
         <!-- Descripcion -->
-        <FormField label="Descripcion de la certificación" :error="form.errors.descripcion">
+        <FormField label="Descripcion del proceso" :error="form.errors.descripcion">
           <FormControl v-model="form.descripcion" type="text" placeholder="Descripcion de la certificación "
             :icon="mdiFormatListChecks" required class="bg-gray-100 cursor-not-allowed"
             title="Campo no editable - Documento Técnico fijo" />
@@ -100,10 +102,8 @@ const handleSubmit = () => {
         <FormField label="Estatus" :error="form.errors.estatus">
           <FormControlSelect v-model="form.estatus" type="select" :icon="mdiFormatListChecks" :options="[
             { value: 'Diseño', text: 'En Diseño' },
-            { value: 'Producción', text: 'Producción' },
-            { value: 'Pruebas', text: 'En Pruebas' },
-            { value: 'Desarrollo', text: 'Desarrollo' },
-            { value: 'Mantenimiento', text: 'Mantenimiento' }
+            { value: 'Revisión', text: 'Revisión' },
+            { value: 'Validación', text: 'Validación' },           
           ]" required />
         </FormField>
         <!-- Número de usuarios -->

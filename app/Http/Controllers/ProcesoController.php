@@ -64,7 +64,7 @@ class ProcesoController extends Controller
     {
         $departamentos = Departamento::select('id', 'nombre as name')->get();
 
-        return Inertia::render('Certificacion/Create', [
+        return Inertia::render('Proceso/Create', [
             'titulo' => 'Crear Registro de Proceso',
             'routeName' => $this->routeName,
             'departamentos' => $departamentos,

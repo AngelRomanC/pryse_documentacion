@@ -153,10 +153,8 @@ const handleSubmit = () => {
         <FormField label="Estatus" :error="form.errors.estatus">
           <FormControlSelect v-model="form.estatus" type="select" :icon="mdiFormatListChecks" :options="[
             { value: 'Diseño', text: 'En Diseño' },
-            { value: 'Producción', text: 'Producción' },
-            { value: 'Pruebas', text: 'En Pruebas' },
-            { value: 'Desarrollo', text: 'Desarrollo' },
-            { value: 'Mantenimiento', text: 'Mantenimiento' }
+            { value: 'Revisión', text: 'Revisión' },
+            { value: 'Validación', text: 'Validación' },
           ]" required />
         </FormField>
         <!-- Número de usuarios -->

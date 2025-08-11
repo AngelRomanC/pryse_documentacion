@@ -8,7 +8,7 @@ import CardBox from "@/components/CardBox.vue";
 import FormField from "@/components/FormField.vue";
 import FormControl from "@/components/FormControl.vue";
 import FormControlSelect from "@/components/FormControlSelect.vue"
-import { mdiAbjadHebrew ,mdiBallotOutline, mdiFormatListChecks, mdiOfficeBuilding, mdiFileDocument, mdiMapMarker, mdiCalendar, mdiPlus, mdiTrashCan, mdiEye } from "@mdi/js";
+import { mdiAbjadHebrew, mdiBallotOutline, mdiFormatListChecks, mdiOfficeBuilding, mdiFileDocument, mdiMapMarker, mdiCalendar, mdiPlus, mdiTrashCan, mdiEye } from "@mdi/js";
 import FileUploader from '@/Components/FileUploader.vue';
 import { ref } from 'vue'
 import LoadingOverlay from '@/components/LoadingOverlay.vue';
@@ -49,12 +49,12 @@ const form = useForm({
 
 // Manejar archivos existentes
 const archivosExistentes = ref(
-    Array.isArray(props.archivosPrincipales) 
+    Array.isArray(props.archivosPrincipales)
         ? props.archivosPrincipales.map(a => ({
             id: a.id,
             nombre_original: a.nombre_original || 'Documento sin nombre',
             ruta_archivo: a.ruta_archivo
-        })) 
+        }))
         : []
 );
 
@@ -98,7 +98,7 @@ const handleSubmit = () => {
     isUploading.value = true;
 
     console.log('Datos del formulario antes de enviar:', form);
-    
+
     form.post(route(`${props.routeName}update`, props.certificacion.id), {
         onFinish: () => {
             isUploading.value = false;
@@ -115,7 +115,7 @@ const handleSubmit = () => {
                 <!-- Nombre de certificacion -->
                 <FormField label="Nombre del sistema" :error="form.errors.nombre">
                     <FormControl v-model="form.nombre" type="text" placeholder="Nombre de certificación "
-                        :icon="mdiAbjadHebrew " required class="bg-gray-100 cursor-not-allowed"
+                        :icon="mdiAbjadHebrew" required class="bg-gray-100 cursor-not-allowed"
                         title="Campo no editable - Documento Técnico fijo" />
                 </FormField>
                 <!-- Descripcion -->
@@ -152,11 +152,9 @@ const handleSubmit = () => {
                 <!-- Estatus -->
                 <FormField label="Estatus" :error="form.errors.estatus">
                     <FormControlSelect v-model="form.estatus" type="select" :icon="mdiFormatListChecks" :options="[
-                    { value: 'Diseño', text: 'En Diseño' },
-                    { value: 'Producción', text: 'Producción' },
-                    { value: 'Pruebas', text: 'En Pruebas' },
-                    { value: 'Desarrollo', text: 'Desarrollo' },
-                    { value: 'Mantenimiento', text: 'Mantenimiento' }
+                        { value: 'Diseño', text: 'En Diseño' },
+                        { value: 'Revisión', text: 'Revisión' },
+                        { value: 'Validación', text: 'Validación' },
                     ]" required />
                 </FormField>
                 <!-- Número de usuarios -->
@@ -182,28 +180,20 @@ const handleSubmit = () => {
                     <div v-for="archivo in archivosExistentes" :key="archivo.id"
                         class="flex items-center justify-between p-3 border rounded-lg"
                         :class="{ 'bg-red-50': form.archivos_a_eliminar.includes(archivo.id) }">
-                        
+
                         <div class="flex items-center space-x-3">
                             <span class="text-sm font-medium text-gray-700 truncate max-w-xs">
                                 {{ archivo.nombre_original }}
                             </span>
                         </div>
-                        
+
                         <div class="flex space-x-2">
-                            <BaseButton
-                                @click="mostrarArchivo(archivo.ruta_archivo)"
-                                color="info"
-                                :icon="mdiEye"
-                                small
-                                title="Ver documento"
-                            />
-                            <BaseButton
-                                @click="toggleEliminarArchivo(archivo.id)"
+                            <BaseButton @click="mostrarArchivo(archivo.ruta_archivo)" color="info" :icon="mdiEye" small
+                                title="Ver documento" />
+                            <BaseButton @click="toggleEliminarArchivo(archivo.id)"
                                 :color="form.archivos_a_eliminar.includes(archivo.id) ? 'success' : 'danger'"
-                                :icon="mdiTrashCan"
-                                small
-                                :title="form.archivos_a_eliminar.includes(archivo.id) ? 'Cancelar eliminación' : 'Eliminar documento'"
-                            />
+                                :icon="mdiTrashCan" small
+                                :title="form.archivos_a_eliminar.includes(archivo.id) ? 'Cancelar eliminación' : 'Eliminar documento'" />
                         </div>
                     </div>
                 </div>
@@ -215,13 +205,9 @@ const handleSubmit = () => {
             <!-- Sección para nuevos archivos -->
             <div class="mt-8">
                 <FormField label="Agregar nuevos documentos" :error="form.errors.nuevos_documentos_principales">
-                    <FileUploader
-                        v-model="form.nuevos_documentos_principales"
-                        :error="form.errors.nuevos_documentos_principales"
-                        :icon="mdiPlus"
-                        accept="application/pdf"
-                        multiple
-                    />
+                    <FileUploader v-model="form.nuevos_documentos_principales"
+                        :error="form.errors.nuevos_documentos_principales" :icon="mdiPlus" accept="application/pdf"
+                        multiple />
                 </FormField>
                 <p class="text-xs text-gray-500 mt-1">
                     Formatos aceptados: PDF. Tamaño máximo por archivo: 10MB.
@@ -230,7 +216,8 @@ const handleSubmit = () => {
 
             <template #footer>
                 <BaseButtons>
-                    <BaseButton @click="handleSubmit" type="submit" color="info" outline label="Actualizar" :disabled="form.processing" />
+                    <BaseButton @click="handleSubmit" type="submit" color="info" outline label="Actualizar"
+                        :disabled="form.processing" />
                     <BaseButton :href="route(`${routeName}index`)" type="button" color="danger" outline
                         label="Cancelar" />
                 </BaseButtons>
