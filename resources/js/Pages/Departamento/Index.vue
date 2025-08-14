@@ -5,7 +5,7 @@ import BaseButton from '@/components/BaseButton.vue';
 import BaseButtons from "@/components/BaseButtons.vue";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
 import Swal from "sweetalert2";
-import { mdiTagEdit, mdiDeleteOutline,mdiInformation } from "@mdi/js";
+import { mdiTagEdit, mdiDeleteOutline,mdiInformation, mdiPlus } from "@mdi/js";
 import Pagination from '@/Shared/Pagination.vue';
 import CardBoxComponentEmpty from "@/components/CardBoxComponentEmpty.vue";
 import CardBox from "@/components/CardBox.vue";
@@ -47,7 +47,7 @@ const destroy = (id) => {
 <template>
     <LayoutMain>
         <SectionTitleLineWithButton :title="props.titulo" main>
-            <BaseButton :href="route(`${props.routeName}create`)" color="warning" label="Crear" />
+            <BaseButton :href="route(`${props.routeName}create`)" color="warning" label="Crear" :icon="mdiPlus"  />
         </SectionTitleLineWithButton>
 
         <SearchBar   v-model="filters.search"  :routeName="routeName"  placeholder="Buscar departamento por nombre..."  />
@@ -90,7 +90,7 @@ const destroy = (id) => {
                     </tr>
                 </tbody>
             </table>
-            <Pagination :currentPage="departamentos.current_page" :links="departamentos.links" :total="departamentos.links.length - 2" />
+            <Pagination :currentPage="departamentos.current_page" :links="departamentos.links" :total="departamentos.last_page" />
         </CardBox>
     </LayoutMain>
 </template>

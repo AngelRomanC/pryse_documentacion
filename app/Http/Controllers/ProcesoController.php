@@ -135,7 +135,7 @@ class ProcesoController extends Controller
         $proceso->load('archivos'); // Carga los archivos asociados al sistema
 
         return Inertia::render('Proceso/Edit', [ // Renderiza la vista de edición con los datos del sistema
-            'titulo' => 'Editar Registro de Certificación', // Título de la página
+            'titulo' => 'Editar Registro de Proceso', // Título de la página
             'proceso' => $proceso, // Datos del sistema
             'routeName' => $this->routeName, // Nombre de la ruta para el formulario
             'departamentos' => $departamentos, // Departamentos para el select

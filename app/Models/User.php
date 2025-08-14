@@ -112,8 +112,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(Sistema::class, 'user_id'); // Cambia 'user_id' si tu columna se llama diferente
     }
+    public function procesos()
+    {
+        return $this->hasMany(Proceso::class, 'user_id');
+    }
+    public function certificaciones()
+    {
+        return $this->hasMany(Certificacion::class, 'user_id');
+    }
 
- 
 
 
 }

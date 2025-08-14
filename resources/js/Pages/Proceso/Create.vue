@@ -12,22 +12,8 @@ import FormControl from "@/components/FormControl.vue"
 import FormControlSelect from "@/components/FormControlSelect.vue"
 import Accordion from '@/components/Accordion.vue'
 import FileUploader from '@/Components/FileUploader.vue';
+import { mdiAbjadHebrew, mdiBallotOutline, mdiFormatListChecks, mdiOfficeBuilding, mdiFileDocument, mdiMapMarker, mdiCalendar, mdiPlus } from "@mdi/js";
 
-
-import {
-  mdiBallotOutline,
-  mdiAccount,
-  mdiHomeCity,
-  mdiDesktopClassic,
-  mdiMicrosoftWindows,
-  mdiChip,
-  mdiMemory,
-  mdiHarddisk,
-  mdiUsb,
-  mdiCamera,
-  mdiCommentTextOutline,
-  mdiBriefcaseAccount,
-} from "@mdi/js";
 
 const props = defineProps({
   titulo: String,

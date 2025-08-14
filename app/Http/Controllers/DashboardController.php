@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Models\Certificacion;
 use App\Models\InventarioEquipo;
+use App\Models\Proceso;
 use App\Models\Sistema;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -11,19 +12,8 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Carbon\Carbon;
 
-
 class DashboardController extends Controller
 {
-    // public function index(): Response
-    // {
-    //       $user = Auth::user();
-
-    //     if ($user->hasRole('Admin')) {
-    //         return Inertia::render('Dashboard/Admin');
-    //     } else {
-    //         return Inertia::render('Dashboard/Usuario');
-    //     }
-    // }
     public function index()
     {
         $user = auth()->user();
@@ -40,7 +30,7 @@ class DashboardController extends Controller
         }
 
         if ($user->hasRole('Desarrollador')) {
-            $sistemas = $user->sistemas()->with('departamento')->get(); // Relación sistemas asignados
+            $sistemas = $user->sistemas()->with('departamento')->get();
 
             return Inertia::render('Dashboard/Desarrollador', [
                 'sistemasAsignados' => $sistemas->count(),
@@ -48,19 +38,70 @@ class DashboardController extends Controller
                 'sistemasAsignadosLista' => $sistemas->take(5),
             ]);
         }
-          
+
         if ($user->hasRole('Procesos')) {
-            $sistemas = $user->sistemas()->with('departamento')->get(); // Relación sistemas asignados
+            // Obtener procesos del usuario (o todos si tiene permiso)
+            $procesosQuery = $user->procesos();
+            $certificacionesQuery = $user->certificaciones();
 
-            return Inertia::render('Dashboard/Desarrollador', [
-                'sistemasAsignados' => $sistemas->count(),
-                'sistemasEnDesarrollo' => $sistemas->where('estatus', 'Desarrollo')->count(),
-                'sistemasAsignadosLista' => $sistemas->take(5),
+            if ($user->can('view_all_procesos')) {
+                $procesosQuery = Proceso::query();
+                $certificacionesQuery = Certificacion::query();
+            }
+
+            // Procesos con paginación
+            $procesosPaginated = $procesosQuery->with('departamento')
+                ->orderBy('created_at', 'desc')
+                ->paginate(5, ['*'], 'procesos_page')
+                ->withQueryString();
+
+
+            $procesos = $procesosPaginated->getCollection();
+            $procesosPorVencer = $procesos->filter(function ($proceso) {
+                return Carbon::parse($proceso->fecha_fin_vigencia)->lte(Carbon::now()->addDays(30));
+            })->count();
+            $procesosPorEstatus = $procesos->groupBy('estatus')->map->count();
+
+            // Certificaciones con paginación
+            $certificacionesPaginated = $certificacionesQuery->with('departamento')
+                ->orderBy('created_at', 'desc')
+                ->paginate(5, ['*'], 'certificaciones_page')
+                ->withQueryString();
+
+            $certificaciones = $certificacionesPaginated->getCollection();
+            $certificacionesPorVencer = $certificaciones->filter(function ($certificacion) {
+                return Carbon::parse($certificacion->fecha_fin_vigencia)->lte(Carbon::now()->addDays(30));
+            })->count();
+            $certificacionesPorEstatus = $certificaciones->groupBy('estatus')->map->count();
+
+            // Actividades recientes (para el dashboard)
+            $actividadesRecientes = $procesos->concat($certificaciones)
+                ->sortByDesc('created_at')
+                ->take(5)
+                ->map(function ($item) {
+                    $item->__typename = $item instanceof Proceso ? 'Proceso' : 'Certificacion';
+                    return $item;
+                })
+                ->values()
+                ->all();
+
+            return Inertia::render('Dashboard/Procesos', [
+                'totalProcesos' => $procesosPaginated->total(),
+                'procesosPorVencer' => $procesosPorVencer,
+                'procesosPorEstatus' => $procesosPorEstatus,
+                'procesosPaginated' => $procesosPaginated,
+
+                'totalCertificaciones' => $certificacionesPaginated->total(),
+                'certificacionesPorVencer' => $certificacionesPorVencer,
+                'certificacionesPorEstatus' => $certificacionesPorEstatus,
+                'certificacionesPaginated' => $certificacionesPaginated,
+
+                'actividadesRecientes' => $actividadesRecientes
             ]);
         }
-        
+
         if ($user->hasRole('Ejecutivo')) {
-            $sistemas = $user->sistemas()->with('departamento')->get(); // Relación sistemas asignados
+            $sistemas = $user->sistemas()->with('departamento')->get();
 
             return Inertia::render('Dashboard/Desarrollador', [
                 'sistemasAsignados' => $sistemas->count(),
