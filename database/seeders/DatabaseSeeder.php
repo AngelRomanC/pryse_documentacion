@@ -24,11 +24,12 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
             PermisosSeeder::class,
-            AdminSeeder::class,           
+            AdminSeeder::class,
+            ModuleSeeder::class,
             DatosSeeder::class,
             MarcaSeeder::class,
-            
-           
+
+
         ]);
     }
 }

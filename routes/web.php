@@ -2,6 +2,8 @@
 use App\Http\Controllers\DepartamentoController;
 use App\Http\Controllers\InventarioEquipoController;
 use App\Http\Controllers\MarcaController;
+use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\PermisosController;
 use App\Http\Controllers\ProcesoController;
 use App\Http\Controllers\CertificacionController;
 use App\Http\Controllers\UserController;
@@ -21,6 +23,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SistemaController;
 
 Route::get('/', function () {
@@ -101,7 +104,15 @@ Route::middleware('auth')->group(function () {
     //Certificación
     Route::resource('certificacion', CertificacionController::class);
 
+    Route::middleware(['auth'])->group(function () {
+        Route::resource('roles', RoleController::class)->names('roles');
+        Route::resource('permisos', PermisosController::class);
+    });
+
 
 });
 
 require __DIR__ . '/auth.php';
+Route::middleware(['auth'])->group(function () {
+    Route::resource('modules', ModuleController::class);
+});

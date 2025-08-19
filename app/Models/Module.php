@@ -19,11 +19,22 @@ class Module extends Model
         return $this->belongsTo(User::class, 'audit_user_id');
     }
 
+    // protected static function boot()
+    // {
+    //     parent::boot();
+    //     static::saving(function ($rec) {
+    //         $rec->audit_user_id = auth()->user()->id;
+    //     });
+    // }
     protected static function boot()
     {
         parent::boot();
+
         static::saving(function ($rec) {
-            $rec->audit_user_id = auth()->user()->id;
+            if (auth()->check()) { // solo si hay usuario logueado
+                $rec->audit_user_id = auth()->id();
+            }
         });
     }
+
 }
