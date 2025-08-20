@@ -15,6 +15,8 @@ return new class extends Migration {
             $table->string('name');
             $table->string('key')->unique();
             $table->string('description')->nullable();
+            $table->foreignId('audit_user_id')->nullable()->constrained('users')->onDelete('set null');
+
             $table->timestamps();
         });
     }

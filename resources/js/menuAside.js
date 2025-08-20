@@ -21,6 +21,33 @@ export default [
     label: "Dashboard",
     role: "Admin" //Vistas 
   },
+  // ... existing code ...
+{
+  label: "Seguridad",
+  icon: mdiScaleBalance,
+  role: "Admin",
+  menu: [
+    {
+      route: "roles.index",
+      label: "Gestión de Roles",
+      icon: mdiFormatListChecks,
+      role: "Admin",
+    },
+    {
+      route: "permisos.index",
+      label: "Gestión de Permisos",
+      icon: mdiFormatListChecks,
+      role: "Admin",
+    },
+    {
+      route: "modules.index",
+      label: "Gestión de Módulos",
+      icon: mdiFormatListChecks,
+      role: "Admin",
+    },
+  ],
+},
+
 
   {
     label: "Gestión de Usuarios",

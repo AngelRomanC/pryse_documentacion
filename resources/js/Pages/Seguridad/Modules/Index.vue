@@ -43,9 +43,8 @@ const props = defineProps({
                         <td>{{ module.description }}</td>
                         <td>
                             <BaseButtons type="justify-start lg:justify-end" no-wrap>
-                                <BaseButton
-                                    :route-name="routeName + 'edit'"
-                                    :route-params="{ module: module.id }"
+                                <BaseButton                                   
+                                    :href="route(`${props.routeName}edit`, module.id)"
                                     color="info"
                                     label="Editar"
                                     small

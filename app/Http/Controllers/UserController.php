@@ -32,71 +32,48 @@ class UserController extends Controller
     public function __construct()
     {
         $this->routeName = "usuarios.";
-        $this->source    = "Seguridad/Usuarios/";
-        $this->model     = new User();
-         $this->middleware("permission:{$this->module}.index")->only(['index', 'show']);
-         $this->middleware("permission:{$this->module}.store")->only(['store', 'create']);
-         $this->middleware("permission:{$this->module}.update")->only(['edit', 'update']);
-         $this->middleware("permission:{$this->module}.delete")->only(['destroy']);
-        
+        $this->source = "Seguridad/Usuarios/";
+        $this->model = new User();
+        $this->middleware("permission:{$this->module}.index")->only(['index', 'show']);
+        $this->middleware("permission:{$this->module}.store")->only(['store', 'create']);
+        $this->middleware("permission:{$this->module}.update")->only(['edit', 'update']);
+        $this->middleware("permission:{$this->module}.delete")->only(['destroy']);
+
     }
 
-    public function index2(Request $request): Response
+
+    public function index(Request $request): Response
     {
+        $query = User::where('role', 'Admin');
 
-        
-        //$admin = User::where('role', 'Admin')->get();
-        $admin = User::where('role', 'Admin')->paginate(8); // Puedes ajustar el 10 al número de elementos por página que desees
+        // Aplicar búsqueda si hay un parámetro `search`
+        if ($request->has('search') && $request->search !== null) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
 
-
-        // $usuarios = $this->model::with('roles')
-        //     ->orderBy('id')
-        //     ->paginate(30)
-        //     ->withQueryString();
-
-
+        $admin = $query->orderBy('id', 'desc')->paginate(8)->withQueryString();
 
         return Inertia::render("{$this->source}Index", [
-            'titulo'   => ' Usuarios Admin',
-            //'usuarios' => $usuarios,
+            'titulo' => 'Usuarios Admin',
             'admin' => $admin,
-            //'profiles' => Role::get(['id', 'name']),
             'routeName' => $this->routeName,
-            //'loadingResults' => false,
+            'filters' => $request->only(['search']), // Para mantener el valor en el input
         ]);
     }
-public function index(Request $request): Response
-{
-    $query = User::where('role', 'Admin');
-
-    // Aplicar búsqueda si hay un parámetro `search`
-    if ($request->has('search') && $request->search !== null) {
-        $query->where('name', 'like', '%' . $request->search . '%');
-    }
-
-    $admin = $query->orderBy('id','desc')->paginate(8)->withQueryString();
-
-    return Inertia::render("{$this->source}Index", [
-        'titulo'   => 'Usuarios Admin',
-        'admin'    => $admin,
-        'routeName'=> $this->routeName,
-        'filters'  => $request->only(['search']), // Para mantener el valor en el input
-    ]);
-}
 
     public function create()
     {
         return Inertia::render("Seguridad/Usuarios/Create", [
-            'titulo'      => 'Agregar Usuario Admin',
-            'routeName'      => $this->routeName,
-            'roles' => Role::pluck('name'),
+            'titulo' => 'Agregar Usuario Admin',
+            'routeName' => $this->routeName,
+            'roles' => Role::select('id', 'name')->get(),
+
         ]);
     }
 
     public function store(StoreUserRequest $request)
-
     {
-        
+
         $newUser = user::create([
             'name' => $request->input('name'),
             'apellido_paterno' => $request->input('apellido_paterno'),
@@ -104,10 +81,13 @@ public function index(Request $request): Response
             'numero' => $request->input('numero'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
-            'role' => $request->input('role'),
+            //'role' => $request->input('role'),
+            
 
 
-        ])->assignRole($request['role']);
+        ]);
+        $newUser->syncRoles($request->input('role')); // acepta array
+
 
         $newUser->notify(instance: new CredencialesEstudianteNotification($request->email, $request->password));
 
@@ -125,8 +105,8 @@ public function index(Request $request): Response
         $usuario = User::find($id);
 
         return Inertia::render("Seguridad/Usuarios/Edit", [
-            'titulo'   => 'Modificar Usuario Admin',
-            'usuario'  => $usuario,
+            'titulo' => 'Modificar Usuario Admin',
+            'usuario' => $usuario,
             'routeName' => $this->routeName,
         ]);
     }
@@ -142,7 +122,7 @@ public function index(Request $request): Response
         // Actualiza los datos del usuario
         $usuario->update($request->all());
 
-      
+
 
         return redirect()->route("usuarios.index")->with('success', '¡Usuario Admin actualizado correctamente!');
     }
