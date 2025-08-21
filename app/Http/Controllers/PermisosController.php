@@ -15,7 +15,11 @@ class PermisosController extends Controller
 
     public function index()
     {
-        $permisos = Permisos::all();
+        //$permisos = Permisos::all();
+        $permisos = Permisos::orderBy('id', 'desc')
+            ->paginate(8)
+            ->withQueryString();
+
         return Inertia::render("{$this->source}Index", [
             'permisos' => $permisos,
             'titulo' => 'Permisos del Sistema',
@@ -35,7 +39,6 @@ class PermisosController extends Controller
 
     public function store(StorePermisosRequest $request)
     {
-         //dd($request->all());
         $permiso = Permisos::create([
             'name' => $request->name,
             'guard_name' => 'web',

@@ -4,11 +4,11 @@ import Layout from '@/Layouts/LayoutAuthenticated.vue';
 import BaseButton from '@/Components/BaseButton.vue';
 import BaseButtons from "@/Components/BaseButtons.vue";
 import FormControl from "@/Components/FormControl.vue";
+import FormField from "@/Components/FormField.vue";
 import CardBox from "@/Components/CardBox.vue";
 import SectionMain from "@/Components/SectionMain.vue";
 import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
-import { mdiBallotOutline,  } from "@mdi/js";
-
+import { mdiBallotOutline } from "@mdi/js";
 
 const props = defineProps({
     permiso: Object,
@@ -35,31 +35,35 @@ const submit = () => {
             <SectionTitleLineWithButton :icon="mdiBallotOutline" :title="titulo" />
 
             <CardBox is-form @submit.prevent="submit">
-                <FormControl
-                    v-model="form.name"
-                    :error="form.errors.name"
-                    label="Nombre"
-                    required
-                />
+                
+                <!-- Nombre -->
+                <FormField label="Nombre" :error="form.errors.name">
+                    <FormControl
+                        v-model="form.name"
+                        required
+                    />
+                </FormField>
 
-                <FormControl
-                    v-model="form.description"
-                    :error="form.errors.description"
-                    type="textarea"
-                    label="Descripción"
-                    required
-                />
+                <!-- Descripción -->
+                <FormField label="Descripción" :error="form.errors.description">
+                    <FormControl
+                        v-model="form.description"
+                        type="textarea"
+                        required
+                    />
+                </FormField>
 
-                <FormControl
-                    v-model="form.module_key"
-                    :error="form.errors.module_key"
-                    type="select"
-                    :options="modules"
-                    option-label="name"
-                    option-value="key"
-                    label="Módulo"
-                    required
-                />
+                <!-- Módulo -->
+                <FormField label="Módulo" :error="form.errors.module_key">
+                    <FormControl
+                        v-model="form.module_key"
+                        type="select"
+                        :options="modules"
+                        option-label="name"
+                        option-value="key"
+                        required
+                    />
+                </FormField>
 
                 <BaseButtons>
                     <BaseButton
@@ -70,7 +74,7 @@ const submit = () => {
                     />
                     <BaseButton
                         :route-name="routeName + 'index'"
-                        color="info"
+                        color="danger"
                         outline
                         label="Cancelar"
                     />

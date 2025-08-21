@@ -38,7 +38,7 @@ class InventarioEquipoController extends Controller
         $query = InventarioEquipo::with('departamento'); // Cargar la relación
         
         if (!auth()->user()->hasRole('Admin')) {
-            $query->where('name_id', auth()->id());
+            $query->where('user_id', auth()->id());
         }
 
         if ($request->filled('search')) {

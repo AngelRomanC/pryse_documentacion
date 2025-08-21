@@ -13,7 +13,10 @@ class ModuleController extends Controller
 
     public function index()
     {
-        $modules = Module::all();
+        $modules = Module::orderBy('id', 'desc')
+            ->paginate(8)
+            ->withQueryString();
+
         return Inertia::render("{$this->source}Index", [
             'modules' => $modules,
             'titulo' => 'Módulos del Sistema',

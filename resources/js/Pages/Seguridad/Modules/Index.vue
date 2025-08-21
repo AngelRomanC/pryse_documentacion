@@ -6,9 +6,10 @@ import BaseButtons from "@/components/BaseButtons.vue"
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue"
 import CardBox from "@/components/CardBox.vue"
 import { mdiBallotOutline, mdiPlus } from "@mdi/js"
+import Pagination from '@/Shared/Pagination.vue'
 
 const props = defineProps({
-    modules: Array,
+    modules: Object,
     titulo: String,
     routeName: String
 })
@@ -37,7 +38,7 @@ const props = defineProps({
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="module in modules" :key="module.id">
+                    <tr v-for="module in modules.data" :key="module.id">
                         <td>{{ module.name }}</td>
                         <td>{{ module.key }}</td>
                         <td>{{ module.description }}</td>
@@ -54,6 +55,8 @@ const props = defineProps({
                     </tr>
                 </tbody>
             </table>
+         <Pagination :currentPage="modules.current_page" :links="modules.links" :total="modules.last_page" />
+
         </CardBox>
     </LayoutMain>
 </template>

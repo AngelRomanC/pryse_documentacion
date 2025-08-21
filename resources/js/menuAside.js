@@ -28,49 +28,34 @@ export default [
   role: "Admin",
   menu: [
     {
+        href:"/usuarios",
+        label: "Usuarios",
+        icon: mdiSecurity,
+        role: "Admin",
+    }, 
+    {
       route: "roles.index",
-      label: "Gestión de Roles",
+      label: "Roles",
+      icon: mdiFormatListChecks,
+      role: "Admin",
+    },
+    
+    {
+      route: "modules.index",
+      label: "Módulos",
       icon: mdiFormatListChecks,
       role: "Admin",
     },
     {
       route: "permisos.index",
-      label: "Gestión de Permisos",
+      label: "Permisos",
       icon: mdiFormatListChecks,
       role: "Admin",
-    },
-    {
-      route: "modules.index",
-      label: "Gestión de Módulos",
-      icon: mdiFormatListChecks,
-      role: "Admin",
-    },
+    }, 
   ],
 },
-
-
-  {
-    label: "Gestión de Usuarios",
-    icon: mdiAccountGroup ,
-    role: "Admin",
-    menu: [
-      {
-        href:"/usuarios",
-        label: "Admin",
-        icon: mdiSecurity,
-        role: "Admin",
-      }, 
-      {
-        href:"/usuarios-sistema",
-        label: "Desarrolladores",
-        icon: mdiAccountTie   ,
-        role: "Admin",
-      }, 
-      
-    ]
-  },
      
-  {
+ {
     label: "Catálogos",
     icon: mdiLibrary ,
     role: "Admin",

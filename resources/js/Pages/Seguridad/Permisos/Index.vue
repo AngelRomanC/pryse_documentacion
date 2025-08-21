@@ -9,10 +9,13 @@ import SectionMain from "@/Components/SectionMain.vue";
 import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
 import { mdiBallotOutline, mdiPencil,mdiDelete,mdiPlus,mdiAccountCogOutline  } from "@mdi/js";
 import Swal from "sweetalert2";
+import Pagination from '@/Shared/Pagination.vue';
+import { router } from '@inertiajs/vue3'
+
 
 
 const props = defineProps({
-    permisos: Array,
+    permisos: Object,
     titulo: String,
     routeName: String
 });
@@ -58,7 +61,7 @@ const destroy = (id) => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="permiso in permisos" :key="permiso.id" class="border-b">
+                        <tr v-for="permiso in permisos.data" :key="permiso.id" class="border-b">
                             <td class="px-3 py-2">{{ permiso.name }}</td>
                             <td class="px-3 py-2">{{ permiso.description }}</td>
                             <td class="px-3 py-2">{{ permiso.module_key }}</td>
@@ -82,6 +85,8 @@ const destroy = (id) => {
                         </tr>
                     </tbody>
                 </table>
+             <Pagination :currentPage="permisos.current_page" :links="permisos.links" :total="permisos.last_page" />
+
             </CardBox>
         </SectionMain>
     </Layout>

@@ -14,7 +14,12 @@ class RoleController extends Controller
 
     public function index()
     {
-        $roles = Role::with('permissions')->get();
+        //$roles = Role::with('permissions')->get();
+        $roles = Role::with('permissions') //  Mantienes la relación
+            ->orderBy('id', 'desc') // Ordenamiento
+            ->paginate(8)           // Paginación de 8 items por página
+            ->withQueryString();     // Mantiene parámetros de URL
+
         return Inertia::render("{$this->source}Index", [
             'roles' => $roles,
             'titulo' => 'Roles y Permisos',

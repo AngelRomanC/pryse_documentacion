@@ -44,7 +44,10 @@ class UserController extends Controller
 
     public function index(Request $request): Response
     {
-        $query = User::where('role', 'Admin');
+        // $query = User::where('role', 'Admin');
+        // $query = User::query();
+        $query = User::query()->with('roles');
+
 
         // Aplicar búsqueda si hay un parámetro `search`
         if ($request->has('search') && $request->search !== null) {
@@ -82,7 +85,7 @@ class UserController extends Controller
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
             //'role' => $request->input('role'),
-            
+
 
 
         ]);

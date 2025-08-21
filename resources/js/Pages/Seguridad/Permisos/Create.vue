@@ -24,18 +24,8 @@ const form = useForm({
 });
 // Debug: ver qué módulos llegan al frontend
 console.log('Módulos recibidos:', props.modules);
-const submit = () => {
-    // Debug: ver qué datos se enviarán
-    console.log('Datos a enviar:', form.data());
-    
-    form.post(route(props.routeName + 'store'), {
-        onError: (errors) => {
-            console.error('Errores del servidor:', errors);
-        },
-        onSuccess: () => {
-            console.log('Permiso creado exitosamente');
-        }
-    });
+const submit = () => {  
+    form.post(route(props.routeName + 'store'))
 };
 </script>
 
@@ -70,7 +60,7 @@ const submit = () => {
                         type="select"
                         :options="modules"
                         option-label="name"
-                        option-value="key"
+                        option-value="id"
                         required
                     />
                 </FormField>

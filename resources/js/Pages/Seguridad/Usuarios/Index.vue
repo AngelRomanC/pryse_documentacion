@@ -12,6 +12,7 @@ import CardBoxComponentEmpty from "@/components/CardBoxComponentEmpty.vue";
 import NotificationBar from "@/components/NotificationBar.vue";
 import SearchBar from '@/components/SearchBar.vue'
 import { ref } from 'vue'
+import { onMounted } from 'vue'
 
 const props = defineProps({
   admin: Object,
@@ -39,7 +40,15 @@ const eliminarAdmin = (id) => {
             });
         };
 
-
+console.log(props.admin.data);
+onMounted(() => {
+    console.log('Datos de usuarios recibidos:', props.admin)
+    
+    // Verificar roles de cada usuario
+    props.admin.data.forEach(user => {
+        console.log(`Usuario ${user.name} tiene roles:`, user.roles)
+    })
+})
 </script>
 
 <template>

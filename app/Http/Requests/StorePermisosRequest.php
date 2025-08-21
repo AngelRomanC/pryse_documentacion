@@ -27,13 +27,13 @@ class StorePermisosRequest extends FormRequest
             'name'        => "required|string|max:50|unique:permissions,name" . (isset($this->route($this->param)->id) ? ',' . $this->route($this->param)->id : ''),
             'guard_name'  => "required|string",
             'description' => "required|string",
-            'module_key'  => "required|exists:modules,key",
+            'module_key'  => "required|exists:modules,id",
         ];
     }
     public function attributes(): array
     {
         return [
-            'name'        => "Nombre",
+            'name'        => "Nombre ",
             'description' => "Descripción",
             'module_key'  => "Nombre del módulo",
         ];
