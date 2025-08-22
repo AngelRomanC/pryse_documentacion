@@ -72,12 +72,14 @@ const destroy = (id) => {
                                         color="info"
                                         :icon="mdiPencil"
                                         small
+                                        label="Editar"
                                     />
                                     <BaseButton
                                         @click="destroy(permiso.id)"
                                         color="danger"
                                         :icon="mdiDelete"
                                         small
+                                        label="Eliminar"
                                     />
                                 </BaseButtons>
                             

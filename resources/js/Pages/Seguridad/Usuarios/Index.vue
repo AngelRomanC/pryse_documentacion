@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 import Pagination from '@/Shared/Pagination.vue';
 import { router } from '@inertiajs/vue3'
 import LayoutMain from '@/layouts/LayoutMain.vue';
-import { mdiTagEdit, mdiDeleteOutline,mdiInformation,mdiPlus,mdiAccountCogOutline  } from "@mdi/js";
+import { mdiTagEdit, mdiDeleteOutline, mdiInformation, mdiPlus, mdiAccountCogOutline } from "@mdi/js";
 import CardBox from "@/components/CardBox.vue";
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue";
 import BaseButtons from "@/components/BaseButtons.vue";
@@ -15,49 +15,41 @@ import { ref } from 'vue'
 import { onMounted } from 'vue'
 
 const props = defineProps({
-  admin: Object,
-  titulo: String,
-  routeName: String,
-  filters: Object,
+    admin: Object,
+    titulo: String,
+    routeName: String,
+    filters: Object,
 })
 const filters = ref({
-  search: props.filters?.search ?? '',
+    search: props.filters?.search ?? '',
 })
 const eliminarAdmin = (id) => {
-            console.log(id)
-            Swal.fire({
-                title: "¿Esta seguro?",
-                text: "Esta acción no se puede revertir",
-                icon: "warning",
-                showCancelButton: true,
-                cancelButtonColor: "#d33",
-                confirmButtonColor: "#3085d6",
-                confirmButtonText: "Si!, eliminar registro!",
-            }).then((res) => {
-                if (res.isConfirmed) {
-                    router.delete(route(`${props.routeName}destroy`, id))
-                }
-            });
-        };
+    console.log(id)
+    Swal.fire({
+        title: "¿Esta seguro?",
+        text: "Esta acción no se puede revertir",
+        icon: "warning",
+        showCancelButton: true,
+        cancelButtonColor: "#d33",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Si!, eliminar registro!",
+    }).then((res) => {
+        if (res.isConfirmed) {
+            router.delete(route(`${props.routeName}destroy`, id))
+        }
+    });
+};
 
-console.log(props.admin.data);
-onMounted(() => {
-    console.log('Datos de usuarios recibidos:', props.admin)
-    
-    // Verificar roles de cada usuario
-    props.admin.data.forEach(user => {
-        console.log(`Usuario ${user.name} tiene roles:`, user.roles)
-    })
-})
+
 </script>
 
 <template>
     <LayoutMain>
-        <SectionTitleLineWithButton  :title="titulo" main :icon="mdiAccountCogOutline ">
+        <SectionTitleLineWithButton :title="titulo" main :icon="mdiAccountCogOutline">
             <BaseButton :href="'usuarios/create'" color="warning" label="Agregar administrador" :icon="mdiPlus" />
         </SectionTitleLineWithButton>
 
-        <SearchBar   v-model="filters.search"  :routeName="routeName"  placeholder="Buscar admin por nombre..."  />
+        <SearchBar v-model="filters.search" :routeName="routeName" placeholder="Buscar admin por nombre..." />
 
         <NotificationBar v-if="$page.props.flash.success" color="success" :icon="mdiInformation" :outline="false">
             {{ $page.props.flash.success }}
@@ -74,7 +66,7 @@ onMounted(() => {
         <CardBox v-else class="mb-6" has-table>
             <table>
                 <thead>
-                   
+
                     <tr>
                         <th />
                         <th>Nombre</th>
@@ -96,7 +88,15 @@ onMounted(() => {
                         <td data-label="Apellido materno">{{ admin.apellido_materno }}</td>
                         <td data-label="Número">{{ admin.numero }}</td>
                         <td data-label="Email">{{ admin.email }}</td>
-                        <td data-label="Rol">{{ admin.role }}</td>
+                        <td data-label="Rol">
+                            <div class="flex flex-wrap gap-1">
+                                <span v-for="role in admin.roles" :key="role.id"
+                                    class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                                    {{ role.name }}
+                                </span>
+                            </div>
+                        </td>
+
                         <td class="before:hidden lg:w-1 whitespace-nowrap">
                             <BaseButtons type="justify-start lg:justify-end" no-wrap>
                                 <BaseButton color="info" :icon="mdiTagEdit" small

@@ -8,6 +8,7 @@ import CardBox from "@/components/CardBox.vue";
 import { mdiBallotOutline, mdiPlus, mdiTagEdit, mdiDelete } from "@mdi/js";
 import Pagination from '@/Shared/Pagination.vue';
 import { router } from '@inertiajs/vue3';
+import Swal from "sweetalert2";
 
 const props = defineProps({
     roles: Object,   // roles con paginación
@@ -15,10 +16,20 @@ const props = defineProps({
     routeName: String
 });
 
-const deleteRole = (role) => {
-    if (confirm('¿Estás seguro de eliminar este rol?')) {
-        router.delete(route(props.routeName + 'destroy', role.id));
+const destroy = (id) => {
+  Swal.fire({
+    title: "¿Está seguro?",
+    text: "Esta acción no se puede revertir",
+    icon: "warning",
+    showCancelButton: true,
+    cancelButtonColor: "#d33",
+    confirmButtonColor: "#3085d6",
+    confirmButtonText: "Sí, eliminar registro!",
+  }).then((res) => {
+    if (res.isConfirmed) {
+      router.delete(route(`${props.routeName}destroy`, id));
     }
+  });
 };
 </script>
 
@@ -63,7 +74,7 @@ const deleteRole = (role) => {
                                 :icon="mdiTagEdit"
                             />
                             <BaseButton
-                                @click="deleteRole(role)"
+                                @click="destroy(role.id)"
                                 color="danger"
                                 label="Eliminar"
                                 small

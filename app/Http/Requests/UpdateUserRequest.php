@@ -34,6 +34,9 @@ class UpdateUserRequest extends FormRequest
                 'max:255',
                 Rule::unique('users')->ignore($this->id)
             ], // Email, ignorando el actual
+            'password' => ['nullable', 'string', 'min:8'],
+            'roles' => ['required', 'array'],
+            'roles.*' => ['integer', 'exists:roles,id'],
         ];
     }
     public function attributes(): array
@@ -44,6 +47,7 @@ class UpdateUserRequest extends FormRequest
             'apellido_materno' => 'Apellido Materno',
             'numero' => 'Número Telefónico',
             'email' => 'Correo Electrónico',
+            'roles' => 'Roles',
         ];
     }
 

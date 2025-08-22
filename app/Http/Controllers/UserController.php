@@ -57,7 +57,7 @@ class UserController extends Controller
         $admin = $query->orderBy('id', 'desc')->paginate(8)->withQueryString();
 
         return Inertia::render("{$this->source}Index", [
-            'titulo' => 'Usuarios Admin',
+            'titulo' => 'Usuarios ',
             'admin' => $admin,
             'routeName' => $this->routeName,
             'filters' => $request->only(['search']), // Para mantener el valor en el input
@@ -67,7 +67,7 @@ class UserController extends Controller
     public function create()
     {
         return Inertia::render("Seguridad/Usuarios/Create", [
-            'titulo' => 'Agregar Usuario Admin',
+            'titulo' => 'Agregar Usuario ',
             'routeName' => $this->routeName,
             'roles' => Role::select('id', 'name')->get(),
 
@@ -85,32 +85,25 @@ class UserController extends Controller
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
             //'role' => $request->input('role'),
-
-
-
         ]);
-        $newUser->syncRoles($request->input('role')); // acepta array
+        $newUser->syncRoles($request->input('roles')); // acepta array
 
 
         $newUser->notify(instance: new CredencialesEstudianteNotification($request->email, $request->password));
 
         return redirect()->route("usuarios.index")->with('success', 'Usuario Admin generado con éxito');
     }
-
-
-
-
-
-
     public function edit($id)
     {
 
-        $usuario = User::find($id);
+        //$usuario = User::find($id);
+        $usuario = User::with('roles')->find($id);
 
         return Inertia::render("Seguridad/Usuarios/Edit", [
-            'titulo' => 'Modificar Usuario Admin',
+            'titulo' => 'Modificar Usuario ',
             'usuario' => $usuario,
             'routeName' => $this->routeName,
+            'roles' => Role::select('id', 'name')->get(), // Roles disponibles
         ]);
     }
 
@@ -122,23 +115,24 @@ class UserController extends Controller
             abort(404, 'Usuario no encontrado');
         }
 
-        // Actualiza los datos del usuario
-        $usuario->update($request->all());
+        $data = $request->only(['name', 'apellido_paterno', 'apellido_materno', 'numero', 'email']);
 
+        // Si envías password desde el formulario, lo encriptas y actualizas
+        if ($request->filled('password')) {
+            $data['password'] = bcrypt($request->password);
+        }
 
+        $usuario->update($data);
+
+        $usuario->syncRoles($request->input('roles'));
 
         return redirect()->route("usuarios.index")->with('success', '¡Usuario Admin actualizado correctamente!');
     }
 
-
-
     public function destroy($id)
     {
-
         $usuario = User::find($id);
         $usuario->delete();
-
-
 
         return redirect()->route('usuarios.index')->with('success', 'Usuario eliminado con éxito');
     }

@@ -5,14 +5,31 @@ import BaseButton from '@/components/BaseButton.vue'
 import BaseButtons from "@/components/BaseButtons.vue"
 import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.vue"
 import CardBox from "@/components/CardBox.vue"
-import { mdiBallotOutline, mdiPlus } from "@mdi/js"
+import { mdiBallotOutline, mdiPlus, mdiDelete, mdiPencil } from "@mdi/js"
 import Pagination from '@/Shared/Pagination.vue'
+import { router } from '@inertiajs/vue3'
+import Swal from "sweetalert2";
 
 const props = defineProps({
     modules: Object,
     titulo: String,
     routeName: String
 })
+const destroy = (id) => {
+  Swal.fire({
+    title: "¿Está seguro?",
+    text: "Esta acción no se puede revertir",
+    icon: "warning",
+    showCancelButton: true,
+    cancelButtonColor: "#d33",
+    confirmButtonColor: "#3085d6",
+    confirmButtonText: "Sí, eliminar registro!",
+  }).then((res) => {
+    if (res.isConfirmed) {
+      router.delete(route(`${props.routeName}destroy`, id));
+    }
+  });
+};
 </script>
 
 <template>
@@ -48,7 +65,15 @@ const props = defineProps({
                                     :href="route(`${props.routeName}edit`, module.id)"
                                     color="info"
                                     label="Editar"
+                                    :icon="mdiPencil"
                                     small
+                                />
+                                <BaseButton
+                                        @click="destroy(module.id)"
+                                        color="danger"
+                                        :icon="mdiDelete"
+                                        label="Eliminar"
+                                        small
                                 />
                             </BaseButtons>
                         </td>
