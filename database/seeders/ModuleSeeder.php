@@ -49,7 +49,22 @@ class ModuleSeeder extends Seeder
                 'name' => 'Certificaciones',
                 'key' => 'certifications',
                 'description' => 'Gestión de certificaciones'
-            ]
+            ],
+            [
+                'name' => 'Marcas',
+                'key' => 'brands',
+                'description' => 'Gestión de marcas de hardware'
+            ],
+            [
+                'name' => 'Modulos',
+                'key' => 'modules',
+                'description' => 'Gestión de marcas de hardware'
+            ],
+            [
+                'name' => 'Permisos',
+                'key' => 'permissions',
+                'description' => 'Gestión de marcas de hardware'
+            ],
         ];
 
         foreach ($modules as $module) {

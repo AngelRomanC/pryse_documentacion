@@ -8,9 +8,18 @@ use Inertia\Inertia;
 
 class ModuleController extends Controller
 {
-    protected string $routeName = 'modules.';
+    protected string $routeName;
     protected string $source = 'Seguridad/Modules/';
-
+     protected string $module = 'module';
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->routeName = 'modules.';
+        $this->middleware("permission:{$this->module}.index")->only(['index', 'show']);
+        $this->middleware("permission:{$this->module}.store")->only(['store', 'create']);
+        $this->middleware("permission:{$this->module}.update")->only(['edit', 'update']);
+        $this->middleware("permission:{$this->module}.delete")->only(['destroy']);
+    }
     public function index()
     {
         $modules = Module::orderBy('id', 'desc')

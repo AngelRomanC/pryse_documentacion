@@ -15,7 +15,7 @@ const props = defineProps({
     titulo: String,
     routeName: String
 });
-
+console.log(props.routeName);
 const destroy = (id) => {
   Swal.fire({
     title: "¿Está seguro?",
