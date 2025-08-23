@@ -8,7 +8,7 @@ import FormField from "@/Components/FormField.vue";
 import CardBox from "@/Components/CardBox.vue";
 import SectionMain from "@/Components/SectionMain.vue";
 import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
-import { mdiBallotOutline } from "@mdi/js";
+import { mdiBallotOutline, mdiKeyChain, mdiTextShort, mdiViewModule} from "@mdi/js";
 
 const props = defineProps({
     modules: Array,
@@ -22,9 +22,13 @@ const form = useForm({
     description: '',
     module_key: ''
 });
-// Debug: ver qué módulos llegan al frontend
-console.log('Módulos recibidos:', props.modules);
+console.log(props.modules);
 const submit = () => {  
+        console.log('Datos a enviar:', {
+        name: form.name,
+        permissions: form.permissions,
+        todos_los_datos: form.data()
+    });
     form.post(route(props.routeName + 'store'))
 };
 </script>
@@ -37,10 +41,12 @@ const submit = () => {
             <CardBox is-form @submit.prevent="submit">
 
                 <!-- Nombre -->
-                <FormField label="Nombre" :error="form.errors.name">
+                <FormField label="Nombre respecto al módulo que pertenece" :error="form.errors.name">
                     <FormControl
                         v-model="form.name"
                         required
+                        placeholder="Ejemplo users.index"
+                        :icon="mdiKeyChain"
                     />
                 </FormField>
 
@@ -50,6 +56,7 @@ const submit = () => {
                         v-model="form.description"
                         type="textarea"
                         required
+                        :icon="mdiTextShort"
                     />
                 </FormField>
 
@@ -60,8 +67,9 @@ const submit = () => {
                         type="select"
                         :options="modules"
                         option-label="name"
-                        option-value="id"
+                        valueSelect="key"
                         required
+                        :icon="mdiViewModule"
                     />
                 </FormField>
 
@@ -71,6 +79,7 @@ const submit = () => {
                         color="info"
                         label="Guardar"
                         :loading="form.processing"
+                        outline=""
                     />
                     <BaseButton
                         :route-name="routeName + 'index'"

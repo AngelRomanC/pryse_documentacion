@@ -34,10 +34,10 @@ class PermisosSeeder extends Seeder
         Permission::create(['name' => 'inventario.update', 'guard_name' => 'web', 'description' => 'Actualizar Registros', 'module_key' => 'inventory']);
         Permission::create(['name' => 'inventario.delete', 'guard_name' => 'web', 'description' => 'Eliminar Registros', 'module_key' => 'inventory']);
 
-        Permission::create(['name' => 'marca.index', 'guard_name' => 'web', 'description' => 'Leer Registros', 'module_key' => 'brands']);
-        Permission::create(['name' => 'marca.store', 'guard_name' => 'web', 'description' => 'Crear Registros', 'module_key' => 'brands']);
-        Permission::create(['name' => 'marca.update', 'guard_name' => 'web', 'description' => 'Actualizar Registros', 'module_key' => 'brands']);
-        Permission::create(['name' => 'marca.delete', 'guard_name' => 'web', 'description' => 'Eliminar Registros', 'module_key' => 'brands']);
+        Permission::create(['name' => 'marcas.index', 'guard_name' => 'web', 'description' => 'Leer Registros', 'module_key' => 'brands']);
+        Permission::create(['name' => 'marcas.store', 'guard_name' => 'web', 'description' => 'Crear Registros', 'module_key' => 'brands']);
+        Permission::create(['name' => 'marcas.update', 'guard_name' => 'web', 'description' => 'Actualizar Registros', 'module_key' => 'brands']);
+        Permission::create(['name' => 'marcas.delete', 'guard_name' => 'web', 'description' => 'Eliminar Registros', 'module_key' => 'brands']);
 
         Permission::create(['name' => 'module.index', 'guard_name' => 'web', 'description' => 'Leer Registros', 'module_key' => 'modules']);
         Permission::create(['name' => 'module.store', 'guard_name' => 'web', 'description' => 'Crear Registros', 'module_key' => 'modules']);

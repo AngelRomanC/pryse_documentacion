@@ -58,12 +58,12 @@ class ModuleSeeder extends Seeder
             [
                 'name' => 'Modulos',
                 'key' => 'modules',
-                'description' => 'Gestión de marcas de hardware'
+                'description' => 'Gestión de módulos'
             ],
             [
                 'name' => 'Permisos',
                 'key' => 'permissions',
-                'description' => 'Gestión de marcas de hardware'
+                'description' => 'Gestión de permisos'
             ],
         ];
 

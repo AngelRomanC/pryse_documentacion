@@ -46,7 +46,7 @@ const eliminarAdmin = (id) => {
 <template>
     <LayoutMain>
         <SectionTitleLineWithButton :title="titulo" main :icon="mdiAccountCogOutline">
-            <BaseButton :href="'usuarios/create'" color="warning" label="Agregar administrador" :icon="mdiPlus" />
+            <BaseButton :href="'usuarios/create'" color="warning" label="Crear" :icon="mdiPlus" />
         </SectionTitleLineWithButton>
 
         <SearchBar v-model="filters.search" :routeName="routeName" placeholder="Buscar admin por nombre..." />

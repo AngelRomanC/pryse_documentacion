@@ -8,7 +8,7 @@ import FormField from "@/Components/FormField.vue";
 import CardBox from "@/Components/CardBox.vue";
 import SectionMain from "@/Components/SectionMain.vue";
 import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
-import { mdiBallotOutline } from "@mdi/js";
+import { mdiBallotOutline, mdiKeyChain, mdiTextShort, mdiViewModule} from "@mdi/js";
 
 const props = defineProps({
     permiso: Object,
@@ -41,6 +41,7 @@ const submit = () => {
                     <FormControl
                         v-model="form.name"
                         required
+                        :icon="mdiKeyChain"
                     />
                 </FormField>
 
@@ -50,6 +51,7 @@ const submit = () => {
                         v-model="form.description"
                         type="textarea"
                         required
+                        :icon="mdiTextShort"
                     />
                 </FormField>
 
@@ -60,8 +62,9 @@ const submit = () => {
                         type="select"
                         :options="modules"
                         option-label="name"
-                        option-value="key"
+                        valueSelect="key"
                         required
+                        :icon="mdiViewModule"
                     />
                 </FormField>
 
@@ -71,6 +74,7 @@ const submit = () => {
                         color="info"
                         label="Actualizar"
                         :loading="form.processing"
+                        outline
                     />
                     <BaseButton
                         :route-name="routeName + 'index'"

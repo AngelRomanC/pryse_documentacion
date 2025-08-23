@@ -7,7 +7,7 @@ import SectionTitleLineWithButton from "@/components/SectionTitleLineWithButton.
 import CardBox from "@/components/CardBox.vue"
 import FormField from "@/components/FormField.vue"
 import FormControl from "@/components/FormControl.vue"
-import { mdiBallotOutline } from "@mdi/js"
+import { mdiBallotOutline,mdiTagTextOutline, mdiKeyVariant, mdiTextShort } from "@mdi/js"
 
 const props = defineProps({
     titulo: String,
@@ -31,15 +31,29 @@ const submit = () => {
 
         <CardBox is-form @submit.prevent="submit">
             <FormField label="Nombre" :error="form.errors.name">
-                <FormControl v-model="form.name" type="text" required />
+                <FormControl 
+                  v-model="form.name" 
+                  type="text" 
+                  required 
+                  :icon="mdiTagTextOutline"  
+                />
             </FormField>
 
             <FormField label="Clave" :error="form.errors.key">
-                <FormControl v-model="form.key" type="text" required />
+                <FormControl 
+                  v-model="form.key" 
+                  type="text" 
+                  required 
+                  :icon="mdiKeyVariant"  
+                />
             </FormField>
 
             <FormField label="Descripción" :error="form.errors.description">
-                <FormControl v-model="form.description" type="textarea" />
+                <FormControl 
+                  v-model="form.description" 
+                  type="textarea" 
+                  :icon="mdiTextShort"  
+                />
             </FormField>
 
             <BaseButtons>
@@ -48,12 +62,15 @@ const submit = () => {
                     color="info"
                     label="Guardar"
                     :loading="form.processing"
+                    outline
+                   
                 />
                 <BaseButton
                     :route-name="routeName + 'index'"
-                    color="info"
+                    color="danger"
                     outline
                     label="Cancelar"
+                      
                 />
             </BaseButtons>
         </CardBox>

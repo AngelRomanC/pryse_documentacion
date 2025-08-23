@@ -50,6 +50,7 @@ class PermisosController extends Controller
 
     public function store(StorePermisosRequest $request)
     {
+        //dd(request());
         $permiso = Permisos::create([
             'name' => $request->name,
             'guard_name' => 'web',

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Module;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Http\Request;
@@ -41,11 +42,14 @@ class RoleController extends Controller
 
     public function create()
     {
-        $permissions = Permission::all();
+
         return Inertia::render("{$this->source}Create", [
-            'permissions' => $permissions,
             'titulo' => 'Crear Rol',
-            'routeName' => $this->routeName
+            'routeName' => $this->routeName,
+            'modules' => Module::orderBy('key')->get(['id', 'name', 'description', 'key']),
+            'permissions' => Permission::get(['id', 'name', 'description', 'module_key'])
+                ->groupBy('module_key')
+                ->toArray(),
         ]);
     }
 
@@ -65,12 +69,15 @@ class RoleController extends Controller
 
     public function edit(Role $role)
     {
-        $permissions = Permission::all();
+        //$permissions = Permission::all();
         return Inertia::render("{$this->source}Edit", [
             'role' => $role->load('permissions'),
-            'permissions' => $permissions,
             'titulo' => 'Editar Rol',
-            'routeName' => $this->routeName
+            'routeName' => $this->routeName,
+            'modules' => Module::orderBy('key')->get(['id', 'name', 'description', 'key']), // igual que en create
+            'permissions' => Permission::get(['id', 'name', 'description', 'module_key'])
+                ->groupBy('module_key')
+                ->toArray()
         ]);
     }
 
