@@ -27,11 +27,6 @@ const form = useForm({
   }, {})
 })
 
-
-const handleSubmit2 = () => {
-  //form.post(route('marcas.store'))
-  form.post(route(`${props.routeName}store`))
-}
 const handleSubmit = () => {
   const tiposSeleccionados = Object.entries(form.tipos)
     .filter(([_, checked]) => checked)
@@ -67,7 +62,7 @@ const handleSubmit = () => {
 
       <template #footer>
         <BaseButtons>
-          <BaseButton @click="handleSubmit" type="submit" color="success" label="Guardar" />
+          <BaseButton @click="handleSubmit" type="submit" color="info" label="Guardar" outline />
           <BaseButton :href="route('marcas.index')" color="danger" outline label="Cancelar" />
         </BaseButtons>
       </template>
