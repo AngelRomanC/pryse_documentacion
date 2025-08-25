@@ -56,7 +56,7 @@ class StoreInventarioEquipoRequest extends FormRequest
             'software_remoto'        => 'nullable|string|max:255',
             'id_remoto'              => 'nullable|string|max:255',
             'password_remoto'        => 'nullable|string|max:255',
-            'name_id'                => 'required|integer|exists:users,id',
+            'user_id'                => 'required|integer|exists:users,id',
             'observaciones'          => 'nullable|string|max:500',
         ];
     }

@@ -22,7 +22,6 @@ const props = defineProps({
   routeName: String,
   filters: Object,
 });
-
 const filters = ref({
   search: props.filters?.search ?? ''
 })

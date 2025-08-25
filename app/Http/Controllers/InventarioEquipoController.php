@@ -53,7 +53,7 @@ class InventarioEquipoController extends Controller
                 ->orWhere('tipo_ram', 'like', '%' . $request->search . '%')
                 ->orWhere('tipo_disco', 'like', '%' . $request->search . '%')
                 ->orWhere('capacidad_disco', 'like', '%' . $request->search . '%')
-                ->orWhere('name_id', 'like', '%' . $request->search . '%')
+                ->orWhere('user_id', 'like', '%' . $request->search . '%')
                 ->orWhereHas('departamento', function ($q) use ($request) {
                     $q->where('nombre', 'like', '%' . $request->search . '%');
                 });
@@ -87,7 +87,7 @@ class InventarioEquipoController extends Controller
                 $query->where('tipo', $tipo);
             })->orderBy('nombre')->get(['id', 'nombre']);
         }
-        $usuariosArqueo = User::where('role', 'Desarrollador')
+        $usuariosArqueo = User::role( 'Desarrollador')
             ->select('id', 'name')
             ->orderBy('name')
             ->get();
@@ -130,7 +130,7 @@ class InventarioEquipoController extends Controller
     {
         //
         // dd($inventarioEquipo);
-        $usuariosArqueo = User::where('role', 'Desarrollador') // si tienes campo `role`
+        $usuariosArqueo = User::role('Desarrollador') // si tienes campo `role`
             ->select('id', 'name')
             ->orderBy('name')
             ->get();

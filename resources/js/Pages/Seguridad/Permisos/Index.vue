@@ -11,6 +11,8 @@ import { mdiBallotOutline, mdiPencil,mdiDelete,mdiPlus,mdiAccountCogOutline  } f
 import Swal from "sweetalert2";
 import Pagination from '@/Shared/Pagination.vue';
 import { router } from '@inertiajs/vue3'
+import NotificationBar from '@/components/NotificationBar.vue'
+
 
 
 
@@ -49,6 +51,10 @@ const destroy = (id) => {
                     
                 />
             </SectionTitleLineWithButton>
+
+            <NotificationBar v-if="$page.props.flash.success" color="success" :icon="mdiPlus">
+                {{ $page.props.flash.success }}
+            </NotificationBar>
 
             <CardBox class="mb-6">
                 <table class="table-auto w-full">

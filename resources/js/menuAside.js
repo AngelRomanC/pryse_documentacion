@@ -1,55 +1,58 @@
 import {
   mdiMonitor,
-  mdiSecurity,
-  mdiBookshelf,
-  mdiFileDocumentOutline,
-  mdiAccountTie ,mdiAccountSchool,
-  mdiAccountGroup,
-  mdiScaleBalance,
-  mdiFileSign,
-  mdiLibrary,
-  mdiFormatListChecks, 
-  mdiGavel , 
-  mdiLaptop,
+  mdiViewModule,
+  mdiShieldKey,
+  mdiShapeOutline,
+  mdiViewDashboard, 
+  mdiAccountMultiple , 
+  mdiKeyChain ,
+  mdiOfficeBuilding,           // departamentos
+  mdiTrademark,        // marcas
+  mdiShieldAccount,    // roles
+  mdiLockCheck,        // permisos
+  mdiLaptop,        // inventario
+  mdiServer,           // sistema
+  mdiClipboardFlow,    // procesos
+  mdiCertificate,      // certificaciones
 } from "@mdi/js";
 
 export default [
-  {
+{
     href: "/dashboard",
     to: "/dashboard",
-    icon: mdiMonitor,
+    icon: mdiViewDashboard,
     label: "Dashboard",
     role: "Admin" //Vistas 
-  },
-  // ... existing code ...
+},
+
 {
   label: "Seguridad",
-  icon: mdiScaleBalance,
+  icon: mdiShieldKey,
   role: "Admin",
   menu: [
     {
         href:"/usuarios",
         label: "Usuarios",
-        icon: mdiSecurity,
+        icon: mdiAccountMultiple,
         role: "Admin",
     }, 
     {
       route: "roles.index",
       label: "Roles",
-      icon: mdiFormatListChecks,
+      icon: mdiShieldAccount,
       role: "Admin",
     },
     
     {
       route: "modules.index",
       label: "Módulos",
-      icon: mdiFormatListChecks,
+      icon: mdiViewModule,
       role: "Admin",
     },
     {
       route: "permisos.index",
       label: "Permisos",
-      icon: mdiFormatListChecks,
+      icon: mdiKeyChain,
       role: "Admin",
     }, 
   ],
@@ -57,19 +60,19 @@ export default [
      
  {
     label: "Catálogos",
-    icon: mdiLibrary ,
+    icon: mdiShapeOutline ,
     role: "Admin",
     menu: [     
       {
         route: "marcas.index",
         label: "Registrar Marcas",
-        icon: mdiLaptop ,
+        icon: mdiTrademark ,
         role: "Admin",
       }, 
       {
         route: "departamentos.index",
         label: "Departamentos",
-        icon: mdiLaptop ,
+        icon: mdiOfficeBuilding ,
         role: "Admin",
       }, 
     ]
@@ -78,14 +81,14 @@ export default [
     {
     route: "inventario.index",
     label: "Inventario Equipos",
-    icon: mdiGavel ,
+    icon: mdiLaptop ,
     role: "Admin",
   }, 
 
     {
     route: "sistema.index",
     label: "Inventario Sistema",
-    icon: mdiGavel ,
+    icon: mdiServer ,
     role: "Admin",
   }, 
 
@@ -102,13 +105,13 @@ export default [
   },
   {
     label: "Catálogos",
-    icon: mdiLibrary ,
+    icon: mdiShapeOutline ,
     role: "Desarrollador",
     menu: [     
       {
         route: "marcas.index",
         label: "Registrar Marcas",
-        icon: mdiLaptop ,
+        icon: mdiTrademark ,
         role: "Desarrollador",
       }, 
     ]
@@ -117,7 +120,7 @@ export default [
     route: "inventario.index",
     //href:"/inventario",
     label: "Inventario Equipos",
-    icon: mdiGavel ,
+    icon: mdiLaptop ,
     role: "Desarrollador",
   }, 
 
@@ -125,7 +128,7 @@ export default [
     route: "sistema.index",
     //href:"/inventario",
     label: "Inventario Sistema",
-    icon: mdiGavel ,
+    icon: mdiServer ,
     role: "Desarrollador",
   }, 
 
@@ -133,20 +136,20 @@ export default [
   {
     href: "/dashboard",
     to: "/dashboard",
-    icon: mdiMonitor,
+    icon: mdiViewDashboard,
     label: "Dashboard",
     role: "Procesos" 
   },
     {
     label: "Catálogos",
-    icon: mdiLibrary ,
+    icon: mdiShapeOutline ,
     role: "Procesos",
     menu: [     
    
       {
         route: "departamentos.index",
         label: "Departamentos",
-        icon: mdiLaptop ,
+        icon: mdiOfficeBuilding ,
         role: "Procesos",
       }, 
     ]
@@ -155,14 +158,14 @@ export default [
   {
     route: "procesos.index",
     label: "Procesos",
-    icon: mdiGavel ,
+    icon: mdiClipboardFlow ,
     role: "Procesos",
   }, 
 
   {
     route: "certificacion.index",
     label: "Certificaciones",
-    icon: mdiGavel ,
+    icon: mdiCertificate ,
     role: "Procesos",
   },
   

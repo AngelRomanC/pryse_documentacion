@@ -9,6 +9,8 @@ import { mdiBallotOutline, mdiPlus, mdiTagEdit, mdiDelete } from "@mdi/js";
 import Pagination from '@/Shared/Pagination.vue';
 import { router } from '@inertiajs/vue3';
 import Swal from "sweetalert2";
+import NotificationBar from '@/components/NotificationBar.vue'
+
 
 const props = defineProps({
     roles: Object,   // roles con paginación
@@ -35,6 +37,9 @@ const destroy = (id) => {
 
 <template>
 <LayoutMain>
+        <NotificationBar v-if="$page.props.flash.success" color="success" :icon="mdiPlus">
+         {{ $page.props.flash.success }}
+        </NotificationBar>
     <SectionTitleLineWithButton :icon="mdiBallotOutline" :title="titulo" main>
         <BaseButton
             :route-name="routeName + 'create'"

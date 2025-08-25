@@ -34,7 +34,6 @@ const props = defineProps({
   marcasPorTipo: Object,
   usuariosArqueo: Array,
 });
-
 const form = useForm({
   nombre_persona: '',
   departamento_id: '',
@@ -57,7 +56,7 @@ const form = useForm({
   software_remoto: '',
   id_remoto: '',
   password_remoto: '',
-  name_id: '',
+  user_id: '',
   observaciones: '',
 });
 
@@ -225,8 +224,8 @@ const sections = [
 
         <!-- Otros -->
         <template #otros>
-          <FormField label="Nombre Arqueo" :error="form.errors.name_id">
-            <FormControlSelect v-model="form.name_id" type="select" :icon="mdiAccount"
+          <FormField label="Nombre Arqueo" :error="form.errors.user_id">
+            <FormControlSelect v-model="form.user_id" type="select" :icon="mdiAccount"
               :options="props.usuariosArqueo.map(u => ({ value: u.id, text: u.name }))" required />
           </FormField>
 

@@ -9,6 +9,8 @@ import { mdiBallotOutline, mdiPlus, mdiDelete, mdiPencil } from "@mdi/js"
 import Pagination from '@/Shared/Pagination.vue'
 import { router } from '@inertiajs/vue3'
 import Swal from "sweetalert2";
+import NotificationBar from '@/components/NotificationBar.vue'
+
 
 const props = defineProps({
     modules: Object,
@@ -43,6 +45,9 @@ const destroy = (id) => {
                 small
             />
         </SectionTitleLineWithButton>
+        <NotificationBar v-if="$page.props.flash.success" color="success" :icon="mdiPlus">
+                 {{ $page.props.flash.success }}
+        </NotificationBar>
 
         <CardBox class="mb-6" has-table>
             <table>
