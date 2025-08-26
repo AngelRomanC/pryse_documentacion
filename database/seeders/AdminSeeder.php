@@ -34,7 +34,7 @@ class AdminSeeder extends Seeder
     $user4->assignRole('Desarrollador');
     $user4 = User::where('email', 'ricardo@gmail.com')->first();
     $user4->assignRole('Desarrollador');
-    
+
     $user5 = User::where('email', 'javier@gmail.com')->first();
     $user5->assignRole('Procesos');
 
@@ -44,13 +44,21 @@ class AdminSeeder extends Seeder
     //Aca aignamos las variables para permisos
     $perfil = Role::where('name', 'Admin')->first();
     $usuarioSistema = Role::where('name', operator: 'Procesos')->first();
+    $Desarrollador = Role::where('name', operator: 'Desarrollador')->first();
+
 
 
 
     //todos los permisos a admin
-     $perfil->givePermissionTo(Permission::where('module_key', 'users')->get());
-     $usuarioSistema->givePermissionTo(Permission::where('module_key', 'users')->get());
-     
+    $perfil->givePermissionTo(Permission::where('module_key', 'users')->get());
+    $usuarioSistema->givePermissionTo(
+      Permission::whereIn('module_key', ['processes', 'certifications', 'departments','users'])->get()
+    );
+    $Desarrollador->givePermissionTo(
+      Permission::whereIn('module_key', ['brands', 'systems', 'inventory'])->get()
+    );
+
+
 
 
     //Permisos a Usuario-Sistema

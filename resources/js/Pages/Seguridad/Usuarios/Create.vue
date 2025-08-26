@@ -17,13 +17,15 @@ import {
   mdiAccountTie,
   mdiPhone,
   mdiMail,
-  mdiLock
+  mdiLock,
+  mdiOfficeBuilding
 } from "@mdi/js";
 
 const props = defineProps({
   titulo: String,
   routeName: String,
-  roles: Array
+  roles: Array,
+  departamentos: Array,
 });
 
 const safeRoles = computed(() => props.roles || []);
@@ -35,6 +37,7 @@ const form = useForm({
   numero: '',
   email: '',
   password: '',
+  departamento_id: null,
   roles: [],
 });
 
@@ -95,6 +98,19 @@ const guardar = () => {
           :icon="mdiLock"
         />
       </FormField>
+      <!-- Departamentos solo para Procesos -->
+     <FormField v-if="props.departamentos" label="Departamento" :error="form.errors.departamento_id">
+        <FormControl
+            v-model="form.departamento_id"
+            :options="departamentos"
+            type="select"
+            label-key="nombre"
+            value-key="id"
+            :icon="mdiOfficeBuilding"
+            required
+          />                            
+     </FormField>
+
 
       <BaseDivider />
 

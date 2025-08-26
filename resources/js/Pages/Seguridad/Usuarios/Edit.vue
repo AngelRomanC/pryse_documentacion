@@ -18,16 +18,18 @@ import {
   mdiAccountTie,
   mdiPhone,
   mdiMail,
-  mdiLock
+  mdiLock,
+  mdiOfficeBuilding
 } from "@mdi/js";
 
 const props = defineProps({
   titulo: String,
   usuario: Object,
   routeName: String,
-  roles: Array
+  roles: Array,
+  departamentos: Array,
 });
-
+console.log(props.usuario);
 const safeRoles = computed(() => props.roles || []);
 
 const form = useForm({
@@ -38,8 +40,12 @@ const form = useForm({
   numero: props.usuario?.numero ?? '',
   email: props.usuario?.email ?? '',
   password: '',
-  roles: props.usuario?.roles?.map(r => r.id) ?? [], // ✅ ahora array de IDs
+  departamento_id: props.usuario?.departamento_id ??'',
+  roles: props.usuario?.roles?.map(r => r.id) ?? [], // ahora array de IDs
 });
+console.log("departamento_id",props.usuario.departamento_id);
+console.log("apellido_paterno",props.usuario.apellido_paterno);
+
 
 const guardar = () => {
   form.put(route(`${props.routeName}update`, props.usuario.id));
@@ -93,10 +99,23 @@ const guardar = () => {
         <FormControl v-model="form.password" type="password" placeholder="Dejar vacío para no cambiar" :icon="mdiLock" />
       </FormField>
 
+      <!-- Departamentos solo para Procesos -->
+     <FormField v-if="props.departamentos" label="Departamento" :error="form.errors.departamento_id">
+        <FormControl
+            v-model="form.departamento_id"
+            :options="departamentos"
+            type="select"
+            label-key="name"
+            value-key="id"
+            :icon="mdiOfficeBuilding"
+            required
+          />                            
+     </FormField>
+
 
       <BaseDivider />
 
-      <!-- ✅ Ahora usando tu componente FormControlCheckbox -->
+      <!--  Ahora usando tu componente FormControlCheckbox -->
       <FormField label="Asignar Roles" :error="form.errors.roles">
         <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
           <FormControlCheckbox

@@ -33,6 +33,10 @@ class StoreUserRequest extends FormRequest
             'roles' => ['required', 'array'],
             'roles.*' => ['integer', 'exists:roles,id'],
         ];
+         // Validación específica si el rol seleccionado es Ejecutivo
+        if (in_array('Ejecutivo', $this->roles ?? [])) {
+            $rules['departamento_id'] = 'required|exists:departamentos,id';
+        }
     }
 
     public function messages()

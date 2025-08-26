@@ -122,7 +122,7 @@ const handleSubmit = () => {
 
             <template #footer>
                 <BaseButtons>
-                    <BaseButton @click="handleSubmit" type="submit" color="info" outline label="Crear" />
+                    <BaseButton @click="handleSubmit" type="submit" color="info" outline label="Guardar" />
 
                     <BaseButton :href="route(`${routeName}index`)" type="button" color="danger" outline
                         label="Cancelar" />

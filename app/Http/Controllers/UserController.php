@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Departamento;
+use App\Models\UserDepartamento;
 use App\Models\Usuario;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
@@ -66,10 +68,24 @@ class UserController extends Controller
 
     public function create()
     {
+        if (auth()->user()->hasRole('Procesos')) {
+            // Solo permitir rol Ejecutivo
+            $roles = Role::where('name', 'Ejecutivo')->get();
+            $departamentos = Departamento::select('id', 'nombre as name')->get();
+
+        } else {
+            // Todos los roles
+            $roles = Role::all();
+            $departamentos = null; // No se muestran
+
+        }
         return Inertia::render("Seguridad/Usuarios/Create", [
             'titulo' => 'Agregar Usuario ',
             'routeName' => $this->routeName,
-            'roles' => Role::select('id', 'name')->get(),
+            //'roles' => Role::select('id', 'name')->get(),
+            'roles' => $roles,
+            'departamentos' => $departamentos,
+
 
         ]);
     }
@@ -77,6 +93,7 @@ class UserController extends Controller
     public function store(StoreUserRequest $request)
     {
 
+        // dd($request);
         $newUser = user::create([
             'name' => $request->input('name'),
             'apellido_paterno' => $request->input('apellido_paterno'),
@@ -86,7 +103,16 @@ class UserController extends Controller
             'password' => Hash::make($request->input('password')),
             //'role' => $request->input('role'),
         ]);
-        $newUser->syncRoles($request->input('roles')); // acepta array
+
+        $newUser->syncRoles($request->input('roles')); // acepta array  
+
+        // Guardar departamento si el rol es Ejecutivo
+        if ($request->departamento_id) {
+            UserDepartamento::create([
+                'user_id' => $newUser->id,
+                'departamento_id' => $request->departamento_id,
+            ]);
+        }
 
 
         $newUser->notify(instance: new CredencialesEstudianteNotification($request->email, $request->password));
@@ -96,16 +122,54 @@ class UserController extends Controller
     public function edit($id)
     {
 
-        //$usuario = User::find($id);
-        $usuario = User::with('roles')->find($id);
+        if (auth()->user()->hasRole('Procesos')) {
+            // Solo permitir rol Ejecutivo
+            $roles = Role::where('name', 'Ejecutivo')->get();
+            $departamentos = Departamento::select('id', 'nombre as name')->get();
+
+        } else {
+            // Todos los roles
+            $roles = Role::all();
+            $departamentos = null; // No se muestran
+
+        }
+        //$usuario = User::with('roles')->find($id);
+        $usuario = User::with(['roles', 'departamento'])->find($id);
+
 
         return Inertia::render("Seguridad/Usuarios/Edit", [
             'titulo' => 'Modificar Usuario ',
             'usuario' => $usuario,
             'routeName' => $this->routeName,
-            'roles' => Role::select('id', 'name')->get(), // Roles disponibles
+            'roles' =>  $roles, // Roles disponibles
+            'departamentos' => $departamentos,
         ]);
     }
+public function edit2($id)
+{
+    if (auth()->user()->hasRole('Procesos')) {
+        // Solo permitir rol Ejecutivo
+        $roles = Role::where('name', 'Ejecutivo')->get();
+        $departamentos = Departamento::select('id', 'nombre as name')->get();
+    } else {
+        // Todos los roles
+        $roles = Role::all();
+        $departamentos = null; // No se muestran
+    }
+
+    $usuario = User::with(['roles', 'departamento.departamento'])->find($id);
+
+    // Extraer departamento_id si existe
+    $usuario->departamento_id = $usuario->departamento->departamento_id ?? null;
+
+    return Inertia::render("Seguridad/Usuarios/Edit", [
+        'titulo' => 'Modificar Usuario',
+        'usuario' => $usuario,
+        'routeName' => $this->routeName,
+        'roles' => $roles,
+        'departamentos' => $departamentos,
+    ]);
+}
 
     public function update(UpdateUserRequest $request, $id)
     {

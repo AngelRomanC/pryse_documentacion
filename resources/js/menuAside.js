@@ -103,6 +103,7 @@ export default [
     label: "Dashboard",
     role: "Desarrollador" 
   },
+  
   {
     label: "Catálogos",
     icon: mdiShapeOutline ,
@@ -132,7 +133,10 @@ export default [
     role: "Desarrollador",
   }, 
 
-   //Modulos a Procesos de sistema 
+   
+  
+  
+  //Modulos a Procesos de sistema ---------------------------------------
   {
     href: "/dashboard",
     to: "/dashboard",
@@ -140,7 +144,41 @@ export default [
     label: "Dashboard",
     role: "Procesos" 
   },
+
+  {
+  label: "Seguridad",
+  icon: mdiShieldKey,
+  role: "Procesos",
+  menu: [
     {
+        href:"/usuarios",
+        label: "Usuarios",
+        icon: mdiAccountMultiple,
+        role: "Procesos",
+    }, 
+    {
+      route: "roles.index",
+      label: "Roles",
+      icon: mdiShieldAccount,
+      role: "Procesos",
+    },
+    
+    {
+      route: "modules.index",
+      label: "Módulos",
+      icon: mdiViewModule,
+      role: "Procesos",
+    },
+    {
+      route: "permisos.index",
+      label: "Permisos",
+      icon: mdiKeyChain,
+      role: "Procesos",
+    }, 
+  ],
+},
+  
+  {
     label: "Catálogos",
     icon: mdiShapeOutline ,
     role: "Procesos",
