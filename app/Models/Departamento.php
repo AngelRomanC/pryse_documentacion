@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Departamento extends Model
 {
@@ -15,5 +16,9 @@ class Departamento extends Model
     public function routeNotificationForMail()
     {
         return $this->email;
+    }
+    public function procesos(): HasMany
+    {
+        return $this->hasMany(Proceso::class, 'departamento_id');
     }
 }

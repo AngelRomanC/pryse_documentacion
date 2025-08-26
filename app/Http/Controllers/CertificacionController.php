@@ -35,8 +35,8 @@ class CertificacionController extends Controller
 
         // dd($request->all());
 
-        // Si el usuario NO es admin, que solo vea los sistemas que él creó
-        if (!auth()->user()->hasRole('Admin')) {
+        // Si el usuario NO es admin, procesos, que solo vea los sistemas que él creó
+        if (!auth()->user()->hasAnyRole(['Admin','Procesos'])) {
             $query->where('user_id', auth()->id());
         }
 

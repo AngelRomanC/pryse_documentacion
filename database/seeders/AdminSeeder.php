@@ -43,20 +43,24 @@ class AdminSeeder extends Seeder
 
     //Aca aignamos las variables para permisos
     $perfil = Role::where('name', 'Admin')->first();
-    $usuarioSistema = Role::where('name', operator: 'Procesos')->first();
+    $Procesos = Role::where('name', operator: 'Procesos')->first();
     $Desarrollador = Role::where('name', operator: 'Desarrollador')->first();
+    $Ejecutivo = Role::where('name', operator: 'Ejecutivo')->first();
 
 
 
 
-    //todos los permisos a admin
+
+    //todos los permisos a Usuarios
     $perfil->givePermissionTo(Permission::where('module_key', 'users')->get());
-    $usuarioSistema->givePermissionTo(
-      Permission::whereIn('module_key', ['processes', 'certifications', 'departments','users'])->get()
+    $Procesos->givePermissionTo(
+      Permission::whereIn('module_key', ['processes', 'certifications', 'departments', 'users'])->get()
     );
     $Desarrollador->givePermissionTo(
       Permission::whereIn('module_key', ['brands', 'systems', 'inventory'])->get()
     );
+    $Ejecutivo->givePermissionTo(Permission::where('module_key', 'processes')->get());
+
 
 
 

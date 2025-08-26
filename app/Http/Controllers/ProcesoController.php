@@ -24,17 +24,21 @@ class ProcesoController extends Controller
     {
         $this->middleware('auth');
         $this->routeName = 'procesos.';
-         $this->middleware("permission:{$this->module}.index")->only(['index', 'show']);
-         $this->middleware("permission:{$this->module}.store")->only(['store', 'create']);
-         $this->middleware("permission:{$this->module}.update")->only(['edit', 'update']);
-         $this->middleware("permission:{$this->module}.delete")->only(['destroy']);
+        $this->middleware("permission:{$this->module}.index")->only(['index', 'show']);
+        $this->middleware("permission:{$this->module}.store")->only(['store', 'create']);
+        $this->middleware("permission:{$this->module}.update")->only(['edit', 'update']);
+        $this->middleware("permission:{$this->module}.delete")->only(['destroy']);
     }
     public function index(Request $request)
     {
         //
         $query = Proceso::with('departamento'); // Cargar la relación
 
-        if (!auth()->user()->hasRole('Admin')) {
+        // if (!auth()->user()->hasRole('Admin')) {
+        //     $query->where('user_id', auth()->id());
+        // }
+        // Si NO es Admin NI Procesos, solo ver sus propios registros
+        if (!auth()->user()->hasAnyRole(['Admin', 'Procesos'])) {
             $query->where('user_id', auth()->id());
         }
 

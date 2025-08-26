@@ -109,6 +109,9 @@ Route::middleware('auth')->group(function () {
         Route::resource('permisos', PermisosController::class);
     });
 
+    Route::get('/dashboard-ejecutivo', [DashboardController::class, 'dashboardEjecutivo'])
+     ->name('dashboard.ejecutivo');
+
 
 });
 

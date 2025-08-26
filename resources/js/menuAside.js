@@ -92,6 +92,20 @@ export default [
     role: "Admin",
   }, 
 
+  {
+    route: "procesos.index",
+    label: "Procesos",
+    icon: mdiClipboardFlow ,
+    role: "Admin",
+  }, 
+
+  {
+    route: "certificacion.index",
+    label: "Certificaciones",
+    icon: mdiCertificate ,
+    role: "Admin",
+  },
+
   
  
 
@@ -215,6 +229,19 @@ export default [
     label: "Dashboard",
     role: "Ejecutivo" 
   },
+  {
+    route: "procesos.index",
+    label: "Procesos",
+    icon: mdiClipboardFlow ,
+    role: "Ejecutivo",
+  }, 
+
+  {
+  href: "/dashboard-ejecutivo",
+  icon: mdiViewDashboard,
+  label: "Dashboard",
+  role: "Ejecutivo"
+}
 
 
 

@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Certificacion;
+use App\Models\Departamento;
 use App\Models\InventarioEquipo;
 use App\Models\Proceso;
 use App\Models\Sistema;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 use Carbon\Carbon;
@@ -109,5 +111,41 @@ class DashboardController extends Controller
                 'sistemasAsignadosLista' => $sistemas->take(5),
             ]);
         }
+    }
+    public function dashboardEjecutivo()
+    {
+        $user = auth()->user();
+
+        // Métricas básicas
+        $metrics = [
+            'total_processes' => Proceso::count(),
+            'in_progress' => Proceso::where('estatus', 'En Progreso')->count(),
+            'completed' => Proceso::where('estatus', 'Completado')->count(),
+            'overdue' => Proceso::where('fecha_fin_vigencia', '<', now())->count(),
+            'by_department' => Departamento::withCount('procesos')->get()
+        ];
+
+        // Procesos recientes
+        $recentProcesses = Proceso::with('departamento')
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+
+        // Próximos vencimientos (próximos 7 días)
+        $upcomingDeadlines = Proceso::with('departamento')
+            ->whereBetween('fecha_fin_vigencia', [now(), now()->addDays(7)])
+            ->orderBy('fecha_fin_vigencia')
+            ->get()
+            ->map(function ($process) {
+                $process->days_remaining = now()->diffInDays($process->fecha_fin_vigencia);
+                return $process;
+            });
+
+        return Inertia::render('Dashboard/Ejecutivo', [
+            'metrics' => $metrics,
+            'recentProcesses' => $recentProcesses,
+            'upcomingDeadlines' => $upcomingDeadlines,
+            'statusSummary' => Proceso::groupBy('estatus')->select('estatus', DB::raw('count(*) as count'))->get()
+        ]);
     }
 }
