@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+
 
 class DashboardController extends Controller
 {
@@ -112,40 +114,85 @@ class DashboardController extends Controller
             ]);
         }
     }
+    public function dashboardEjecutivo2()
+    {
+        $user = auth()->user();
+        $departamentoId = $user->departamento?->departamento_id;
+
+        if (!$departamentoId) {
+            return Inertia::render('Dashboard/Ejecutivo', [
+                'titulo' => 'Dashboard Ejecutivo',
+                'stats' => [],
+                'procesos' => [],
+            ]);
+        }
+
+        // Consultar procesos de su departamento
+        $procesos = Proceso::with('departamento')
+            ->where('departamento_id', $departamentoId)
+            ->orderBy('id', 'desc')
+            ->get();
+
+        // Estadísticas simples
+        $stats = [
+            'total' => $procesos->count(),
+            'pendientes' => $procesos->where('estatus', 'Revisión')->count(),
+            'con_documentos' => $procesos->filter(fn($p) => $p->archivos->count() > 0)->count(),
+            'sin_documentos' => $procesos->filter(fn($p) => $p->archivos->count() === 0)->count(),
+        ];
+
+        return Inertia::render('Dashboard/Ejecutivo', [
+            'titulo' => 'Dashboard Ejecutivo',
+            'stats' => $stats,
+            'procesos' => $procesos,
+        ]);
+    }
     public function dashboardEjecutivo()
     {
         $user = auth()->user();
+        $departamentoId = $user->departamento?->departamento_id;
 
-        // Métricas básicas
-        $metrics = [
-            'total_processes' => Proceso::count(),
-            'in_progress' => Proceso::where('estatus', 'En Progreso')->count(),
-            'completed' => Proceso::where('estatus', 'Completado')->count(),
-            'overdue' => Proceso::where('fecha_fin_vigencia', '<', now())->count(),
-            'by_department' => Departamento::withCount('procesos')->get()
-        ];
+        if (!$departamentoId) {
+            return Inertia::render('Dashboard/Ejecutivo', [
+                'titulo' => 'Dashboard Ejecutivo',
+                'stats' => [],
+                'porEstatus' => [],
+                'proximosProcesos' => [],
+                'procesos' => [],
+            ]);
+        }
 
-        // Procesos recientes
-        $recentProcesses = Proceso::with('departamento')
-            ->orderBy('created_at', 'desc')
-            ->take(5)
+        // Consultar procesos de su departamento
+        $procesos = Proceso::with('departamento', 'archivos')
+            ->where('departamento_id', $departamentoId)
+            ->orderBy('id', 'desc')
             ->get();
 
-        // Próximos vencimientos (próximos 7 días)
-        $upcomingDeadlines = Proceso::with('departamento')
-            ->whereBetween('fecha_fin_vigencia', [now(), now()->addDays(7)])
-            ->orderBy('fecha_fin_vigencia')
-            ->get()
-            ->map(function ($process) {
-                $process->days_remaining = now()->diffInDays($process->fecha_fin_vigencia);
-                return $process;
-            });
+        // Estadísticas principales
+        $stats = [
+            'total' => $procesos->count(),
+            'pendientes' => $procesos->where('estatus', 'Revisión')->count(),
+            'con_documentos' => $procesos->filter(fn($p) => $p->archivos->count() > 0)->count(),
+            'sin_documentos' => $procesos->filter(fn($p) => $p->archivos->count() === 0)->count(),
+        ];
+
+        // Estadísticas por estatus
+        $porEstatus = [
+            'Diseño' => $procesos->where('estatus', 'Diseño')->count(),
+            'Revisión' => $procesos->where('estatus', 'Revisión')->count(),
+            'Validación' => $procesos->where('estatus', 'Validación')->count(),
+        ];
+
+        // Próximos procesos a entregar (30 días)
+        $proximosProcesos = $procesos->filter(fn($p) => \Carbon\Carbon::parse($p->fecha_fin_vigencia)->between(now(), now()->addDays(30)))->values();
 
         return Inertia::render('Dashboard/Ejecutivo', [
-            'metrics' => $metrics,
-            'recentProcesses' => $recentProcesses,
-            'upcomingDeadlines' => $upcomingDeadlines,
-            'statusSummary' => Proceso::groupBy('estatus')->select('estatus', DB::raw('count(*) as count'))->get()
+            'titulo' => 'Dashboard Ejecutivo',
+            'stats' => $stats,
+            'porEstatus' => $porEstatus,
+            'proximosProcesos' => $proximosProcesos,
+            'procesos' => $procesos,
         ]);
     }
+
 }

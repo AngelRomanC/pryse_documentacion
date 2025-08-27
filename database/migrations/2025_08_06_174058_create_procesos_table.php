@@ -15,10 +15,10 @@ return new class extends Migration {
             $table->string('nombre');
             $table->string('descripcion');
             $table->foreignId('departamento_id')->nullable()->constrained('departamentos')->onDelete('set null'); 
-            $table->string('fecha_solicitud');
-            $table->string('fecha_entrega');
-            $table->string('fecha_inicio_vigencia');
-            $table->string('fecha_fin_vigencia');
+            $table->date('fecha_solicitud');
+            $table->date('fecha_entrega');
+            $table->date('fecha_inicio_vigencia');
+            $table->date('fecha_fin_vigencia');
             $table->string('estatus');
             $table->string('numero_usuarios');
             $table->string('nombre_responsable');
