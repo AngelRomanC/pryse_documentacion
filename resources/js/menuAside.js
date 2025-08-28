@@ -222,6 +222,13 @@ export default [
   },
   
   //Modulos a Ejecutivo de sistema 
+
+    {
+  href: "/dashboard-ejecutivo",
+  icon: mdiViewDashboard,
+  label: "Dashboard",
+  role: "Ejecutivo"
+  },
   {
     href: "/dashboard",
     to: "/dashboard",
@@ -236,12 +243,7 @@ export default [
     role: "Ejecutivo",
   }, 
 
-  {
-  href: "/dashboard-ejecutivo",
-  icon: mdiViewDashboard,
-  label: "Dashboard",
-  role: "Ejecutivo"
-}
+
 
 
 

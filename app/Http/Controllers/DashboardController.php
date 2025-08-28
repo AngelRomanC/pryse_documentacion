@@ -166,6 +166,7 @@ class DashboardController extends Controller
         $procesos = Proceso::with('departamento', 'archivos')
             ->where('departamento_id', $departamentoId)
             ->orderBy('id', 'desc')
+            ->take(5)
             ->get();
 
         // Estadísticas principales
@@ -185,9 +186,11 @@ class DashboardController extends Controller
 
         // Próximos procesos a entregar (30 días)
         $proximosProcesos = $procesos->filter(fn($p) => \Carbon\Carbon::parse($p->fecha_fin_vigencia)->between(now(), now()->addDays(30)))->values();
+        
+        $departamento = Departamento::find($departamentoId);
 
         return Inertia::render('Dashboard/Ejecutivo', [
-            'titulo' => 'Dashboard Ejecutivo',
+            'titulo' => "Dashboard Ejecutivo - {$departamento->nombre}",
             'stats' => $stats,
             'porEstatus' => $porEstatus,
             'proximosProcesos' => $proximosProcesos,

@@ -1,9 +1,15 @@
 <script setup>
 import { defineProps, computed } from 'vue'
-import LayoutMain from '@/layouts/LayoutMain.vue'
-import CardBox from "@/components/CardBox.vue"
+import LayoutDashboard from '@/Layouts/LayoutDashboard.vue'
+import CardBox from "@/Components/CardBox.vue"
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
+import { Bar } from 'vue-chartjs'
+import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
+import SectionMain from "@/Components/SectionMain.vue";
+import { mdiChartBar, mdiArrowRight } from "@mdi/js";
+import BaseButton from '@/Components/BaseButton.vue'
 
-// Props del controlador
+
 const props = defineProps({
   titulo: String,
   stats: Object,
@@ -12,120 +18,170 @@ const props = defineProps({
   procesos: Array,
 })
 
-// Función para darle color a los estatus
+// Colores de estatus
 const estatusColor = (estatus) => {
   switch (estatus) {
-    case 'Diseño':
-      return 'bg-yellow-100 text-yellow-800'
-    case 'Revisión':
-      return 'bg-blue-100 text-blue-800'
-    case 'Validación':
-      return 'bg-green-100 text-green-800'
-    default:
-      return 'bg-gray-100 text-gray-800'
+    case 'Diseño': return 'bg-yellow-100 text-yellow-800'
+    case 'Revisión': return 'bg-blue-100 text-blue-800'
+    case 'Validación': return 'bg-green-100 text-green-800'
+    default: return 'bg-gray-100 text-gray-800'
   }
 }
 
-// Preparar datos para gráfico tipo barra (opcional si usas Chart.js o Vue Chart 3)
-const chartData = computed(() => ({
-  labels: Object.keys(props.porEstatus),
-  datasets: [
-    {
-      label: 'Procesos por estatus',
-      data: Object.values(props.porEstatus),
-      backgroundColor: ['#FACC15','#3B82F6','#10B981']
-    }
-  ]
-}))
 </script>
 
 <template>
-  <LayoutMain :title="titulo">
-    <h1 class="text-3xl font-bold mb-6">{{ titulo }}</h1>
-
-    <!-- Estadísticas principales -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      <CardBox class="p-4 bg-blue-50 shadow hover:shadow-lg transition">
-        <div class="text-center">
-          <p class="text-gray-600 font-medium">Total de Procesos</p>
-          <p class="text-3xl font-bold text-blue-700">{{ stats.total || 0 }}</p>
+  <LayoutDashboard :title="titulo">
+    <!-- Título -->
+    <SectionMain>
+      <SectionTitleLineWithButton :title=props.titulo main class="mb-6" :icon="mdiChartBar">
+        <BaseButton label="Ver procesos" color="success" small outline="true" routeName="procesos.index"
+          :icon="mdiArrowRight" />
+      </SectionTitleLineWithButton>
+    </SectionMain>
+    <!-- Tarjetas de métricas principales -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <CardBox class="hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+        <div class="flex items-center">
+          <div class="bg-indigo-100 p-4 rounded-full mr-4">
+            <svg class="w-6 h-6 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd"
+                d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z"
+                clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-sm font-medium text-gray-500">Total de Procesos</h3>
+            <p class="text-2xl font-semibold text-gray-900">{{ stats.total }}</p>
+          </div>
         </div>
       </CardBox>
 
-      <CardBox class="p-4 bg-yellow-50 shadow hover:shadow-lg transition">
-        <div class="text-center">
-          <p class="text-gray-600 font-medium">Pendientes</p>
-          <p class="text-3xl font-bold text-yellow-700">{{ stats.pendientes || 0 }}</p>
+      <CardBox class="hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+        <div class="flex items-center">
+          <div class="bg-yellow-100 p-4 rounded-full mr-4">
+            <svg class="w-6 h-6 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-sm font-medium text-gray-500">Pendientes</h3>
+            <p class="text-2xl font-semibold text-gray-900">{{ stats.pendientes }}</p>
+          </div>
         </div>
       </CardBox>
 
-      <CardBox class="p-4 bg-green-50 shadow hover:shadow-lg transition">
-        <div class="text-center">
-          <p class="text-gray-600 font-medium">Con Documentos</p>
-          <p class="text-3xl font-bold text-green-700">{{ stats.con_documentos || 0 }}</p>
+      <CardBox class="hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+        <div class="flex items-center">
+          <div class="bg-green-100 p-4 rounded-full mr-4">
+            <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-sm font-medium text-gray-500">Con Documentos</h3>
+            <p class="text-2xl font-semibold text-gray-900">{{ stats.con_documentos }}</p>
+          </div>
         </div>
       </CardBox>
 
-      <CardBox class="p-4 bg-red-50 shadow hover:shadow-lg transition">
-        <div class="text-center">
-          <p class="text-gray-600 font-medium">Sin Documentos</p>
-          <p class="text-3xl font-bold text-red-700">{{ stats.sin_documentos || 0 }}</p>
+      <CardBox class="hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+        <div class="flex items-center">
+          <div class="bg-red-100 p-4 rounded-full mr-4">
+            <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M4 4h12v12H4z" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-sm font-medium text-gray-500">Sin Documentos</h3>
+            <p class="text-2xl font-semibold text-gray-900">{{ stats.sin_documentos }}</p>
+          </div>
         </div>
       </CardBox>
     </div>
 
-    <!-- Próximos procesos a entregar -->
-    <CardBox class="mb-8">
-      <h2 class="text-xl font-semibold mb-4">Próximos procesos a VENCER en (30 días)</h2>
-      <ul>
-        <li v-for="proceso in proximosProcesos" :key="proceso.id" class="py-2 border-b flex justify-between">
-          <span>{{ proceso.nombre }}</span>
-          <span class="text-gray-500">{{ proceso.fecha_fin_vigencia }}</span>
-        </li>
-        <li v-if="proximosProcesos.length === 0" class="text-gray-400 italic">No hay procesos próximos a Vencer</li>
-      </ul>
-    </CardBox>
+<!-- Próximos procesos -->
+<CardBox class="mb-8 p-6 rounded-lg shadow-md">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-xl font-semibold flex items-center">
+      <svg class="w-6 h-6 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 1.75a10.25 10.25 0 1010.25 10.25A10.262 10.262 0 0012 1.75zm0 18.5a8.25 8.25 0 118.25-8.25 8.26 8.26 0 01-8.25 8.25z"/>
+        <path d="M12 6a.75.75 0 01.75.75v5.25l4.5 2.7a.75.75 0 11-.75 1.3l-5-3A.75.75 0 0112 12V6.75A.75.75 0 0112 6z"/>
+      </svg>
+      Próximos procesos a vencer (30 días)
+    </h2>
+  </div>
 
-    <!-- Tabla de procesos con estatus -->
-    <CardBox class="overflow-x-auto">
-      <h2 class="text-xl font-semibold mb-4">Procesos del Departamento</h2>
-      <table class="min-w-full divide-y divide-gray-200">
-        <thead class="bg-gray-100">
-          <tr>
-            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Nombre</th>
-            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Departamento</th>
-            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Estatus</th>
-            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Fecha Entrega</th>
-            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Documentos</th>
-          </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-          <tr v-for="proceso in procesos" :key="proceso.id" class="hover:bg-gray-50 transition">
-            <td class="px-6 py-4 font-medium text-gray-700">{{ proceso.nombre }}</td>
-            <td class="px-6 py-4 text-gray-600">{{ proceso.departamento?.nombre }}</td>
-            <td class="px-6 py-4">
-              <span :class="['px-3 py-1 rounded-full text-xs font-semibold', estatusColor(proceso.estatus)]">
-                {{ proceso.estatus }}
-              </span>
-            </td>
-            <td class="px-6 py-4 text-gray-600">{{ proceso.fecha_entrega }}</td>
-            <td class="px-6 py-4 text-gray-700">
-              {{ proceso.archivos.length }} archivo(s)
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </CardBox>
-
-    <!-- Gráfico de estatus -->
-    <CardBox class="mt-8 p-4">
-      <h2 class="text-xl font-semibold mb-4">Distribución por Estatus</h2>
-      <div v-if="Object.keys(porEstatus).length > 0" class="h-64 flex items-center justify-center">
-        <!-- Aquí puedes integrar tu librería de gráficos preferida -->
-        <!-- Ejemplo con Chart.js o Vue Chart 3 -->
-        <canvas id="chartEstatus"></canvas>
+  <ul class="space-y-2">
+    <li v-for="p in proximosProcesos" :key="p.id"
+      class="flex justify-between items-center p-3 border rounded-lg shadow-sm hover:shadow-md transition bg-white">
+      
+      <div>
+        <p class="font-medium text-gray-800">{{ p.nombre }}</p>
+        <p class="text-xs text-gray-500">Departamento: {{ p.departamento?.nombre }}</p>
       </div>
-      <div v-else class="text-gray-400 italic">No hay datos para mostrar</div>
+
+      <div class="flex items-center space-x-2">
+        <!-- Badge con color según urgencia -->
+        <span
+          :class="{
+            'bg-red-100 text-red-700': new Date(p.fecha_fin_vigencia) <= new Date(Date.now() + 7*24*60*60*1000),
+            'bg-yellow-100 text-yellow-700': new Date(p.fecha_fin_vigencia) > new Date(Date.now() + 7*24*60*60*1000) && new Date(p.fecha_fin_vigencia) <= new Date(Date.now() + 15*24*60*60*1000),
+            'bg-green-100 text-green-700': new Date(p.fecha_fin_vigencia) > new Date(Date.now() + 15*24*60*60*1000)
+          }"
+          class="text-xs font-semibold px-2 py-1 rounded-full">
+          {{ p.fecha_fin_vigencia }}
+        </span>
+
+        <!-- Días restantes -->
+        <span class="text-xs text-gray-400">
+          {{ Math.ceil((new Date(p.fecha_fin_vigencia) - new Date()) / (1000*60*60*24)) }} días restantes
+        </span>
+      </div>
+    </li>
+
+    <li v-if="proximosProcesos.length === 0" class="text-gray-400 italic">No hay procesos próximos a vencer</li>
+  </ul>
+</CardBox>
+
+
+    <!-- Tabla de procesos recientes -->
+    <CardBox class="overflow-x-auto p-6 rounded-lg shadow-md">
+      <h2 class="text-xl font-semibold mb-4">Procesos del Departamento (Últimos 5)</h2>
+      <div class="max-h-96 overflow-y-auto border rounded-lg">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-100 sticky top-0">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Nombre</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Departamento</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Estatus</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Fecha fin de Vigencia</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Documentos</th>
+              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase"></th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr v-for="p in procesos" :key="p.id"
+              class="hover:bg-gray-50 transition even:bg-gray-50">
+              <td class="px-6 py-4 font-medium text-gray-700">{{ p.nombre }}</td>
+              <td class="px-6 py-4 text-gray-600">{{ p.departamento?.nombre }}</td>
+              <td class="px-6 py-4">
+                <span :class="['px-3 py-1 rounded-full text-xs font-semibold', estatusColor(p.estatus)]">
+                  {{ p.estatus }}
+                </span>
+              </td>
+              <td class="px-6 py-4 text-gray-600">{{ p.fecha_fin_vigencia }}</td>
+              <td class="px-6 py-4 text-gray-700">{{ p.archivos.length }} archivo(s)</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <BaseButton :icon="mdiArrowRight" color="info" small outline label="Ver"
+                  :href="route('procesos.edit', p.id)" title="Ver detalles del proceso" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </CardBox>
-  </LayoutMain>
+  </LayoutDashboard>
 </template>
