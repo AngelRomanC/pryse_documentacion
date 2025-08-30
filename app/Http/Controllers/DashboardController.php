@@ -51,7 +51,7 @@ class DashboardController extends Controller
             // Procesos con paginación
             $procesosPaginated = $procesosQuery->with('departamento')
                 ->orderBy('created_at', 'desc')
-                ->paginate(1, ['*'], 'procesos_page')
+                ->paginate(5, ['*'], 'procesos_page')
                 ->withQueryString();
 
 
