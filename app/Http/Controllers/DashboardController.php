@@ -44,19 +44,14 @@ class DashboardController extends Controller
         }
 
         if ($user->hasRole('Procesos')) {
-            // Obtener procesos del usuario (o todos si tiene permiso)
-            $procesosQuery = $user->procesos();
-            $certificacionesQuery = $user->certificaciones();
-
-            if ($user->can('view_all_procesos')) {
-                $procesosQuery = Proceso::query();
-                $certificacionesQuery = Certificacion::query();
-            }
+                    
+            $procesosQuery = Proceso::query();
+            $certificacionesQuery = Certificacion::query();
 
             // Procesos con paginación
             $procesosPaginated = $procesosQuery->with('departamento')
                 ->orderBy('created_at', 'desc')
-                ->paginate(5, ['*'], 'procesos_page')
+                ->paginate(1, ['*'], 'procesos_page')
                 ->withQueryString();
 
 
@@ -66,7 +61,6 @@ class DashboardController extends Controller
             })->count();
             $procesosPorEstatus = $procesos->groupBy('estatus')->map->count();
 
-            // Certificaciones con paginación
             $certificacionesPaginated = $certificacionesQuery->with('departamento')
                 ->orderBy('created_at', 'desc')
                 ->paginate(5, ['*'], 'certificaciones_page')
@@ -105,13 +99,9 @@ class DashboardController extends Controller
         }
 
         if ($user->hasRole('Ejecutivo')) {
-            $sistemas = $user->sistemas()->with('departamento')->get();
 
-            return Inertia::render('Dashboard/Desarrollador', [
-                'sistemasAsignados' => $sistemas->count(),
-                'sistemasEnDesarrollo' => $sistemas->where('estatus', 'Desarrollo')->count(),
-                'sistemasAsignadosLista' => $sistemas->take(5),
-            ]);
+            return redirect()->route('dashboard.ejecutivo');
+
         }
     }
     public function dashboardEjecutivo2()
@@ -151,6 +141,7 @@ class DashboardController extends Controller
     {
         $user = auth()->user();
         $departamentoId = $user->departamento?->departamento_id;
+        $procesosQuery = Proceso::query();
 
         if (!$departamentoId) {
             return Inertia::render('Dashboard/Ejecutivo', [
@@ -162,31 +153,37 @@ class DashboardController extends Controller
             ]);
         }
 
-        // Consultar procesos de su departamento
         $procesos = Proceso::with('departamento', 'archivos')
             ->where('departamento_id', $departamentoId)
             ->orderBy('id', 'desc')
-            ->take(5)
+            ->paginate(5, ['*'], 'procesos_ejecutivo')
+            ->withQueryString();
+            
+
+        $todosLosProcesos = Proceso::with('archivos')
+            ->where('departamento_id', $departamentoId)
             ->get();
 
-        // Estadísticas principales
+   
         $stats = [
-            'total' => $procesos->count(),
-            'pendientes' => $procesos->where('estatus', 'Revisión')->count(),
-            'con_documentos' => $procesos->filter(fn($p) => $p->archivos->count() > 0)->count(),
-            'sin_documentos' => $procesos->filter(fn($p) => $p->archivos->count() === 0)->count(),
+            'total' => $todosLosProcesos->count(),
+            'pendientes' => $todosLosProcesos->where('estatus', 'Revisión')->count(),
+            'con_documentos' => $todosLosProcesos->filter(fn($p) => $p->archivos->count() > 0)->count(),
+            'sin_documentos' => $todosLosProcesos->filter(fn($p) => $p->archivos->count() === 0)->count(),
         ];
 
-        // Estadísticas por estatus
+      
         $porEstatus = [
-            'Diseño' => $procesos->where('estatus', 'Diseño')->count(),
-            'Revisión' => $procesos->where('estatus', 'Revisión')->count(),
-            'Validación' => $procesos->where('estatus', 'Validación')->count(),
+            'Diseño' => $todosLosProcesos->where('estatus', 'Diseño')->count(),
+            'Revisión' => $todosLosProcesos->where('estatus', 'Revisión')->count(),
+            'Validación' => $todosLosProcesos->where('estatus', 'Validación')->count(),
         ];
 
-        // Próximos procesos a entregar (30 días)
-        $proximosProcesos = $procesos->filter(fn($p) => \Carbon\Carbon::parse($p->fecha_fin_vigencia)->between(now(), now()->addDays(30)))->values();
-        
+        $proximosProcesos = Proceso::with('departamento')
+            ->where('departamento_id', $departamentoId)
+            ->whereBetween('fecha_fin_vigencia', [now(), now()->addDays(30)])
+            ->get();
+
         $departamento = Departamento::find($departamentoId);
 
         return Inertia::render('Dashboard/Ejecutivo', [
@@ -194,7 +191,7 @@ class DashboardController extends Controller
             'stats' => $stats,
             'porEstatus' => $porEstatus,
             'proximosProcesos' => $proximosProcesos,
-            'procesos' => $procesos,
+            'procesos' => $procesos, 
         ]);
     }
 

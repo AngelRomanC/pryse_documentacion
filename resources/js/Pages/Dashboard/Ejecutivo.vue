@@ -6,8 +6,10 @@ import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, Li
 import { Bar } from 'vue-chartjs'
 import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
 import SectionMain from "@/Components/SectionMain.vue";
-import { mdiChartBar, mdiArrowRight } from "@mdi/js";
+import { mdiChartBar, mdiArrowRight, mdiFileDocument } from "@mdi/js";
 import BaseButton from '@/Components/BaseButton.vue'
+import PaginationDashboard from '@/Shared/PaginationDashboard.vue';
+
 
 
 const props = defineProps({
@@ -15,9 +17,9 @@ const props = defineProps({
   stats: Object,
   porEstatus: Object,
   proximosProcesos: Array,
-  procesos: Array,
+  procesos: Object,
 })
-
+console.log(props.stats) ;
 // Colores de estatus
 const estatusColor = (estatus) => {
   switch (estatus) {
@@ -27,7 +29,6 @@ const estatusColor = (estatus) => {
     default: return 'bg-gray-100 text-gray-800'
   }
 }
-
 </script>
 
 <template>
@@ -35,7 +36,7 @@ const estatusColor = (estatus) => {
     <!-- Título -->
     <SectionMain>
       <SectionTitleLineWithButton :title=props.titulo main class="mb-6" :icon="mdiChartBar">
-        <BaseButton label="Ver procesos" color="success" small outline="true" routeName="procesos.index"
+        <BaseButton label="Ver procesos" color="success" small outline routeName="procesos.index"
           :icon="mdiArrowRight" />
       </SectionTitleLineWithButton>
     </SectionMain>
@@ -102,86 +103,98 @@ const estatusColor = (estatus) => {
       </CardBox>
     </div>
 
-<!-- Próximos procesos -->
-<CardBox class="mb-8 p-6 rounded-lg shadow-md">
-  <div class="flex items-center justify-between mb-4">
-    <h2 class="text-xl font-semibold flex items-center">
-      <svg class="w-6 h-6 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 24 24">
-        <path d="M12 1.75a10.25 10.25 0 1010.25 10.25A10.262 10.262 0 0012 1.75zm0 18.5a8.25 8.25 0 118.25-8.25 8.26 8.26 0 01-8.25 8.25z"/>
-        <path d="M12 6a.75.75 0 01.75.75v5.25l4.5 2.7a.75.75 0 11-.75 1.3l-5-3A.75.75 0 0112 12V6.75A.75.75 0 0112 6z"/>
-      </svg>
-      Próximos procesos a vencer (30 días)
-    </h2>
-  </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
 
-  <ul class="space-y-2">
-    <li v-for="p in proximosProcesos" :key="p.id"
-      class="flex justify-between items-center p-3 border rounded-lg shadow-sm hover:shadow-md transition bg-white">
-      
-      <div>
-        <p class="font-medium text-gray-800">{{ p.nombre }}</p>
-        <p class="text-xs text-gray-500">Departamento: {{ p.departamento?.nombre }}</p>
+      <!-- Columna 1: Próximos a vencer -->
+      <CardBox class="mb-0 p-6 rounded-lg shadow-md">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-xl font-semibold flex items-center">
+            <svg class="w-6 h-6 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M12 1.75a10.25 10.25 0 1010.25 10.25A10.262 10.262 0 0012 1.75zm0 18.5a8.25 8.25 0 118.25-8.25 8.26 8.26 0 01-8.25 8.25z" />
+              <path
+                d="M12 6a.75.75 0 01.75.75v5.25l4.5 2.7a.75.75 0 11-.75 1.3l-5-3A.75.75 0 0112 12V6.75A.75.75 0 0112 6z" />
+            </svg>
+            Próximos procesos a vencer (30 días)
+          </h2>
+        </div>
+
+        <ul class="space-y-2">
+          <li v-for="p in proximosProcesos" :key="p.id"
+            class="flex justify-between items-center p-3 border rounded-lg shadow-sm hover:shadow-md transition bg-white">
+
+            <div>
+              <p class="font-medium text-gray-800">{{ p.nombre }}</p>
+              <p class="text-xs text-gray-500">Departamento: {{ p.departamento?.nombre }}</p>
+            </div>
+
+            <div class="flex items-center space-x-2">
+              <span :class="{
+                'bg-red-100 text-red-700': new Date(p.fecha_fin_vigencia) <= new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+                'bg-yellow-100 text-yellow-700': new Date(p.fecha_fin_vigencia) > new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) && new Date(p.fecha_fin_vigencia) <= new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
+                'bg-green-100 text-green-700': new Date(p.fecha_fin_vigencia) > new Date(Date.now() + 15 * 24 * 60 * 60 * 1000)
+              }" class="text-xs font-semibold px-2 py-1 rounded-full">
+                {{ p.fecha_fin_vigencia }}
+              </span>
+
+              <span class="text-xs text-gray-400">
+                {{ Math.ceil((new Date(p.fecha_fin_vigencia) - new Date()) / (1000 * 60 * 60 * 24)) }} días restantes
+              </span>
+            </div>
+          </li>
+
+          <li v-if="proximosProcesos.length === 0" class="text-gray-400 italic">No hay procesos próximos a vencer</li>
+        </ul>
+      </CardBox>
+
+      <!-- Columna 2: Últimos registrados -->
+        <div class="space-y-6">
+          <SectionTitleLineWithButton 
+            :icon="mdiFileDocument" 
+            title="Procesos Recientes (Últimos 5)" 
+          />
+      <CardBox class="overflow-y-auto max-h-[600px]">
+        <div class="overflow-x-auto flex-grow">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-100 sticky top-0">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Nombre</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Departamento</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Estatus</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Fecha fin de Vigencia</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Documentos</th>
+                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase"></th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr v-for="p in procesos.data" :key="p.id" class="hover:bg-gray-50 transition even:bg-gray-50">
+                <td class="px-6 py-4 font-medium text-gray-700">{{ p.nombre }}</td>
+                <td class="px-6 py-4 text-gray-600">{{ p.departamento?.nombre }}</td>
+                <td class="px-6 py-4">
+                  <span :class="['px-3 py-1 rounded-full text-xs font-semibold', estatusColor(p.estatus)]">
+                    {{ p.estatus }}
+                  </span>
+                </td>
+                <td class="px-6 py-4 text-gray-600">{{ p.fecha_fin_vigencia }}</td>
+                <td class="px-6 py-4 text-gray-700">{{ p.archivos.length }} archivo(s)</td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <BaseButton :icon="mdiArrowRight" color="info" small outline label="Ver"
+                    :href="route('procesos.edit', p.id)" title="Ver detalles del proceso" />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+            <PaginationDashboard 
+              :currentPage="procesos.current_page" 
+              :links="procesos.links"
+              :total="procesos.last_page" 
+              pageParam="procesos_ejecutivo"
+              routeName="dashboard.ejecutivo"          
+            />
+       
+       </CardBox>
       </div>
-
-      <div class="flex items-center space-x-2">
-        <!-- Badge con color según urgencia -->
-        <span
-          :class="{
-            'bg-red-100 text-red-700': new Date(p.fecha_fin_vigencia) <= new Date(Date.now() + 7*24*60*60*1000),
-            'bg-yellow-100 text-yellow-700': new Date(p.fecha_fin_vigencia) > new Date(Date.now() + 7*24*60*60*1000) && new Date(p.fecha_fin_vigencia) <= new Date(Date.now() + 15*24*60*60*1000),
-            'bg-green-100 text-green-700': new Date(p.fecha_fin_vigencia) > new Date(Date.now() + 15*24*60*60*1000)
-          }"
-          class="text-xs font-semibold px-2 py-1 rounded-full">
-          {{ p.fecha_fin_vigencia }}
-        </span>
-
-        <!-- Días restantes -->
-        <span class="text-xs text-gray-400">
-          {{ Math.ceil((new Date(p.fecha_fin_vigencia) - new Date()) / (1000*60*60*24)) }} días restantes
-        </span>
-      </div>
-    </li>
-
-    <li v-if="proximosProcesos.length === 0" class="text-gray-400 italic">No hay procesos próximos a vencer</li>
-  </ul>
-</CardBox>
-
-
-    <!-- Tabla de procesos recientes -->
-    <CardBox class="overflow-x-auto p-6 rounded-lg shadow-md">
-      <h2 class="text-xl font-semibold mb-4">Procesos del Departamento (Últimos 5)</h2>
-      <div class="max-h-96 overflow-y-auto border rounded-lg">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-100 sticky top-0">
-            <tr>
-              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Nombre</th>
-              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Departamento</th>
-              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Estatus</th>
-              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Fecha fin de Vigencia</th>
-              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Documentos</th>
-              <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase"></th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="p in procesos" :key="p.id"
-              class="hover:bg-gray-50 transition even:bg-gray-50">
-              <td class="px-6 py-4 font-medium text-gray-700">{{ p.nombre }}</td>
-              <td class="px-6 py-4 text-gray-600">{{ p.departamento?.nombre }}</td>
-              <td class="px-6 py-4">
-                <span :class="['px-3 py-1 rounded-full text-xs font-semibold', estatusColor(p.estatus)]">
-                  {{ p.estatus }}
-                </span>
-              </td>
-              <td class="px-6 py-4 text-gray-600">{{ p.fecha_fin_vigencia }}</td>
-              <td class="px-6 py-4 text-gray-700">{{ p.archivos.length }} archivo(s)</td>
-              <td class="px-6 py-4 whitespace-nowrap">
-                <BaseButton :icon="mdiArrowRight" color="info" small outline label="Ver"
-                  :href="route('procesos.edit', p.id)" title="Ver detalles del proceso" />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </CardBox>
+    </div>
   </LayoutDashboard>
 </template>
