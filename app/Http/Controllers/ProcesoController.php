@@ -31,15 +31,19 @@ class ProcesoController extends Controller
     }
     public function index(Request $request)
     {
-        //
+
         $query = Proceso::with('departamento'); // Cargar la relación
 
-        // if (!auth()->user()->hasRole('Admin')) {
-        //     $query->where('user_id', auth()->id());
-        // }
-        // Si NO es Admin NI Procesos, solo ver sus propios registros
         if (!auth()->user()->hasAnyRole(['Admin', 'Procesos'])) {
-            $query->where('user_id', auth()->id());
+            $user = auth()->user();
+
+            $query->where(function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+
+                if ($user->departamento_id) {
+                    $q->orWhere('departamento_id', $user->departamento_id);
+                }
+            });
         }
 
         if ($request->filled('search')) {
@@ -67,11 +71,14 @@ class ProcesoController extends Controller
     public function create()
     {
         $departamentos = Departamento::select('id', 'nombre as name')->get();
+        $user = auth()->user();
 
         return Inertia::render('Proceso/Create', [
             'titulo' => 'Crear Registro de Proceso',
             'routeName' => $this->routeName,
             'departamentos' => $departamentos,
+            'departamento_id' => $user->departamento_id, // se pasa directo al form
+
         ]);
     }
 

@@ -19,12 +19,14 @@ const props = defineProps({
   titulo: String,
   routeName: String,
   departamentos: Array,
+  departamento_id: Number,
 });
 
 const form = useForm({
   nombre: '',
   descripcion: '',
-  departamento_id: '',
+  //departamento_id: '',
+  departamento_id: props.departamento_id || '',
   fecha_solicitud: '',
   fecha_entrega: '',
   fecha_inicio_vigencia: '',
@@ -35,7 +37,7 @@ const form = useForm({
   nombre_autorizacion: '',
   ruta_documento: [],
 });
-
+console.log(props.departamento_id);
 const handleSubmit = () => {
   form.post(route(`${props.routeName}store`));
 };
@@ -62,7 +64,7 @@ const handleSubmit = () => {
         <!-- Departamento -->
         <FormField label="Departamento" :error="form.errors.departamento_id">
           <FormControl v-model="form.departamento_id" :options="departamentos" type="select"
-            label-key="nombre_departamento" value-key="id" :icon="mdiOfficeBuilding" required />
+            label-key="nombre" value-key="id" :icon="mdiOfficeBuilding" required  :disabled="!!form.departamento_id"/>
         </FormField>
         <!-- Fecha de creación -->
         <FormField label="Fecha de creación" :error="form.errors.fecha_solicitud">
@@ -89,7 +91,7 @@ const handleSubmit = () => {
           <FormControlSelect v-model="form.estatus" type="select" :icon="mdiFormatListChecks" :options="[
             { value: 'Diseño', text: 'En Diseño' },
             { value: 'Revisión', text: 'Revisión' },
-            { value: 'Validación', text: 'Validación' },           
+            { value: 'Validación', text: 'Validación' },
           ]" required />
         </FormField>
         <!-- Número de usuarios -->
