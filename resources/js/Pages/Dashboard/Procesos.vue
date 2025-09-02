@@ -181,14 +181,14 @@ console.log(props.procesosPaginated) ;
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
                 <tr v-for="item in procesosPaginated.data" :key="item.id" class="hover:bg-gray-50">
-                  <td class="px-4 py-3 whitespace-nowrap">
+                  <td data-label="Nombre" class="px-4 py-3 whitespace-nowrap">
                     <div class="text-sm font-medium text-gray-900 truncate max-w-[150px]">{{ item.nombre }}</div>
                     <div class="text-xs text-gray-500 truncate max-w-[150px]">{{ item.descripcion.substring(0, 30) }}...</div>
                   </td>
-                  <td class="px-4 py-3 whitespace-nowrap">
+                  <td data-label="Departamento" class="px-4 py-3 whitespace-nowrap">
                     <div class="text-xs text-gray-900">{{ item.departamento?.nombre }}</div>
                   </td>
-                  <td class="px-4 py-3 whitespace-nowrap">
+                  <td data-label="Estatus" class="px-4 py-3 whitespace-nowrap">
                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" 
                           :class="{
                             'bg-green-100 text-green-800': item.estatus === 'Validación',
@@ -199,7 +199,7 @@ console.log(props.procesosPaginated) ;
                       {{ item.estatus }}
                     </span>
                   </td>
-                  <td class="px-4 py-3 whitespace-nowrap text-xs" 
+                  <td data-label="Vencimiento" class="px-4 py-3 whitespace-nowrap text-xs" 
                       :class="new Date(item.fecha_fin_vigencia) < new Date() ? 'text-red-600 font-bold' : 'text-gray-500'">
                     {{ moment(item.fecha_fin_vigencia).format("DD-MM-YYYY") }}
                     <div v-if="new Date(item.fecha_fin_vigencia) < new Date()" class="text-xxs">VENCIDO</div>
@@ -253,14 +253,14 @@ console.log(props.procesosPaginated) ;
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
                 <tr v-for="item in certificacionesPaginated.data" :key="item.id" class="hover:bg-gray-50">
-                  <td class="px-4 py-3 whitespace-nowrap">
+                  <td data-label="Nombre" class="px-4 py-3 whitespace-nowrap">
                     <div class="text-sm font-medium text-gray-900 truncate max-w-[150px]">{{ item.nombre }}</div>
                     <div class="text-xs text-gray-500 truncate max-w-[150px]">{{ item.descripcion.substring(0, 30) }}...</div>
                   </td>
-                  <td class="px-4 py-3 whitespace-nowrap">
+                  <td data-label="Departamento" class="px-4 py-3 whitespace-nowrap">
                     <div class="text-xs text-gray-900">{{ item.departamento?.nombre }}</div>
                   </td>
-                  <td class="px-4 py-3 whitespace-nowrap">
+                  <td data-label="Estatus" class="px-4 py-3 whitespace-nowrap">
                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" 
                           :class="{
                             'bg-green-100 text-green-800': item.estatus === 'Validación',
@@ -271,7 +271,7 @@ console.log(props.procesosPaginated) ;
                       {{ item.estatus }}
                     </span>
                   </td>
-                  <td class="px-4 py-3 whitespace-nowrap text-xs" 
+                  <td data-label="Vencimiento" class="px-4 py-3 whitespace-nowrap text-xs" 
                       :class="new Date(item.fecha_fin_vigencia) < new Date() ? 'text-red-600 font-bold' : 'text-gray-500'">
                     {{ moment(item.fecha_fin_vigencia).format("DD-MM-YYYY") }}
                     <div v-if="new Date(item.fecha_fin_vigencia) < new Date()" class="text-xxs">VENCIDO</div>

@@ -19,7 +19,6 @@ const props = defineProps({
   proximosProcesos: Array,
   procesos: Object,
 })
-console.log(props.stats) ;
 // Colores de estatus
 const estatusColor = (estatus) => {
   switch (estatus) {
@@ -76,10 +75,9 @@ const estatusColor = (estatus) => {
       <CardBox class="hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
         <div class="flex items-center">
           <div class="bg-green-100 p-4 rounded-full mr-4">
-            <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" />
-            </svg>
+           <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/>
+          </svg>
           </div>
           <div>
             <h3 class="text-sm font-medium text-gray-500">Con Documentos</h3>
@@ -91,9 +89,9 @@ const estatusColor = (estatus) => {
       <CardBox class="hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
         <div class="flex items-center">
           <div class="bg-red-100 p-4 rounded-full mr-4">
-            <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M4 4h12v12H4z" />
-            </svg>
+           <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm10 7a1 1 0 10-2 0 1 1 0 002 0zm-4 0a1 1 0 10-2 0 1 1 0 002 0z" clip-rule="evenodd"/>
+          </svg>
           </div>
           <div>
             <h3 class="text-sm font-medium text-gray-500">Sin Documentos</h3>
@@ -168,15 +166,15 @@ const estatusColor = (estatus) => {
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
               <tr v-for="p in procesos.data" :key="p.id" class="hover:bg-gray-50 transition even:bg-gray-50">
-                <td class="px-6 py-4 font-medium text-gray-700">{{ p.nombre }}</td>
-                <td class="px-6 py-4 text-gray-600">{{ p.departamento?.nombre }}</td>
-                <td class="px-6 py-4">
+                <td data-label="Nombre" class="px-6 py-4 font-medium text-gray-700">{{ p.nombre }}</td>
+                <td data-label="Departamento" class="px-6 py-4 text-gray-600">{{ p.departamento?.nombre }}</td>
+                <td data-label="Estatus" class="px-6 py-4">
                   <span :class="['px-3 py-1 rounded-full text-xs font-semibold', estatusColor(p.estatus)]">
                     {{ p.estatus }}
                   </span>
                 </td>
-                <td class="px-6 py-4 text-gray-600">{{ p.fecha_fin_vigencia }}</td>
-                <td class="px-6 py-4 text-gray-700">{{ p.archivos.length }} archivo(s)</td>
+                <td data-label="Fin vigencia" class="px-6 py-4 text-gray-600">{{ p.fecha_fin_vigencia }}</td>
+                <td data-label="Archivo(s)" class="px-6 py-4 text-gray-700">{{ p.archivos.length }} archivo(s)</td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <BaseButton :icon="mdiArrowRight" color="info" small outline label="Ver"
                     :href="route('procesos.edit', p.id)" title="Ver detalles del proceso" />

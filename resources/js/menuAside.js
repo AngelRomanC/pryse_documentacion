@@ -170,25 +170,7 @@ export default [
         icon: mdiAccountMultiple,
         role: "Procesos",
     }, 
-    {
-      route: "roles.index",
-      label: "Roles",
-      icon: mdiShieldAccount,
-      role: "Procesos",
-    },
-    
-    {
-      route: "modules.index",
-      label: "Módulos",
-      icon: mdiViewModule,
-      role: "Procesos",
-    },
-    {
-      route: "permisos.index",
-      label: "Permisos",
-      icon: mdiKeyChain,
-      role: "Procesos",
-    }, 
+   
   ],
 },
   
@@ -229,13 +211,7 @@ export default [
   label: "Dashboard",
   role: "Ejecutivo"
   },
-  {
-    href: "/dashboard",
-    to: "/dashboard",
-    icon: mdiMonitor,
-    label: "Dashboard",
-    role: "Ejecutivo" 
-  },
+
   {
     route: "procesos.index",
     label: "Procesos",

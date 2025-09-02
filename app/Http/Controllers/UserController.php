@@ -50,7 +50,13 @@ class UserController extends Controller
         // $query = User::query();
         $query = User::query()->with('roles');
 
-
+        // Si el usuario logueado es de tipo "Procesos", filtramos solo ejecutivos
+        if (auth()->user()->role === 'Procesos') {
+            $query->whereHas('roles', function ($q) {
+                $q->where('name', 'Ejecutivo');
+            });
+        }
+        
         // Aplicar búsqueda si hay un parámetro `search`
         if ($request->has('search') && $request->search !== null) {
             $query->where('name', 'like', '%' . $request->search . '%');
@@ -141,35 +147,35 @@ class UserController extends Controller
             'titulo' => 'Modificar Usuario ',
             'usuario' => $usuario,
             'routeName' => $this->routeName,
-            'roles' =>  $roles, // Roles disponibles
+            'roles' => $roles, // Roles disponibles
             'departamentos' => $departamentos,
         ]);
     }
-public function edit2($id)
-{
-    if (auth()->user()->hasRole('Procesos')) {
-        // Solo permitir rol Ejecutivo
-        $roles = Role::where('name', 'Ejecutivo')->get();
-        $departamentos = Departamento::select('id', 'nombre as name')->get();
-    } else {
-        // Todos los roles
-        $roles = Role::all();
-        $departamentos = null; // No se muestran
+    public function edit2($id)
+    {
+        if (auth()->user()->hasRole('Procesos')) {
+            // Solo permitir rol Ejecutivo
+            $roles = Role::where('name', 'Ejecutivo')->get();
+            $departamentos = Departamento::select('id', 'nombre as name')->get();
+        } else {
+            // Todos los roles
+            $roles = Role::all();
+            $departamentos = null; // No se muestran
+        }
+
+        $usuario = User::with(['roles', 'departamento.departamento'])->find($id);
+
+        // Extraer departamento_id si existe
+        $usuario->departamento_id = $usuario->departamento->departamento_id ?? null;
+
+        return Inertia::render("Seguridad/Usuarios/Edit", [
+            'titulo' => 'Modificar Usuario',
+            'usuario' => $usuario,
+            'routeName' => $this->routeName,
+            'roles' => $roles,
+            'departamentos' => $departamentos,
+        ]);
     }
-
-    $usuario = User::with(['roles', 'departamento.departamento'])->find($id);
-
-    // Extraer departamento_id si existe
-    $usuario->departamento_id = $usuario->departamento->departamento_id ?? null;
-
-    return Inertia::render("Seguridad/Usuarios/Edit", [
-        'titulo' => 'Modificar Usuario',
-        'usuario' => $usuario,
-        'routeName' => $this->routeName,
-        'roles' => $roles,
-        'departamentos' => $departamentos,
-    ]);
-}
 
     public function update(UpdateUserRequest $request, $id)
     {
