@@ -6,23 +6,45 @@ import {
   mdiViewDashboard, 
   mdiAccountMultiple , 
   mdiKeyChain ,
-  mdiOfficeBuilding,           // departamentos
-  mdiTrademark,        // marcas
-  mdiShieldAccount,    // roles
-  mdiLockCheck,        // permisos
-  mdiLaptop,        // inventario
-  mdiServer,           // sistema
-  mdiClipboardFlow,    // procesos
-  mdiCertificate,      // certificaciones
+  mdiOfficeBuilding,         
+  mdiTrademark,       
+  mdiShieldAccount,    
+  mdiClipboardList,       
+  mdiLaptop,        
+  mdiServer,          
+  mdiClipboardFlow,    
+  mdiCertificate,     
 } from "@mdi/js";
 
 export default [
+// {
+//     href: "/dashboard",
+//     to: "/dashboard",
+//     icon: mdiViewDashboard,
+//     label: "Dashboard",
+//     role: "Admin" //Vistas 
+// },
+
 {
-    href: "/dashboard",
-    to: "/dashboard",
-    icon: mdiViewDashboard,
-    label: "Dashboard",
-    role: "Admin" //Vistas 
+  label: "Dashboard",
+  icon: mdiViewDashboard,
+  role: "Admin",
+  menu: [
+    {
+        href:"/dashboard",
+        label: "Inventario",
+        icon: mdiClipboardList,
+        role: "Admin",
+    }, 
+    {
+      route: "dashboard.procesos",
+      label: "Procesos & Cerificaciones",
+      icon: mdiShieldAccount,
+      role: "Admin",
+    },
+    
+   
+  ],
 },
 
 {
@@ -171,8 +193,8 @@ export default [
         role: "Procesos",
     }, 
    
-  ],
-},
+   ],
+  },
   
   {
     label: "Catálogos",
@@ -205,11 +227,11 @@ export default [
   
   //Modulos a Ejecutivo de sistema 
 
-    {
-  href: "/dashboard-ejecutivo",
-  icon: mdiViewDashboard,
-  label: "Dashboard",
-  role: "Ejecutivo"
+  {
+    href: "/dashboard-ejecutivo",
+    icon: mdiViewDashboard,
+    label: "Dashboard",
+    role: "Ejecutivo"
   },
 
   {

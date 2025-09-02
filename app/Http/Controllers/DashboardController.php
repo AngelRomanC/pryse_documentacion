@@ -44,58 +44,60 @@ class DashboardController extends Controller
         }
 
         if ($user->hasRole('Procesos')) {
-                    
-            $procesosQuery = Proceso::query();
-            $certificacionesQuery = Certificacion::query();
 
-            // Procesos con paginación
-            $procesosPaginated = $procesosQuery->with('departamento')
-                ->orderBy('created_at', 'desc')
-                ->paginate(5, ['*'], 'procesos_page')
-                ->withQueryString();
+            // $procesosQuery = Proceso::query();
+            // $certificacionesQuery = Certificacion::query();
+
+            // // Procesos con paginación
+            // $procesosPaginated = $procesosQuery->with('departamento')
+            //     ->orderBy('created_at', 'desc')
+            //     ->paginate(5, ['*'], 'procesos_page')
+            //     ->withQueryString();
 
 
-            $procesos = $procesosPaginated->getCollection();
-            $procesosPorVencer = $procesos->filter(function ($proceso) {
-                return Carbon::parse($proceso->fecha_fin_vigencia)->lte(Carbon::now()->addDays(30));
-            })->count();
-            $procesosPorEstatus = $procesos->groupBy('estatus')->map->count();
+            // $procesos = $procesosPaginated->getCollection();
+            // $procesosPorVencer = $procesos->filter(function ($proceso) {
+            //     return Carbon::parse($proceso->fecha_fin_vigencia)->lte(Carbon::now()->addDays(30));
+            // })->count();
+            // $procesosPorEstatus = $procesos->groupBy('estatus')->map->count();
 
-            $certificacionesPaginated = $certificacionesQuery->with('departamento')
-                ->orderBy('created_at', 'desc')
-                ->paginate(5, ['*'], 'certificaciones_page')
-                ->withQueryString();
+            // $certificacionesPaginated = $certificacionesQuery->with('departamento')
+            //     ->orderBy('created_at', 'desc')
+            //     ->paginate(5, ['*'], 'certificaciones_page')
+            //     ->withQueryString();
 
-            $certificaciones = $certificacionesPaginated->getCollection();
-            $certificacionesPorVencer = $certificaciones->filter(function ($certificacion) {
-                return Carbon::parse($certificacion->fecha_fin_vigencia)->lte(Carbon::now()->addDays(30));
-            })->count();
-            $certificacionesPorEstatus = $certificaciones->groupBy('estatus')->map->count();
+            // $certificaciones = $certificacionesPaginated->getCollection();
+            // $certificacionesPorVencer = $certificaciones->filter(function ($certificacion) {
+            //     return Carbon::parse($certificacion->fecha_fin_vigencia)->lte(Carbon::now()->addDays(30));
+            // })->count();
+            // $certificacionesPorEstatus = $certificaciones->groupBy('estatus')->map->count();
 
-            // Actividades recientes (para el dashboard)
-            $actividadesRecientes = $procesos->concat($certificaciones)
-                ->sortByDesc('created_at')
-                ->take(5)
-                ->map(function ($item) {
-                    $item->__typename = $item instanceof Proceso ? 'Proceso' : 'Certificacion';
-                    return $item;
-                })
-                ->values()
-                ->all();
+            // // Actividades recientes (para el dashboard)
+            // $actividadesRecientes = $procesos->concat($certificaciones)
+            //     ->sortByDesc('created_at')
+            //     ->take(5)
+            //     ->map(function ($item) {
+            //         $item->__typename = $item instanceof Proceso ? 'Proceso' : 'Certificacion';
+            //         return $item;
+            //     })
+            //     ->values()
+            //     ->all();
 
-            return Inertia::render('Dashboard/Procesos', [
-                'totalProcesos' => $procesosPaginated->total(),
-                'procesosPorVencer' => $procesosPorVencer,
-                'procesosPorEstatus' => $procesosPorEstatus,
-                'procesosPaginated' => $procesosPaginated,
+            // return Inertia::render('Dashboard/Procesos', [
+            //     'totalProcesos' => $procesosPaginated->total(),
+            //     'procesosPorVencer' => $procesosPorVencer,
+            //     'procesosPorEstatus' => $procesosPorEstatus,
+            //     'procesosPaginated' => $procesosPaginated,
 
-                'totalCertificaciones' => $certificacionesPaginated->total(),
-                'certificacionesPorVencer' => $certificacionesPorVencer,
-                'certificacionesPorEstatus' => $certificacionesPorEstatus,
-                'certificacionesPaginated' => $certificacionesPaginated,
+            //     'totalCertificaciones' => $certificacionesPaginated->total(),
+            //     'certificacionesPorVencer' => $certificacionesPorVencer,
+            //     'certificacionesPorEstatus' => $certificacionesPorEstatus,
+            //     'certificacionesPaginated' => $certificacionesPaginated,
 
-                'actividadesRecientes' => $actividadesRecientes
-            ]);
+            //     'actividadesRecientes' => $actividadesRecientes
+            // ]);
+
+              return redirect()->route('dashboard.procesos');
         }
 
         if ($user->hasRole('Ejecutivo')) {
@@ -104,39 +106,58 @@ class DashboardController extends Controller
 
         }
     }
-    public function dashboardEjecutivo2()
+    public function dashboardProcesos()
     {
-        $user = auth()->user();
-        $departamentoId = $user->departamento?->departamento_id;
+        $procesosQuery = Proceso::query();
+        $certificacionesQuery = Certificacion::query();
 
-        if (!$departamentoId) {
-            return Inertia::render('Dashboard/Ejecutivo', [
-                'titulo' => 'Dashboard Ejecutivo',
-                'stats' => [],
-                'procesos' => [],
-            ]);
-        }
+        $procesosPaginated = $procesosQuery->with('departamento')
+            ->orderBy('created_at', 'desc')
+            ->paginate(5, ['*'], 'procesos_page')
+            ->withQueryString();
 
-        // Consultar procesos de su departamento
-        $procesos = Proceso::with('departamento')
-            ->where('departamento_id', $departamentoId)
-            ->orderBy('id', 'desc')
-            ->get();
+        $procesos = $procesosPaginated->getCollection();
+        $procesosPorVencer = $procesos->filter(function ($proceso) {
+            return Carbon::parse($proceso->fecha_fin_vigencia)->lte(Carbon::now()->addDays(30));
+        })->count();
+        $procesosPorEstatus = $procesos->groupBy('estatus')->map->count();
 
-        // Estadísticas simples
-        $stats = [
-            'total' => $procesos->count(),
-            'pendientes' => $procesos->where('estatus', 'Revisión')->count(),
-            'con_documentos' => $procesos->filter(fn($p) => $p->archivos->count() > 0)->count(),
-            'sin_documentos' => $procesos->filter(fn($p) => $p->archivos->count() === 0)->count(),
-        ];
+        $certificacionesPaginated = $certificacionesQuery->with('departamento')
+            ->orderBy('created_at', 'desc')
+            ->paginate(5, ['*'], 'certificaciones_page')
+            ->withQueryString();
 
-        return Inertia::render('Dashboard/Ejecutivo', [
-            'titulo' => 'Dashboard Ejecutivo',
-            'stats' => $stats,
-            'procesos' => $procesos,
+        $certificaciones = $certificacionesPaginated->getCollection();
+        $certificacionesPorVencer = $certificaciones->filter(function ($certificacion) {
+            return Carbon::parse($certificacion->fecha_fin_vigencia)->lte(Carbon::now()->addDays(30));
+        })->count();
+        $certificacionesPorEstatus = $certificaciones->groupBy('estatus')->map->count();
+
+        $actividadesRecientes = $procesos->concat($certificaciones)
+            ->sortByDesc('created_at')
+            ->take(5)
+            ->map(function ($item) {
+                $item->__typename = $item instanceof Proceso ? 'Proceso' : 'Certificacion';
+                return $item;
+            })
+            ->values()
+            ->all();
+
+        return Inertia::render('Dashboard/Procesos', [
+            'totalProcesos' => $procesosPaginated->total(),
+            'procesosPorVencer' => $procesosPorVencer,
+            'procesosPorEstatus' => $procesosPorEstatus,
+            'procesosPaginated' => $procesosPaginated,
+
+            'totalCertificaciones' => $certificacionesPaginated->total(),
+            'certificacionesPorVencer' => $certificacionesPorVencer,
+            'certificacionesPorEstatus' => $certificacionesPorEstatus,
+            'certificacionesPaginated' => $certificacionesPaginated,
+
+            'actividadesRecientes' => $actividadesRecientes
         ]);
     }
+
     public function dashboardEjecutivo()
     {
         $user = auth()->user();
@@ -158,13 +179,13 @@ class DashboardController extends Controller
             ->orderBy('id', 'desc')
             ->paginate(5, ['*'], 'procesos_ejecutivo')
             ->withQueryString();
-            
+
 
         $todosLosProcesos = Proceso::with('archivos')
             ->where('departamento_id', $departamentoId)
             ->get();
 
-   
+
         $stats = [
             'total' => $todosLosProcesos->count(),
             'pendientes' => $todosLosProcesos->where('estatus', 'Revisión')->count(),
@@ -172,7 +193,7 @@ class DashboardController extends Controller
             'sin_documentos' => $todosLosProcesos->filter(fn($p) => $p->archivos->count() === 0)->count(),
         ];
 
-      
+
         $porEstatus = [
             'Diseño' => $todosLosProcesos->where('estatus', 'Diseño')->count(),
             'Revisión' => $todosLosProcesos->where('estatus', 'Revisión')->count(),
@@ -191,7 +212,7 @@ class DashboardController extends Controller
             'stats' => $stats,
             'porEstatus' => $porEstatus,
             'proximosProcesos' => $proximosProcesos,
-            'procesos' => $procesos, 
+            'procesos' => $procesos,
         ]);
     }
 

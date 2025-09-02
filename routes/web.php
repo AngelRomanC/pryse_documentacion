@@ -63,14 +63,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/perfil', [UserController::class, 'perfil'])->name('usuarios.perfil');
     Route::post('actualizarPerfil', [UserController::class, 'updatePerfil'])->name('usuarios.update-perfil');
 
-    //Desarrolladores
-    Route::resource('usuarios-sistema', controller: UsuarioGeneralController::class);
-
-
-
-    //Alumno
-    Route::resource('alumno', AlumnoController::class)->parameters(['alumno' => 'alumno']);
-
     //Notificaciones 
     //Route::get('/notificaciones', [NotificationController::class, 'index']);
     Route::get('/notificaciones', [NotificationController::class, 'index'])->name('notifications.index');
@@ -100,22 +92,24 @@ Route::middleware('auth')->group(function () {
 
     //Procesos
     Route::resource('procesos', controller: ProcesoController::class);
-
     //Certificación
     Route::resource('certificacion', CertificacionController::class);
 
-    Route::middleware(['auth'])->group(function () {
-        Route::resource('roles', RoleController::class)->names('roles');
-        Route::resource('permisos', PermisosController::class);
-    });
+
+    Route::resource('roles', RoleController::class)->names('roles');
+    Route::resource('permisos', PermisosController::class);
+    Route::resource('modules', ModuleController::class);
+
+
 
     Route::get('/dashboard-ejecutivo', [DashboardController::class, 'dashboardEjecutivo'])
-     ->name('dashboard.ejecutivo');
+        ->name('dashboard.ejecutivo');
+
+    Route::get('/dashboard-procesos', [DashboardController::class, 'dashboardProcesos'])
+        ->name('dashboard.procesos');
 
 
 });
 
 require __DIR__ . '/auth.php';
-Route::middleware(['auth'])->group(function () {
-    Route::resource('modules', ModuleController::class);
-});
+
