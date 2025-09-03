@@ -28,8 +28,11 @@ const props = defineProps({
   routeName: String,
   roles: Array,
   departamentos: Array,
+  departamento_id: String,
 });
-console.log(props.usuario);
+console.log(props.departamentos);
+
+//console.log(props.usuario);
 const safeRoles = computed(() => props.roles || []);
 
 const form = useForm({

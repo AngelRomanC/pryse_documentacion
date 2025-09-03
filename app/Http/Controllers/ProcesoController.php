@@ -145,12 +145,16 @@ class ProcesoController extends Controller
         $departamentos = Departamento::select('id', 'nombre as name')->get();
         $proceso->load('archivos'); // Carga los archivos asociados al sistema
 
+
+
         return Inertia::render('Proceso/Edit', [ // Renderiza la vista de edición con los datos del sistema
             'titulo' => 'Editar Registro de Proceso', // Título de la página
             'proceso' => $proceso, // Datos del sistema
             'routeName' => $this->routeName, // Nombre de la ruta para el formulario
             'departamentos' => $departamentos, // Departamentos para el select
             'archivosPrincipales' => $proceso->archivos, // Archivos principales del sistema
+            'userRole' => auth()->user()->getRoleNames()->first(), 
+
         ]);
     }
 

@@ -56,7 +56,7 @@ class UserController extends Controller
                 $q->where('name', 'Ejecutivo');
             });
         }
-        
+
         // Aplicar búsqueda si hay un parámetro `search`
         if ($request->has('search') && $request->search !== null) {
             $query->where('name', 'like', '%' . $request->search . '%');
@@ -132,6 +132,7 @@ class UserController extends Controller
             // Solo permitir rol Ejecutivo
             $roles = Role::where('name', 'Ejecutivo')->get();
             $departamentos = Departamento::select('id', 'nombre as name')->get();
+            $user = auth()->user();
 
         } else {
             // Todos los roles
@@ -140,7 +141,7 @@ class UserController extends Controller
 
         }
         //$usuario = User::with('roles')->find($id);
-        $usuario = User::with(['roles', 'departamento'])->find($id);
+        $usuario = User::with(['roles', 'departamento.departamento'])->find($id);
 
 
         return Inertia::render("Seguridad/Usuarios/Edit", [
@@ -149,6 +150,8 @@ class UserController extends Controller
             'routeName' => $this->routeName,
             'roles' => $roles, // Roles disponibles
             'departamentos' => $departamentos,
+            'departamento_id' => $user->departamento_id,
+
         ]);
     }
     public function edit2($id)

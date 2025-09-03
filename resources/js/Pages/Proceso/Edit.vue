@@ -20,6 +20,7 @@ const props = defineProps({
   titulo: String,
   routeName: String,
   departamentos: Array,
+  userRole: String,
   proceso: Object,
   archivosPrincipales: {
     type: Array,
@@ -115,19 +116,19 @@ const handleSubmit = () => {
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <!-- Nombre de certificacion -->
         <FormField label="Nombre del sistema" :error="form.errors.nombre">
-          <FormControl v-model="form.nombre" type="text" placeholder="Nombre de certificación " :icon="mdiAbjadHebrew"
-            required class="bg-gray-100 cursor-not-allowed" title="Campo no editable - Documento Técnico fijo" />
+          <FormControl v-model="form.nombre" type="text" placeholder="Nombre del proceso " :icon="mdiAbjadHebrew"
+            required />
         </FormField>
         <!-- Descripcion -->
-        <FormField label="Descripcion de la certificación" :error="form.errors.descripcion">
-          <FormControl v-model="form.descripcion" type="text" placeholder="Descripcion de la certificación "
-            :icon="mdiFormatListChecks" required class="bg-gray-100 cursor-not-allowed"
-            title="Campo no editable - Documento Técnico fijo" />
+        <FormField label="Descripcion del proceso" :error="form.errors.descripcion">
+          <FormControl v-model="form.descripcion" type="text" placeholder="Descripcion del proceso "
+            :icon="mdiFormatListChecks" required />
         </FormField>
         <!-- Departamento -->
         <FormField label="Departamento" :error="form.errors.departamento_id">
-          <FormControl v-model="form.departamento_id" :options="departamentos" type="select"
-            label-key="nombre_departamento" value-key="id" :icon="mdiOfficeBuilding" required />
+          <FormControl v-model="form.departamento_id" :options="departamentos" type="select" label-key="nombre"
+            value-key="id" :icon="mdiOfficeBuilding" required :disabled="!(userRole === 'Admin' || userRole === 'Procesos')"
+            title="Campo no editable - Departamento fijo" />
         </FormField>
         <!-- Fecha de creación -->
         <FormField label="Fecha de creación" :error="form.errors.fecha_solicitud">
