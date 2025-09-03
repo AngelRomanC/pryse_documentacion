@@ -127,13 +127,12 @@ class UserController extends Controller
     }
     public function edit($id)
     {
-
+        $user = auth()->user();
         if (auth()->user()->hasRole('Procesos')) {
             // Solo permitir rol Ejecutivo
             $roles = Role::where('name', 'Ejecutivo')->get();
             $departamentos = Departamento::select('id', 'nombre as name')->get();
-            $user = auth()->user();
-
+           
         } else {
             // Todos los roles
             $roles = Role::all();
