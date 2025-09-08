@@ -97,7 +97,7 @@ class DashboardController extends Controller
             //     'actividadesRecientes' => $actividadesRecientes
             // ]);
 
-              return redirect()->route('dashboard.procesos');
+            return redirect()->route('dashboard.procesos');
         }
 
         if ($user->hasRole('Ejecutivo')) {
@@ -162,7 +162,6 @@ class DashboardController extends Controller
     {
         $user = auth()->user();
         $departamentoId = $user->departamento?->departamento_id;
-        $procesosQuery = Proceso::query();
 
         if (!$departamentoId) {
             return Inertia::render('Dashboard/Ejecutivo', [
@@ -170,7 +169,13 @@ class DashboardController extends Controller
                 'stats' => [],
                 'porEstatus' => [],
                 'proximosProcesos' => [],
-                'procesos' => [],
+                'procesos' => (object) [
+                    'data' => [],
+                    'links' => [],
+                    'current_page' => 1,
+                    'last_page' => 1,
+                    'total' => 0
+                ],
             ]);
         }
 
