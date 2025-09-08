@@ -28,11 +28,9 @@ const props = defineProps({
   routeName: String,
   roles: Array,
   departamentos: Array,
-  departamento_id: String,
+  //departamento_id: Number,
 });
-console.log(props.departamentos);
 
-//console.log(props.usuario);
 const safeRoles = computed(() => props.roles || []);
 
 const form = useForm({
@@ -43,11 +41,10 @@ const form = useForm({
   numero: props.usuario?.numero ?? '',
   email: props.usuario?.email ?? '',
   password: '',
-  departamento_id: props.usuario?.departamento_id ??'',
+  departamento_id: props.usuario.departamento?.departamento_id ??'',
   roles: props.usuario?.roles?.map(r => r.id) ?? [], // ahora array de IDs
 });
-console.log("departamento_id",props.usuario.departamento_id);
-console.log("apellido_paterno",props.usuario.apellido_paterno);
+
 
 
 const guardar = () => {

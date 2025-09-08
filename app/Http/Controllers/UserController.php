@@ -127,12 +127,12 @@ class UserController extends Controller
     }
     public function edit($id)
     {
-        $user = auth()->user();
+        //$user = auth()->user();
         if (auth()->user()->hasRole('Procesos')) {
             // Solo permitir rol Ejecutivo
             $roles = Role::where('name', 'Ejecutivo')->get();
             $departamentos = Departamento::select('id', 'nombre as name')->get();
-           
+
         } else {
             // Todos los roles
             $roles = Role::all();
@@ -140,7 +140,7 @@ class UserController extends Controller
 
         }
         //$usuario = User::with('roles')->find($id);
-        $usuario = User::with(['roles', 'departamento.departamento'])->find($id);
+        $usuario = User::with(['roles', 'departamento'])->find($id);
 
 
         return Inertia::render("Seguridad/Usuarios/Edit", [
@@ -149,36 +149,9 @@ class UserController extends Controller
             'routeName' => $this->routeName,
             'roles' => $roles, // Roles disponibles
             'departamentos' => $departamentos,
-            'departamento_id' => $user->departamento_id,
 
         ]);
     }
-    public function edit2($id)
-    {
-        if (auth()->user()->hasRole('Procesos')) {
-            // Solo permitir rol Ejecutivo
-            $roles = Role::where('name', 'Ejecutivo')->get();
-            $departamentos = Departamento::select('id', 'nombre as name')->get();
-        } else {
-            // Todos los roles
-            $roles = Role::all();
-            $departamentos = null; // No se muestran
-        }
-
-        $usuario = User::with(['roles', 'departamento.departamento'])->find($id);
-
-        // Extraer departamento_id si existe
-        $usuario->departamento_id = $usuario->departamento->departamento_id ?? null;
-
-        return Inertia::render("Seguridad/Usuarios/Edit", [
-            'titulo' => 'Modificar Usuario',
-            'usuario' => $usuario,
-            'routeName' => $this->routeName,
-            'roles' => $roles,
-            'departamentos' => $departamentos,
-        ]);
-    }
-
     public function update(UpdateUserRequest $request, $id)
     {
         $usuario = User::find($id);
@@ -197,6 +170,17 @@ class UserController extends Controller
         $usuario->update($data);
 
         $usuario->syncRoles($request->input('roles'));
+        
+        // Actualizar departamento si aplica
+        if ($request->filled('departamento_id')) {
+            UserDepartamento::updateOrCreate(
+                ['user_id' => $usuario->id],
+                ['departamento_id' => $request->departamento_id]
+            );
+        } else {
+            // Si quitas el departamento, lo eliminamos
+            UserDepartamento::where('user_id', $usuario->id)->delete();
+        }
 
         return redirect()->route("usuarios.index")->with('success', '¡Usuario Admin actualizado correctamente!');
     }

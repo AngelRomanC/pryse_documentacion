@@ -31,7 +31,6 @@ const props = defineProps({
   
   actividadesRecientes: Array
 });
-console.log(props.procesosPaginated) ;
 
 </script>
 <template>
