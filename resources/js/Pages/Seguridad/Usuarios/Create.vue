@@ -38,7 +38,7 @@ const form = useForm({
   email: '',
   password: '',
   departamento_id: null,
-  roles: [],
+  rol: null,
 });
 
 const guardar = () => {
@@ -114,28 +114,29 @@ const guardar = () => {
 
       <BaseDivider />
 
-      <!-- Roles -->
-      <FormField label="Asignar Roles" :error="form.errors.roles">
+      <!-- Rol único -->
+      <FormField label="Asignar Rol" :error="form.errors.rol">
         <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
-          <FormControlCheckbox
-            v-for="role in safeRoles"
-            :key="role.id"
-            v-model="form.roles"
-            :value="role.id"
-            :label="role.name"
-          />
+          <label v-for="role in safeRoles" :key="role.id" class="flex items-center space-x-2 cursor-pointer">
+            <input
+              type="radio"
+              :value="role.id"
+              v-model="form.rol"
+              class="form-radio text-blue-600"
+              required
+            />
+            <span>{{ role.name }}</span>
+          </label>
         </div>
 
-        <!-- Mostrar roles seleccionados -->
-        <div v-if="form.roles.length > 0" class="mt-4 p-3 bg-blue-50 rounded-lg">
-          <p class="text-sm font-medium text-blue-800">Roles seleccionados:</p>
+        <!-- Mostrar rol seleccionado -->
+        <div v-if="form.rol" class="mt-4 p-3 bg-blue-50 rounded-lg">
+          <p class="text-sm font-medium text-blue-800">Rol seleccionado:</p>
           <div class="flex flex-wrap gap-2 mt-2">
             <span
-              v-for="roleId in form.roles"
-              :key="roleId"
               class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
             >
-              {{ safeRoles.find(r => r.id === roleId)?.name }}
+              {{ safeRoles.find(r => r.id === form.rol)?.name }}
             </span>
           </div>
         </div>

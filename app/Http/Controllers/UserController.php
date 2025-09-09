@@ -51,11 +51,12 @@ class UserController extends Controller
         $query = User::query()->with('roles');
 
         // Si el usuario logueado es de tipo "Procesos", filtramos solo ejecutivos
-        if (auth()->user()->role === 'Procesos') {
+        if (auth()->user()->hasRole('Procesos')) {
             $query->whereHas('roles', function ($q) {
                 $q->where('name', 'Ejecutivo');
             });
         }
+
 
         // Aplicar búsqueda si hay un parámetro `search`
         if ($request->has('search') && $request->search !== null) {
@@ -110,7 +111,7 @@ class UserController extends Controller
             //'role' => $request->input('role'),
         ]);
 
-        $newUser->syncRoles($request->input('roles')); // acepta array  
+        $newUser->syncRoles([$request->input('rol')]); // ahora solo un rol
 
         // Guardar departamento si el rol es Ejecutivo
         if ($request->departamento_id) {
@@ -169,8 +170,8 @@ class UserController extends Controller
 
         $usuario->update($data);
 
-        $usuario->syncRoles($request->input('roles'));
-        
+        $usuario->syncRoles([$request->input('rol')]);
+
         // Actualizar departamento si aplica
         if ($request->filled('departamento_id')) {
             UserDepartamento::updateOrCreate(

@@ -65,7 +65,7 @@ const destroy = (id) => {
     <CardBox v-else class="mb-6" has-table>
       <table class="w-full border-collapse border text-sm">
         <thead>
-          <tr class="bg-gray-100">
+          <tr >
             <th class="border px-4 py-2">#</th>
             <th class="border px-4 py-2">Nombre</th>
             <th class="border px-4 py-2">Tipos Asociados</th>

@@ -22,22 +22,26 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => ['required', 'string', 'max:255'], // Nombre
-            'apellido_paterno' => ['required', 'string', 'max:255'], // Apellido paterno
-            'apellido_materno' => ['required', 'string', 'max:255'], // Apellido materno
-            'numero' => ['required', 'string', 'max:20'], // Número telefónico
+        $rules = [
+            'name' => ['required', 'string', 'max:255'],
+            'apellido_paterno' => ['required', 'string', 'max:255'],
+            'apellido_materno' => ['required', 'string', 'max:255'],
+            'numero' => ['required', 'string', 'max:20'],
             'email' => [
                 'required',
                 'string',
                 'email',
                 'max:255',
                 Rule::unique('users')->ignore($this->id)
-            ], // Email, ignorando el actual
+            ],
             'password' => ['nullable', 'string', 'min:8'],
-            'roles' => ['required', 'array'],
-            'roles.*' => ['integer', 'exists:roles,id'],
+            'rol' => ['required', 'integer', 'exists:roles,id'],
         ];
+        // Validación específica si el rol seleccionado es Ejecutivo (opcional)
+        // if ($this->rol == ID_DEL_ROL_EJECUTIVO) {
+        //     $rules['departamento_id'] = 'required|exists:departamentos,id';
+        // }
+        return $rules;
     }
     public function attributes(): array
     {

@@ -22,21 +22,27 @@ class StoreUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $ID_ROL_EJECUTIVO = 4;
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'apellido_paterno' => ['required', 'string', 'max:255'],
             'apellido_materno' => ['required', 'string', 'max:255'],
             'numero' => ['required', 'digits:10'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required','string', 'min:8'],
-
-            'roles' => ['required', 'array'],
-            'roles.*' => ['integer', 'exists:roles,id'],
+            'rol' => ['required', 'integer', 'exists:roles,id'],
         ];
-         // Validación específica si el rol seleccionado es Ejecutivo
-        if (in_array('Ejecutivo', $this->roles ?? [])) {
-            $rules['departamento_id'] = 'required|exists:departamentos,id';
-        }
+        // Validación específica si el rol seleccionado es Ejecutivo (opcional, ajusta según tu lógica)
+        // if ($this->rol == ID_DEL_ROL_EJECUTIVO) {
+        //     $rules['departamento_id'] = 'required|exists:departamentos,id';
+        // }
+           // Validación condicional: departamento requerido si el rol es Ejecutivo
+    if ($this->input('rol') == $ID_ROL_EJECUTIVO) {
+        $rules['departamento_id'] = ['required', 'integer', 'exists:departamentos,id'];
+    }
+   
+        return $rules;
+        
     }
 
     public function messages()
@@ -56,6 +62,7 @@ class StoreUserRequest extends FormRequest
             'roles.required' => 'Debes asignar al menos un rol al usuario.',
             'roles.array' => 'El formato de roles no es válido.',
             'roles.*.exists' => 'Alguno de los roles seleccionados no existe en el sistema.',
+            'departamento_id.required' => 'El campo departamento es obligatorio cuando el rol es Ejecutivo.',
 
         ];
     }
