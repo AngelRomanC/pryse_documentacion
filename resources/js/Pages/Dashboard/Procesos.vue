@@ -158,150 +158,149 @@ const props = defineProps({
     </div>
 
     <!-- Contenedor de dos columnas para las tablas -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-      <!-- Columna 1: Procesos -->
-      <div class="space-y-6">
-        <SectionTitleLineWithButton 
-          :icon="mdiFileDocument" 
-          title="Procesos Recientes" 
-        />
+  <!-- Contenedor de dos columnas para las tablas -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+  <!-- Columna 1: Procesos -->
+  <div class="space-y-6">
+    <SectionTitleLineWithButton 
+      :icon="mdiFileDocument" 
+      title="Procesos Recientes" 
+    />
 
-        <CardBox class="overflow-y-auto max-h-[600px]">
-          <div class="overflow-x-auto flex-grow">
-            <table class="w-full">
-              <thead>
-                <tr class="bg-gray-50">
-                  <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
-                  <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Depto</th>
-                  <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estatus</th>
-                  <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vencimiento</th>
-                  <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
-                </tr>
-              </thead>
-              <tbody class="bg-white divide-y divide-gray-200">
-                <tr v-for="item in procesosPaginated.data" :key="item.id" class="hover:bg-gray-50">
-                  <td data-label="Nombre" class="px-4 py-3 whitespace-nowrap">
-                    <div class="text-sm font-medium text-gray-900 truncate max-w-[150px]">{{ item.nombre }}</div>
-                    <div class="text-xs text-gray-500 truncate max-w-[150px]">{{ item.descripcion.substring(0, 30) }}...</div>
-                  </td>
-                  <td data-label="Departamento" class="px-4 py-3 whitespace-nowrap">
-                    <div class="text-xs text-gray-900">{{ item.departamento?.nombre }}</div>
-                  </td>
-                  <td data-label="Estatus" class="px-4 py-3 whitespace-nowrap">
-                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" 
-                          :class="{
-                            'bg-green-100 text-green-800': item.estatus === 'Validación',
-                            'bg-yellow-100 text-yellow-800': item.estatus === 'Revisión',
-                            'bg-blue-100 text-blue-800': item.estatus === 'Diseño',
-                            'bg-red-100 text-red-800': item.estatus === 'Inactivo'
-                          }">
-                      {{ item.estatus }}
-                    </span>
-                  </td>
-                  <td data-label="Vencimiento" class="px-4 py-3 whitespace-nowrap text-xs" 
-                      :class="new Date(item.fecha_fin_vigencia) < new Date() ? 'text-red-600 font-bold' : 'text-gray-500'">
-                    {{ moment(item.fecha_fin_vigencia).format("DD-MM-YYYY") }}
-                    <div v-if="new Date(item.fecha_fin_vigencia) < new Date()" class="text-xxs">VENCIDO</div>
-                    <div v-else class="text-xxs">
-                      {{ Math.ceil((new Date(item.fecha_fin_vigencia) - new Date()) / (1000 * 60 * 60 * 24)) }} días
-                    </div>
-                  </td>
-                  <td class="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
-                    <BaseButton 
-                      label="Ver" 
-                      color="info" 
-                      x-small 
-                      outline 
-                      :icon="mdiArrowRight"
-                      :href="route('procesos.edit', item.id)"
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          
-          <PaginationDashboard 
-            :currentPage="procesosPaginated.current_page" 
-            :links="procesosPaginated.links"
-            :total="procesosPaginated.last_page" 
-            pageParam="procesos_page"
-        
-          />
-        </CardBox>
+    <CardBox class="overflow-y-auto max-h-[600px]">
+      <div class="overflow-x-auto flex-grow">
+        <table class="w-full">
+          <thead>
+            <tr class="bg-gray-50 dark:bg-gray-700">
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nombre</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Depto</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Estatus</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Vencimiento</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <tr v-for="item in procesosPaginated.data" :key="item.id" class="hover:bg-gray-50 dark:hover:bg-gray-700">
+              <td data-label="Nombre" class="px-4 py-3 whitespace-nowrap">
+                <div class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate max-w-[150px]">{{ item.nombre }}</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[150px]">{{ item.descripcion.substring(0, 30) }}...</div>
+              </td>
+              <td data-label="Departamento" class="px-4 py-3 whitespace-nowrap">
+                <div class="text-xs text-gray-900 dark:text-gray-300">{{ item.departamento?.nombre }}</div>
+              </td>
+              <td data-label="Estatus" class="px-4 py-3 whitespace-nowrap">
+                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" 
+                      :class="{
+                        'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200': item.estatus === 'Validación',
+                        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200': item.estatus === 'Revisión',
+                        'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200': item.estatus === 'Diseño',
+                        'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200': item.estatus === 'Inactivo'
+                      }">
+                  {{ item.estatus }}
+                </span>
+              </td>
+              <td data-label="Vencimiento" class="px-4 py-3 whitespace-nowrap text-xs" 
+                  :class="new Date(item.fecha_fin_vigencia) < new Date() ? 'text-red-600 dark:text-red-400 font-bold' : 'text-gray-500 dark:text-gray-400'">
+                {{ moment(item.fecha_fin_vigencia).format("DD-MM-YYYY") }}
+                <div v-if="new Date(item.fecha_fin_vigencia) < new Date()" class="text-xxs">VENCIDO</div>
+                <div v-else class="text-xxs">
+                  {{ Math.ceil((new Date(item.fecha_fin_vigencia) - new Date()) / (1000 * 60 * 60 * 24)) }} días
+                </div>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
+                <BaseButton 
+                  label="Ver" 
+                  color="info" 
+                  x-small 
+                  outline 
+                  :icon="mdiArrowRight"
+                  :href="route('procesos.edit', item.id)"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
+      
+      <PaginationDashboard 
+        :currentPage="procesosPaginated.current_page" 
+        :links="procesosPaginated.links"
+        :total="procesosPaginated.last_page" 
+        pageParam="procesos_page"
+      />
+    </CardBox>
+  </div>
 
-      <!-- Columna 2: Certificaciones -->
-      <div class="space-y-6">
-        <SectionTitleLineWithButton 
-          :icon="mdiFileDocument" 
-          title="Certificaciones Recientes" 
-        />
+  <!-- Columna 2: Certificaciones -->
+  <div class="space-y-6">
+    <SectionTitleLineWithButton 
+      :icon="mdiFileDocument" 
+      title="Certificaciones Recientes" 
+    />
 
-        <CardBox class="overflow-y-auto max-h-[600px]">
-          <div class="overflow-x-auto flex-grow">
-            <table class="w-full">
-              <thead>
-                <tr class="bg-gray-50">
-                  <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
-                  <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Depto</th>
-                  <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estatus</th>
-                  <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vencimiento</th>
-                  <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
-                </tr>
-              </thead>
-              <tbody class="bg-white divide-y divide-gray-200">
-                <tr v-for="item in certificacionesPaginated.data" :key="item.id" class="hover:bg-gray-50">
-                  <td data-label="Nombre" class="px-4 py-3 whitespace-nowrap">
-                    <div class="text-sm font-medium text-gray-900 truncate max-w-[150px]">{{ item.nombre }}</div>
-                    <div class="text-xs text-gray-500 truncate max-w-[150px]">{{ item.descripcion.substring(0, 30) }}...</div>
-                  </td>
-                  <td data-label="Departamento" class="px-4 py-3 whitespace-nowrap">
-                    <div class="text-xs text-gray-900">{{ item.departamento?.nombre }}</div>
-                  </td>
-                  <td data-label="Estatus" class="px-4 py-3 whitespace-nowrap">
-                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" 
-                          :class="{
-                            'bg-green-100 text-green-800': item.estatus === 'Validación',
-                            'bg-yellow-100 text-yellow-800': item.estatus === 'Revisión',
-                            'bg-blue-100 text-blue-800': item.estatus === 'Diseño',
-                            'bg-red-100 text-red-800': item.estatus === 'Inactivo'
-                          }">
-                      {{ item.estatus }}
-                    </span>
-                  </td>
-                  <td data-label="Vencimiento" class="px-4 py-3 whitespace-nowrap text-xs" 
-                      :class="new Date(item.fecha_fin_vigencia) < new Date() ? 'text-red-600 font-bold' : 'text-gray-500'">
-                    {{ moment(item.fecha_fin_vigencia).format("DD-MM-YYYY") }}
-                    <div v-if="new Date(item.fecha_fin_vigencia) < new Date()" class="text-xxs">VENCIDO</div>
-                    <div v-else class="text-xxs">
-                      {{ Math.ceil((new Date(item.fecha_fin_vigencia) - new Date()) / (1000 * 60 * 60 * 24)) }} días
-                    </div>
-                  </td>
-                  <td class="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
-                    <BaseButton 
-                      label="Ver" 
-                      color="success" 
-                      x-small 
-                      outline
-                      :icon="mdiArrowRight" 
-                      :href="route('certificacion.edit', item.id)"
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          
-          <PaginationDashboard 
-            :currentPage="certificacionesPaginated.current_page" 
-            :links="certificacionesPaginated.links"
-            :total="certificacionesPaginated.last_page" 
-            pageParam="certificaciones_page"
-            
-          />
-        </CardBox>
+    <CardBox class="overflow-y-auto max-h-[600px]">
+      <div class="overflow-x-auto flex-grow">
+        <table class="w-full">
+          <thead>
+            <tr class="bg-gray-50 dark:bg-gray-700">
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Nombre</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Depto</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Estatus</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Vencimiento</th>
+              <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+            <tr v-for="item in certificacionesPaginated.data" :key="item.id" class="hover:bg-gray-50 dark:hover:bg-gray-700">
+              <td data-label="Nombre" class="px-4 py-3 whitespace-nowrap">
+                <div class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate max-w-[150px]">{{ item.nombre }}</div>
+                <div class="text-xs text-gray-500 dark:text-gray-400 truncate max-w-[150px]">{{ item.descripcion.substring(0, 30) }}...</div>
+              </td>
+              <td data-label="Departamento" class="px-4 py-3 whitespace-nowrap">
+                <div class="text-xs text-gray-900 dark:text-gray-300">{{ item.departamento?.nombre }}</div>
+              </td>
+              <td data-label="Estatus" class="px-4 py-3 whitespace-nowrap">
+                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" 
+                      :class="{
+                        'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200': item.estatus === 'Validación',
+                        'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200': item.estatus === 'Revisión',
+                        'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200': item.estatus === 'Diseño',
+                        'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200': item.estatus === 'Inactivo'
+                      }">
+                  {{ item.estatus }}
+                </span>
+              </td>
+              <td data-label="Vencimiento" class="px-4 py-3 whitespace-nowrap text-xs" 
+                  :class="new Date(item.fecha_fin_vigencia) < new Date() ? 'text-red-600 dark:text-red-400 font-bold' : 'text-gray-500 dark:text-gray-400'">
+                {{ moment(item.fecha_fin_vigencia).format("DD-MM-YYYY") }}
+                <div v-if="new Date(item.fecha_fin_vigencia) < new Date()" class="text-xxs">VENCIDO</div>
+                <div v-else class="text-xxs">
+                  {{ Math.ceil((new Date(item.fecha_fin_vigencia) - new Date()) / (1000 * 60 * 60 * 24)) }} días
+                </div>
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap text-right text-sm font-medium">
+                <BaseButton 
+                  label="Ver" 
+                  color="success" 
+                  x-small 
+                  outline
+                  :icon="mdiArrowRight" 
+                  :href="route('certificacion.edit', item.id)"
+                />
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </div>
+      
+      <PaginationDashboard 
+        :currentPage="certificacionesPaginated.current_page" 
+        :links="certificacionesPaginated.links"
+        :total="certificacionesPaginated.last_page" 
+        pageParam="certificaciones_page"
+      />
+    </CardBox>
+  </div>
+</div>
   </LayoutDashboard>
 </template>

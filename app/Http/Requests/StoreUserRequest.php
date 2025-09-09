@@ -22,7 +22,6 @@ class StoreUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        $ID_ROL_EJECUTIVO = 4;
         $rules = [
             'name' => ['required', 'string', 'max:255'],
             'apellido_paterno' => ['required', 'string', 'max:255'],
@@ -37,9 +36,21 @@ class StoreUserRequest extends FormRequest
         //     $rules['departamento_id'] = 'required|exists:departamentos,id';
         // }
            // Validación condicional: departamento requerido si el rol es Ejecutivo
-    if ($this->input('rol') == $ID_ROL_EJECUTIVO) {
-        $rules['departamento_id'] = ['required', 'integer', 'exists:departamentos,id'];
-    }
+ 
+        // Buscar el nombre del rol según el ID enviado en el form
+            $rol = \Spatie\Permission\Models\Role::find($this->input('rol'));
+
+            if ($rol && $rol->name === 'Ejecutivo') {
+                // Si lo crea "Procesos" → departamento obligatorio
+                if (auth()->user()->hasRole('Procesos')) {
+                    $rules['departamento_id'] = ['required', 'integer', 'exists:departamentos,id'];
+                }
+
+                // Si lo crea Admin → no es obligatorio
+                if (auth()->user()->hasRole('Admin')) {
+                    $rules['departamento_id'] = ['nullable', 'integer', 'exists:departamentos,id'];
+                }
+            }
    
         return $rules;
         

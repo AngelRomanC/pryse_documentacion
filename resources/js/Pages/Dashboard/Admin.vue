@@ -238,147 +238,149 @@ onMounted(() => {
     </div>
 
     <!-- Sección de Actividad Reciente -->
+ <!-- Sección de Actividad Reciente -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
       <!-- Últimos Equipos -->
-      <CardBox class="overflow-hidden">
-        <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-indigo-50">
-          <div class="flex justify-between items-center">
-            <h2 class="text-xl font-semibold text-gray-800 flex items-center">
-              <svg class="w-5 h-5 mr-2 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd"
-                  d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
-                  clip-rule="evenodd" />
-              </svg>
-              Últimos Equipos Registrados
-            </h2>
-            <BaseButton label="Ver todos" :icon="mdiArrowRight" color="info" small outline routeName="inventario.index" />
-          </div>
-        </div>
-        <div class="divide-y divide-gray-200">
-          <div v-for="equipo in ultimosEquipos" :key="equipo.id" class="p-4 hover:bg-gray-50 transition-colors">
-            <div class="flex items-center justify-between">
-              <div>
-                <h3 class="font-medium text-gray-900">{{ equipo.nombre_persona }}</h3>
-                <div class="flex items-center mt-1">
-                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" :class="{
-                    'bg-purple-100 text-purple-800': equipo.tipo_pc === 'Laptop',
-                    'bg-blue-100 text-blue-800': equipo.tipo_pc === 'PC Escritorio'
-                  }">
-                    {{ equipo.tipo_pc }}
-                  </span>
-                  <span class="ml-2 text-sm text-gray-500">{{ equipo.marca_equipo }}</span>
-                </div>
-              </div>
-              <span class="text-xs text-gray-500">
-                {{ new Date(equipo.fecha_registro).toLocaleDateString() }}
-              </span>
+        <CardBox class="overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+          <div class="p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/30 dark:to-indigo-900/30">
+            <div class="flex justify-between items-center">
+              <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-100 flex items-center">
+                <svg class="w-5 h-5 mr-2 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd"
+                    d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
+                    clip-rule="evenodd" />
+                </svg>
+                Últimos Equipos Registrados
+              </h2>
+              <BaseButton label="Ver todos" :icon="mdiArrowRight" color="info" small outline routeName="inventario.index" />
             </div>
           </div>
-        </div>
-      </CardBox>
+          <div class="divide-y divide-gray-200 dark:divide-gray-700">
+            <div v-for="equipo in ultimosEquipos" :key="equipo.id" class="p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="font-medium text-gray-900 dark:text-gray-100">{{ equipo.nombre_persona }}</h3>
+                  <div class="flex items-center mt-1">
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" :class="{
+                      'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200': equipo.tipo_pc === 'Laptop',
+                      'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200': equipo.tipo_pc === 'PC Escritorio'
+                    }">
+                      {{ equipo.tipo_pc }}
+                    </span>
+                    <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">{{ equipo.marca_equipo }}</span>
+                  </div>
+                </div>
+                <span class="text-xs text-gray-500 dark:text-gray-400">
+                  {{ new Date(equipo.fecha_registro).toLocaleDateString() }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </CardBox>
 
-      <!-- Últimos Sistemas -->
-      <CardBox class="overflow-hidden">
-        <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-green-50 to-teal-50">
-          <div class="flex justify-between items-center">
-            <h2 class="text-xl font-semibold text-gray-800 flex items-center">
-              <svg class="w-5 h-5 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
-              </svg>
-              Sistemas Recientes
-            </h2>
-            <BaseButton label="Ver todos" :icon="mdiArrowRight" color="success" small outline routeName="sistema.index" />
-          </div>
-        </div>
-        <div class="divide-y divide-gray-200">
-          <div v-for="sistema in sistemasRecientes" :key="sistema.id" class="p-4 hover:bg-gray-50 transition-colors">
-            <div class="flex items-center justify-between">
-              <div>
-                <h3 class="font-medium text-gray-900">{{ sistema.nombre }}</h3>
-                <div class="flex items-center mt-1">
-                  <span class="text-sm text-gray-500">{{ sistema.departamento.nombre }}</span>
-                  <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" :class="{
-                    'bg-green-100 text-green-800': sistema.estatus === 'Producción',
-                    'bg-yellow-100 text-yellow-800': sistema.estatus === 'Pruebas',
-                    'bg-blue-100 text-blue-800': sistema.estatus === 'Desarrollo',
-                    'bg-red-100 text-red-800': sistema.estatus === 'Inactivo'
-                  }">
-                    {{ sistema.estatus }}
-                  </span>
-                </div>
-              </div>
-              <span class="text-xs text-gray-500">
-                {{ new Date(sistema.fecha_produccion).toLocaleDateString() }}
-              </span>
+       <!-- Últimos Sistemas -->
+        <CardBox class="overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+          <div class="p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-green-50 to-teal-50 dark:from-green-900/30 dark:to-teal-900/30">
+            <div class="flex justify-between items-center">
+              <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-100 flex items-center">
+                <svg class="w-5 h-5 mr-2 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+                </svg>
+                Sistemas Recientes
+              </h2>
+              <BaseButton label="Ver todos" :icon="mdiArrowRight" color="success" small outline routeName="sistema.index" />
             </div>
           </div>
-        </div>
-      </CardBox>
+          <div class="divide-y divide-gray-200 dark:divide-gray-700">
+            <div v-for="sistema in sistemasRecientes" :key="sistema.id" class="p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="font-medium text-gray-900 dark:text-gray-100">{{ sistema.nombre }}</h3>
+                  <div class="flex items-center mt-1">
+                    <span class="text-sm text-gray-500 dark:text-gray-400">{{ sistema.departamento.nombre }}</span>
+                    <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium" :class="{
+                      'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200': sistema.estatus === 'Producción',
+                      'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200': sistema.estatus === 'Pruebas',
+                      'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200': sistema.estatus === 'Desarrollo',
+                      'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200': sistema.estatus === 'Inactivo'
+                    }">
+                      {{ sistema.estatus }}
+                    </span>
+                  </div>
+                </div>
+                <span class="text-xs text-gray-500 dark:text-gray-400">
+                  {{ new Date(sistema.fecha_produccion).toLocaleDateString() }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </CardBox>
     </div>
 
     <!-- Sección de Gráficos -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-      <!-- Gráfico de Distribución de Equipos -->
-      <CardBox>
-        <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-purple-50 to-indigo-50">
-          <h2 class="text-xl font-semibold text-gray-800 flex items-center">
-            <svg class="w-5 h-5 mr-2 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
-            </svg>
-            Distribución de Equipos por Tipo
-          </h2>
-        </div>
-        <div class="p-6">
-          <div class="h-64">
-            <canvas ref="chartEquiposRef"></canvas>
-          </div>
-          <div class="grid grid-cols-3 gap-4 mt-4">
-            <div v-for="(count, tipo) in equiposPorTipo" :key="tipo" class="text-center">
-              <p class="text-lg font-semibold">{{ count }}</p>
-              <p class="text-sm text-gray-500">{{ tipo }}</p>
-            </div>
-          </div>
-        </div>
-      </CardBox>
-
-      <!-- Gráfico de Sistemas por Estado -->
-      <CardBox>
-        <div class="p-6 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-cyan-50">
-          <h2 class="text-xl font-semibold text-gray-800 flex items-center">
-            <svg class="w-5 h-5 mr-2 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd"
-                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                clip-rule="evenodd" />
-            </svg>
-            Sistemas por Estado
-          </h2>
-        </div>
-        <div class="p-6">
-          <div class="h-64">
-            <canvas ref="chartSistemasRef"></canvas>
-          </div>
-          <div class="grid grid-cols-4 gap-4 mt-4">
-            <div class="text-center">
-              <p class="text-lg font-semibold text-green-600">{{ sistemasPorEstatus?.Producción || 0 }}</p>
-              <p class="text-sm text-gray-500">Producción</p>
-            </div>
-            <div class="text-center">
-              <p class="text-lg font-semibold text-yellow-600">{{ sistemasPorEstatus?.Pruebas || 0 }}</p>
-              <p class="text-sm text-gray-500">Pruebas</p>
-            </div>
-            <div class="text-center">
-              <p class="text-lg font-semibold text-blue-600">{{ sistemasPorEstatus?.Desarrollo || 0 }}</p>
-              <p class="text-sm text-gray-500">Desarrollo</p>
-            </div>
-            <div class="text-center">
-              <p class="text-lg font-semibold text-red-600">{{ sistemasPorEstatus?.Inactivo || 0 }}</p>
-              <p class="text-sm text-gray-500">Inactivo</p>
-            </div>
-          </div>
-        </div>
-      </CardBox>
+<!-- Sección de Gráficos -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+  <!-- Gráfico de Distribución de Equipos -->
+  <CardBox class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+    <div class="p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/30 dark:to-indigo-900/30">
+      <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-100 flex items-center">
+        <svg class="w-5 h-5 mr-2 text-purple-600 dark:text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+        </svg>
+        Distribución de Equipos por Tipo
+      </h2>
     </div>
+    <div class="p-6">
+      <div class="h-64">
+        <canvas ref="chartEquiposRef"></canvas>
+      </div>
+      <div class="grid grid-cols-3 gap-4 mt-4">
+        <div v-for="(count, tipo) in equiposPorTipo" :key="tipo" class="text-center">
+          <p class="text-lg font-semibold text-gray-900 dark:text-gray-100">{{ count }}</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">{{ tipo }}</p>
+        </div>
+      </div>
+    </div>
+  </CardBox>
+
+  <!-- Gráfico de Sistemas por Estado -->
+  <CardBox class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+    <div class="p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/30 dark:to-cyan-900/30">
+      <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-100 flex items-center">
+        <svg class="w-5 h-5 mr-2 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd"
+            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+            clip-rule="evenodd" />
+        </svg>
+        Sistemas por Estado
+      </h2>
+    </div>
+    <div class="p-6">
+      <div class="h-64">
+        <canvas ref="chartSistemasRef"></canvas>
+      </div>
+      <div class="grid grid-cols-4 gap-4 mt-4">
+        <div class="text-center">
+          <p class="text-lg font-semibold text-green-600 dark:text-green-400">{{ sistemasPorEstatus?.Producción || 0 }}</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Producción</p>
+        </div>
+        <div class="text-center">
+          <p class="text-lg font-semibold text-yellow-600 dark:text-yellow-400">{{ sistemasPorEstatus?.Pruebas || 0 }}</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Pruebas</p>
+        </div>
+        <div class="text-center">
+          <p class="text-lg font-semibold text-blue-600 dark:text-blue-400">{{ sistemasPorEstatus?.Desarrollo || 0 }}</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Desarrollo</p>
+        </div>
+        <div class="text-center">
+          <p class="text-lg font-semibold text-red-600 dark:text-red-400">{{ sistemasPorEstatus?.Inactivo || 0 }}</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Inactivo</p>
+        </div>
+      </div>
+    </div>
+  </CardBox>
+</div>
   </LayoutDashboard>
 </template>
